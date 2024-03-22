@@ -14,7 +14,16 @@ router.get('/', async ({ response }) => {
 })
 
 router.get('/home', async ({ view }) => {
-  return view.render('pages/home')
+  return view.render('pages/home', {
+    items: [
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' }
+    ],
+  })
 })
 
 router.get('/home/kleine_preise', async ({ view }) => {
