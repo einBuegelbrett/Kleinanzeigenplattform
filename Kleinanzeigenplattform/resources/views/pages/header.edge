@@ -15,15 +15,19 @@
       <a class="nav-link" href="/home/anzeige_aufgeben">Anzeige aufgeben</a>
     </li>
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         Konto
       </a>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="#">Profil</a></li>
-        <li><a class="dropdown-item" href="#">Nachrichten</a></li>
-        <li><a class="dropdown-item" href="#">Anzeigen</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">Einstellungen</a></li>
+        @if(isLoggedIn)
+          <li><a class="dropdown-item" href="#">Profil</a></li>
+          <li><a class="dropdown-item" href="#">Nachrichten</a></li>
+          <li><a class="dropdown-item" href="#">Anzeigen</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#">Einstellungen</a></li>
+        @else
+          <li><a class="dropdown-item" href="/home/anmelden">Einloggen oder neu anmelden</a></li>
+        @end
       </ul>
     </li>
   </ul>
