@@ -9,8 +9,31 @@
 
 import router from '@adonisjs/core/services/router'
 
-router.get('/', async ({ response }) => {
-  return response.redirect('/home')
+router.get('/', async ({ view }) => {
+  return view.render('pages/start')
+})
+
+router.post('/home', async ({ request, view }) => {
+  const vorname = request.input('vorname')
+  const nachname = request.input('nachname')
+
+  if(nachname === null || vorname === null){
+    return view.render('/',{error: 'Bitte geben Sie einen Vornamen und Nachnamen ein'})
+  }
+
+  return view.render('pages/home', {
+    profil: [
+      {vorname, nachname}
+    ],
+    items: [
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' },
+      { titel: 'Item', beschreibung: 'Beschreibung' }
+    ],
+  })
 })
 
 router.get('/home', async ({ view }) => {
