@@ -28,3 +28,7 @@ router.get('/home/hilfe', async ({ view }) => {
 router.get('/home/anzeige_aufgeben', async ({ view }) => {
   return view.render('pages/anzeige-aufgeben')
 })
+
+router.get('/home/anmelden', async ({ view }) => {
+  return view.render('pages/anmelden')
+})
