@@ -9,8 +9,8 @@
 
 import router from '@adonisjs/core/services/router'
 
-router.get('/', async ({ view }) => {
-  return view.render('pages/start')
+router.get('/', async ({ response }) => {
+  return response.redirect('/anmelden')
 })
 
 router.post('/home', async ({ request, view }) => {
@@ -59,6 +59,10 @@ router.get('/home/hilfe', async ({ view }) => {
 
 router.get('/home/anzeige_aufgeben', async ({ view }) => {
   return view.render('pages/anzeige-aufgeben')
+})
+
+router.get('/anmelden', async ({ view }) => {
+  return view.render('pages/anmelden')
 })
 
 router.get('/home/anmelden', async ({ view }) => {
