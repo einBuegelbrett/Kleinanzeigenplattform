@@ -50,7 +50,7 @@ router.get('/home', async ({ view }) => {
 })
 
 router.get('/home/kleine_preise', async ({ view }) => {
-  return view.render('pages/k-preise')
+  return view.render('pages/kleine-preise')
 })
 
 router.get('/home/hilfe', async ({ view }) => {
@@ -67,4 +67,8 @@ router.get('/anmelden', async ({ view }) => {
 
 router.get('/home/anmelden', async ({ view }) => {
   return view.render('pages/anmelden')
+})
+
+router.get('/home/konto/profil', async ({ view }) => {
+  return view.render('pages/konto-profil')
 })
