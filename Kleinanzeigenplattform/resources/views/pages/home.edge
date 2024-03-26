@@ -12,7 +12,7 @@
 <body>
   @include('pages/header')
 
-  <div class="mt-2">
+  <div class="d-flex justify-content-around mt-4 mb-4">
     <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Was suchst du?" aria-label="Was suchst du?">
         <input class="form-control me-2" type="search" placeholder="Postleitzahl" aria-label="Postleitzahl">
@@ -23,8 +23,8 @@
   <div class="container">
       <div class="row">
           @each(item in items)
-            <div class="col-md-4 row-sm-4">
-                <div class="card" style="width: 10rem;">
+            <div class="d-flex justify-content-center col-md-4 row-sm-4">
+                <div class="card mb-3" style="width: 10rem;">
                     <img src="" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{item.titel}}</h5>
