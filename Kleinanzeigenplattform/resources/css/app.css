@@ -8,3 +8,12 @@ body {
   height: 100%;
   width: 100%;
 }
+
+footer {
+  color: rgb(255, 255, 255);
+  background-color: rgb(43, 48, 53);
+}
+
+svg a {
+  color: white;
+}
