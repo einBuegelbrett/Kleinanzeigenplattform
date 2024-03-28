@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class HomeController {
   public async geheAnmeldungsseite({ response }: HttpContext) {
-    return response.redirect('/anmelden')
+    return response.redirect('/home/anmelden')
   }
 
   public async getAnmeldungsseite({ view }: HttpContext) {
@@ -10,16 +10,16 @@ export default class HomeController {
   }
 
   public async setFormUndItems({ request, view }: HttpContext) {
-    const vorname = request.input('vorname')
-    const nachname = request.input('nachname')
+    const benutzername = request.input('benutzername');
+    const passwort = request.input('passwort');
 
-    if(nachname === null || vorname === null){
-      return view.render('/',{error: 'Bitte geben Sie einen Vornamen und Nachnamen ein'})
+    if(benutzername === null || passwort === null){
+      return view.render('pages/anmelden',{error: 'Benutzername oder Passwort falsch'})
     }
 
     return view.render('pages/home', {
       profil: [
-        {vorname, nachname}
+        {benutzername, passwort}
       ],
       items: [
         { titel: 'Item', beschreibung: 'Beschreibung' },

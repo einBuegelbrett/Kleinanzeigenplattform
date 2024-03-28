@@ -14,7 +14,6 @@ import HomeController from "#controllers/home_controller";
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
 router.post('/home', [HomeController, 'setFormUndItems'])
 router.get('/home', [HomeController, 'getItems'])
-router.get('/anmelden', [HomeController, 'getAnmeldungsseite'])
 router.get('/home/anmelden', [HomeController, 'getAnmeldungsseite'])
 
 router.get('/home/kleine_preise', async ({ view }) => {

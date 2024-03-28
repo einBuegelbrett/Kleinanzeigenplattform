@@ -22,12 +22,12 @@
     <div class="container-lg w-50 border border-dark rounded my-4 mx-5 p-5">
       <div id="anmeldungForm">
         <h2 class="mb-4 d-flex justify-content-center">Anmelden</h2>
-        <form action="/home" method="post">
+        <form action="/home/anmelden" method="post">
           {{csrfField()}}
           <div class="row mb-3 d-flex justify-content-center">
             <div class="col-md-6">
               <label for="reg_benutzername" class="form-label">Benutzername:</label>
-              <input type="text" class="form-control" id="reg_benutzername" name="username" placeholder="Benutzername">
+              <input type="text" class="form-control" id="reg_benutzername" name="benutzername" placeholder="Benutzername">
             </div>
           </div>
           <div class="row mb-4 d-flex justify-content-center">
@@ -36,6 +36,9 @@
               <input type="password" class="form-control" id="reg_passwort" name="passwort" placeholder="Passwort">
             </div>
           </div>
+          @if(error != undefined)
+            <p class="d-flex justify-content-center text-danger">{{error}}</p>
+          @end
           <div class="col-md-12 mb-4 d-flex d-flex justify-content-center">
             <button type="submit" class="btn btn-success">Einloggen</button>
           </div>
