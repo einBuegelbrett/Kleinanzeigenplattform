@@ -20,68 +20,33 @@
 
   <div class="d-flex justify-content-center align-items-center">
     <div class="container-lg w-50 border border-dark rounded my-4 mx-5 p-5">
-      <div id="anmeldungForm">
-        <h2 class="mb-4 d-flex justify-content-center">Anmelden</h2>
-        <form action="/home/anmelden" method="post">
-          {{csrfField()}}
-          <div class="row mb-3 d-flex justify-content-center">
-            <div class="col-md-6">
-              <label for="reg_benutzername" class="form-label">Benutzername:</label>
-              <input type="text" class="form-control" id="reg_benutzername" name="benutzername" placeholder="Benutzername">
-            </div>
+      <h2 class="mb-4 d-flex justify-content-center">Anmelden</h2>
+      <form action="/home/anmelden" method="post">
+        {{csrfField()}}
+        <div class="row mb-3 d-flex justify-content-center">
+          <div class="col-md-6">
+            <label for="reg_benutzername" class="form-label">Benutzername:</label>
+            <input type="text" class="form-control" id="reg_benutzername" name="benutzername" placeholder="Benutzername">
           </div>
-          <div class="row mb-4 d-flex justify-content-center">
-            <div class="col-md-6">
-              <label for="reg_passwort" class="form-label">Passwort:</label>
-              <input type="password" class="form-control" id="reg_passwort" name="passwort" placeholder="Passwort">
-            </div>
+        </div>
+        <div class="row mb-4 d-flex justify-content-center">
+          <div class="col-md-6">
+            <label for="reg_passwort" class="form-label">Passwort:</label>
+            <input type="password" class="form-control" id="reg_passwort" name="passwort" placeholder="Passwort">
           </div>
-          @if(error != undefined)
-            <p class="d-flex justify-content-center text-danger">{{error}}</p>
-          @end
-          <div class="col-md-12 mb-4 d-flex d-flex justify-content-center">
-            <button type="submit" class="btn btn-success">Einloggen</button>
-          </div>
-        </form>
-      </div>
-      <div id="registrierungForm" style="display: none;">
-        <h2 class="mb-4 d-flex justify-content-center">Registrieren</h2>
-        <form action="/home" method="post" class="row">
-          {{csrfField()}}
-          <div class="col-md-4 mb-3">
-            <label for="neu_benutzername" class="form-label">Benutzername:</label>
-            <input type="text" class="form-control" id="neu_benutzername" name="benutzername" placeholder="Benutzername">
-          </div>
-          <div class="col-md-4">
-            <label for="vorname" class="form-label">Vorname:</label>
-            <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname">
-          </div>
-          <div class="col-md-4">
-            <label for="nachname" class="form-label">Nachname:</label>
-            <input type="text" class="form-control" id="nachname" name="nachname" placeholder="Nachname">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="neu_passwort" class="form-label">Passwort:</label>
-            <input type="password" class="form-control" id="neu_passwort" name="passwort" placeholder="Passwort">
-          </div>
-          <div class="col-md-6 mb-4">
-            <label for="neu_passwort_wiederholen" class="form-label">Passwort wiederholen:</label>
-            <input type="password" class="form-control" id="neu_passwort_wiederholen" name="passwort_wiederholen" placeholder="Passwort wiederholen">
-          </div>
-          <div class="col-md-12 mb-4 d-flex justify-content-center">
-            <button type="submit" class="btn btn-success">Registrieren</button>
-          </div>
-        </form>
-      </div>
+        </div>
+        @if(error != undefined)
+          <p class="d-flex justify-content-center text-danger">{{error}}</p>
+        @end
+        <div class="col-md-12 mb-4 d-flex d-flex justify-content-center">
+          <button type="submit" class="btn btn-success">Einloggen</button>
+        </div>
+      </form>
       <div class="row justify-content-between">
         <div class="col-auto">
-          <div id="textAnmeldung" class="d-flex align-items-center">
+          <div class="d-flex align-items-center">
             <p class="mb-0 me-2">Neu?</p>
-            <a href="/anmelden" id="zeigeRegistrierungForm" class="link-primary">Hier geht’s zur Registrierung</a>
-          </div>
-          <div id="textRegistrierung" class="d-flex align-items-center d-none">
-            <p class="mb-0 me-2">Schon Registriert?</p>
-            <a href="/anmelden" id="zeigeAnmeldungForm" class="link-primary">Anmelden</a>
+            <a href="/home/registrieren" class="link-primary">Hier geht’s zur Registrierung</a>
           </div>
         </div>
         <div class="col-auto">

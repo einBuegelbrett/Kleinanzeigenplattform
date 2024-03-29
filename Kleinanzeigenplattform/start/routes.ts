@@ -12,9 +12,11 @@ import HomeController from "#controllers/home_controller";
 
 // Home Controller für Startseite und Anmeldungsseite
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
-router.post('/home', [HomeController, 'setFormUndItems'])
+router.post('/home/anmelden', [HomeController, 'anmelden'])
+router.post('/home/registrieren', [HomeController, 'registrieren'])
 router.get('/home', [HomeController, 'getItems'])
 router.get('/home/anmelden', [HomeController, 'getAnmeldungsseite'])
+router.get('/home/registrieren', [HomeController, 'getRegistrierungsseite'])
 
 router.get('/home/kleine_preise', async ({ view }) => {
   return view.render('pages/kleine-preise')

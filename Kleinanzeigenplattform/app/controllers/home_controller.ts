@@ -9,7 +9,11 @@ export default class HomeController {
     return view.render('pages/anmelden')
   }
 
-  public async setFormUndItems({ request, view }: HttpContext) {
+  public async getRegistrierungsseite({ view }: HttpContext) {
+    return view.render('pages/registrieren')
+  }
+
+  public async anmelden({ response, request, view }: HttpContext) {
     const benutzername = request.input('benutzername');
     const passwort = request.input('passwort');
 
@@ -17,19 +21,21 @@ export default class HomeController {
       return view.render('pages/anmelden',{error: 'Benutzername oder Passwort falsch'})
     }
 
-    return view.render('pages/home', {
-      profil: [
-        {benutzername, passwort}
-      ],
-      items: [
-        { titel: 'Item', beschreibung: 'Beschreibung' },
-        { titel: 'Item', beschreibung: 'Beschreibung' },
-        { titel: 'Item', beschreibung: 'Beschreibung' },
-        { titel: 'Item', beschreibung: 'Beschreibung' },
-        { titel: 'Item', beschreibung: 'Beschreibung' },
-        { titel: 'Item', beschreibung: 'Beschreibung' }
-      ],
-    })
+    return response.redirect().toRoute('/home');
+  }
+
+  public async registrieren({ response, request, view }: HttpContext) {
+    const benutzername = request.input('benutzername');
+    const vorname = request.input('vorname');
+    const nachname = request.input('nachname');
+    const passwort = request.input('passwort');
+    const passwortWiederholen = request.input('passwort_wiederholen');
+
+    if (benutzername === null || vorname === null || nachname === null || passwort === null || passwortWiederholen === null) {
+      return view.render('pages/registrieren', { error: 'Alle Felder müssen ausgefüllt sein' });
+    }
+
+    return response.redirect().toRoute('/home');
   }
 
   public async getItems({ view }: HttpContext) {
