@@ -17,3 +17,12 @@ footer {
 svg a {
   color: white;
 }
+
+.profilBild {
+  width: 75px;
+  height: 75px;
+}
+
+#versteckterBtn {
+  display: none;
+}

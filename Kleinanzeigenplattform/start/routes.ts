@@ -33,3 +33,7 @@ router.get('/home/anzeige_aufgeben', async ({ view }) => {
 router.get('/home/konto/profil', async ({ view }) => {
   return view.render('pages/konto-profil')
 })
+
+router.post('/home/konto/profil', async ({ view }) => {
+  return view.render('pages/konto-profil')
+})

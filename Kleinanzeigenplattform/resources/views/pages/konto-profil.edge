@@ -13,6 +13,40 @@
   @include('pages/header')
   @include('pages/suchleiste')
 
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12">
+      <h2>Profil</h2>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-8">
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle profilBild" alt="profil-bild">
+    </div>
+    <div class="col-md-4 d-flex justify-content-end align-items-center">
+      <button type="button" id="enableInputBtn" class="btn btn-primary ml-auto">Daten ändern</button>
+    </div>
+    <div class="col-md-12 mt-3">
+      <form action="/home/konto/profil" method="post">
+        {{csrfField()}}
+        <div class="mb-3">
+          <label for="benutzername" class="form-label">Benutzername:</label>
+          <input type="text" id="benutzername" class="form-control w-50" placeholder="Benutzername" disabled>
+        </div>
+        <div class="mb-3">
+          <label for="vorname" class="form-label">Vorname:</label>
+          <input type="text" id="vorname" class="form-control w-50" placeholder="Vorname" disabled>
+        </div>
+        <div class="mb-4">
+          <label for="nachname" class="form-label">Nachname:</label>
+          <input type="text" id="nachname" class="form-control w-50" placeholder="Nachname" disabled>
+        </div>
+        <button type="submit" id="versteckterBtn" class="btn btn-primary mb-4">Ändern</button>
+      </form>
+    </div>
+  </div>
+</div>
+
   @include('pages/footer')
 </body>
 </html>
