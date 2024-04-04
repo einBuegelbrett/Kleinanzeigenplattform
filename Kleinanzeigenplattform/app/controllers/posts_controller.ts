@@ -17,16 +17,17 @@ export default class PostsController {
 
   public async registrieren({ response, request, view }: HttpContext) {
     const benutzername = request.input('benutzername');
+    const email = request.input('email');
     const vorname = request.input('vorname');
     const nachname = request.input('nachname');
     const passwort = request.input('passwort');
     const passwortWiederholen = request.input('passwort_wiederholen');
 
-    if (benutzername === null || vorname === null || nachname === null || passwort === null || passwortWiederholen === null) {
+    if (benutzername === null || email === null || vorname === null || nachname === null || passwort === null || passwortWiederholen === null) {
       return view.render('pages/registrieren', { error: 'Alle Felder müssen ausgefüllt sein' });
     }
 
-    await db.table('user').insert({ username: benutzername, firstname: vorname, lastname: nachname, password: passwort, email: 'test@email'})
+    await db.table('user').insert({ username: benutzername, firstname: vorname, lastname: nachname, password: passwort, email: email})
     return response.redirect().toRoute('/home');
   }
 
