@@ -9,11 +9,12 @@
 
 import router from '@adonisjs/core/services/router'
 import HomeController from "#controllers/home_controller";
+import PostsController from "#controllers/posts_controller";
 
 // Home Controller für Startseite und Anmeldungsseite
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
-router.post('/home/anmelden', [HomeController, 'anmelden'])
-router.post('/home/registrieren', [HomeController, 'registrieren'])
+router.post('/home/anmelden', [PostsController, 'anmelden'])
+router.post('/home/registrieren', [PostsController, 'registrieren'])
 router.get('/home', [HomeController, 'getItems'])
 router.get('/home/anmelden', [HomeController, 'getAnmeldungsseite'])
 router.get('/home/registrieren', [HomeController, 'getRegistrierungsseite'])
@@ -34,6 +35,4 @@ router.get('/home/konto/profil', async ({ view }) => {
   return view.render('pages/konto-profil')
 })
 
-router.post('/home/konto/profil', async ({ view }) => {
-  return view.render('pages/konto-profil')
-})
+router.post('/home/konto/profil', [PostsController, 'profil'])

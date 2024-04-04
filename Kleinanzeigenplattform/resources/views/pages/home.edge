@@ -14,12 +14,11 @@
   @include('pages/suchleiste')
 
   <h3 class="ms-5 mb-3">Artikel:</h3>
-
   <div class="container">
       <div class="row">
           @each(item in items)
             <div class="d-flex justify-content-center col-md-4 row-sm-4">
-                <div class="card mb-3" style="width: 10rem;">
+                <div class="card shadow mb-3" style="width: 10rem;">
                     <img src="" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{item.titel}}</h5>
