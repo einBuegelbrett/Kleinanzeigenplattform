@@ -5,16 +5,9 @@ export default class HomeController {
     return response.redirect('/home/anmelden')
   }
 
-  public async getAnmeldungsseite({ view }: HttpContext) {
-    return view.render('pages/anmelden')
-  }
-
-  public async getRegistrierungsseite({ view }: HttpContext) {
-    return view.render('pages/registrieren')
-  }
-
-  public async getItems({ view }: HttpContext) {
+  public async getItems({ view, session }: HttpContext) {
     return view.render('pages/home', {
+      user: session.get('user'),
       items: [
         { titel: 'Item', beschreibung: 'Beschreibung' },
         { titel: 'Item', beschreibung: 'Beschreibung' },

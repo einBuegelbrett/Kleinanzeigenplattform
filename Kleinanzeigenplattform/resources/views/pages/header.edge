@@ -19,12 +19,13 @@
         Konto
       </a>
       <ul class="dropdown-menu dropdown-menu-end">
-        @if(isLoggedIn)
-          <li><a class="dropdown-item" href="#">Profil</a></li>
+        @if(user)
+          <li><a class="dropdown-item" href="/home/konto/profil">Profil</a></li>
           <li><a class="dropdown-item" href="#">Nachrichten</a></li>
           <li><a class="dropdown-item" href="#">Anzeigen</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="#">Einstellungen</a></li>
+          <li><a class="dropdown-item" href="/home/logout">Ausloggen</a></li>
         @else
           <li><a class="dropdown-item" href="/home/anmelden">einloggen oder neu anmelden</a></li>
         @end

@@ -10,29 +10,35 @@
 import router from '@adonisjs/core/services/router'
 import HomeController from "#controllers/home_controller";
 import PostsController from "#controllers/posts_controller";
+import UsersController from "#controllers/users_controller";
 
 // Home Controller für Startseite und Anmeldungsseite
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
-router.post('/home/anmelden', [PostsController, 'anmelden'])
-router.post('/home/registrieren', [PostsController, 'registrieren'])
 router.get('/home', [HomeController, 'getItems'])
-router.get('/home/anmelden', [HomeController, 'getAnmeldungsseite'])
-router.get('/home/registrieren', [HomeController, 'getRegistrierungsseite'])
+router.get('/home/registrieren', [UsersController, 'registrierungsForm'])
+router.post('/home/registrieren', [UsersController, 'registrierungsProzess'])
+router.get('/home/anmelden', [UsersController, 'anmeldungsForm'])
+router.post('/home/anmelden', [UsersController, 'anmeldungsProzess'])
+router.get('/home/logout', [UsersController, 'logout'])
 
-router.get('/home/kleine_preise', async ({ view }) => {
-  return view.render('pages/kleine-preise')
+router.get('/home/kleine_preise', async ({ view, session }) => {
+  return view.render('pages/kleine-preise', {user: session.get('user')})
 })
 
-router.get('/home/hilfe', async ({ view }) => {
-  return view.render('pages/hilfe')
+router.get('/home/hilfe', async ({ view, session }) => {
+  return view.render('pages/hilfe', {user: session.get('user')})
 })
 
-router.get('/home/anzeige_aufgeben', async ({ view }) => {
-  return view.render('pages/anzeige-aufgeben')
+router.get('/home/anzeige_aufgeben', async ({ view, response, session }) => {
+  if (session.get('user') === undefined) {
+    return response.redirect('/home/anmelden')
+  }
+
+  return view.render('pages/anzeige-aufgeben', {user: session.get('user')})
 })
 
-router.get('/home/konto/profil', async ({ view }) => {
-  return view.render('pages/konto-profil')
+router.get('/home/konto/profil', async ({ view, session }) => {
+  return view.render('pages/konto-profil', {user: session.get('user')})
 })
 
 router.post('/home/konto/profil', [PostsController, 'profil'])
