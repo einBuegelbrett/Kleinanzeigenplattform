@@ -9,8 +9,8 @@
 
 import router from '@adonisjs/core/services/router'
 import HomeController from "#controllers/home_controller";
-import PostsController from "#controllers/posts_controller";
 import UsersController from "#controllers/users_controller";
+import db from "@adonisjs/lucid/services/db";
 
 // Home Controller für Startseite und Anmeldungsseite
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
@@ -37,8 +37,37 @@ router.get('/home/anzeige_aufgeben', async ({ view, response, session }) => {
   return view.render('pages/anzeige-aufgeben', {user: session.get('user')})
 })
 
-router.get('/home/konto/profil', async ({ view, session }) => {
+router.get('/home/konto/profil', async ({ view, response, session }) => {
+  if (session.get('user') === undefined) {
+    return response.redirect('/home/anmelden')
+  }
+
   return view.render('pages/konto-profil', {user: session.get('user')})
 })
 
-router.post('/home/konto/profil', [PostsController, 'profil'])
+router.post('/home/konto/profil', async ({ view, response, request, session}) => {
+  try {
+    const userId = session.get('user').user_id
+
+    session.forget('user')
+
+    session.put('user', {
+      user_id: userId,
+      username: request.input('benutzername'),
+      firstname: request.input('vorname'),
+      lastname: request.input('nachname'),
+      email: request.input('email')
+    })
+
+    await db.from('user').where('user_id', userId).update({
+      username: request.input('benutzername'),
+      email: request.input('email'),
+      firstname: request.input('vorname'),
+      lastname: request.input('nachname')})
+
+  } catch (error) {
+    return view.render('pages/konto-profil', { error: 'Fehler bei der Dateneingabe' });
+  }
+
+  return response.redirect('/home/konto/profil')
+})

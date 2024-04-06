@@ -31,15 +31,19 @@
           {{csrfField()}}
           <div class="mb-3">
             <label for="benutzername" class="form-label">Benutzername:</label>
-            <input type="text" id="benutzername" class="form-control w-50" placeholder="Benutzername" disabled>
+            <input type="text" id="benutzername" class="form-control w-50" name="benutzername" placeholder="{{ user.username }}" value="{{ user.username }}" disabled>
+          </div>
+          <div class="mb-4">
+            <label for="email" class="form-label">E-Mail:</label>
+            <input type="text" id="email" class="form-control w-50" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
           </div>
           <div class="mb-3">
             <label for="vorname" class="form-label">Vorname:</label>
-            <input type="text" id="vorname" class="form-control w-50" placeholder="Vorname" disabled>
+            <input type="text" id="vorname" class="form-control w-50" name="vorname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
           </div>
           <div class="mb-4">
             <label for="nachname" class="form-label">Nachname:</label>
-            <input type="text" id="nachname" class="form-control w-50" placeholder="Nachname" disabled>
+            <input type="text" id="nachname" class="form-control w-50" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
           </div>
           <button type="submit" id="versteckterBtn" class="btn btn-primary mb-4">Ändern</button>
         </form>
