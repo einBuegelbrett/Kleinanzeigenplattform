@@ -11,6 +11,7 @@ import router from '@adonisjs/core/services/router'
 import HomeController from "#controllers/home_controller";
 import UsersController from "#controllers/users_controller";
 import db from "@adonisjs/lucid/services/db";
+import ListingsController from "#controllers/listings_controller";
 
 // Home Controller für Startseite und Anmeldungsseite
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
@@ -20,7 +21,9 @@ router.post('/home/registrieren', [UsersController, 'registrierungsProzess'])
 router.get('/home/anmelden', [UsersController, 'anmeldungsForm'])
 router.post('/home/anmelden', [UsersController, 'anmeldungsProzess'])
 router.get('/home/logout', [UsersController, 'logout'])
-router.get('/home/artikel/:id', [HomeController, 'listingDetails'])
+router.get('/home/artikel/:id', [ListingsController, 'listingDetails'])
+router.get('/home/anzeige_aufgeben', [ListingsController, 'listingPage'])
+router.post('/home/anzeige_aufgeben', [ListingsController, 'postListing'])
 
 router.get('/home/kleine_preise', async ({ view, session }) => {
   return view.render('pages/kleine-preise', {user: session.get('user')})
@@ -28,14 +31,6 @@ router.get('/home/kleine_preise', async ({ view, session }) => {
 
 router.get('/home/hilfe', async ({ view, session }) => {
   return view.render('pages/hilfe', {user: session.get('user')})
-})
-
-router.get('/home/anzeige_aufgeben', async ({ view, response, session }) => {
-  if (session.get('user') === undefined) {
-    return response.redirect('/home/anmelden')
-  }
-
-  return view.render('pages/anzeige-aufgeben', {user: session.get('user')})
 })
 
 router.get('/home/konto/profil', async ({ view, response, session }) => {
