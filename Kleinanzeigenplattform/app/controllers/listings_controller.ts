@@ -14,7 +14,7 @@ export default class ListingsController {
       if (session.get('user') === undefined) {
         return response.redirect('/home/anmelden')
       }
-      return view.render('pages/anzeige-aufgeben')
+      return view.render('pages/anzeige-aufgeben', {user: session.get('user')})
   }
 
   public async postListing({request, view, session}: HttpContext) {
