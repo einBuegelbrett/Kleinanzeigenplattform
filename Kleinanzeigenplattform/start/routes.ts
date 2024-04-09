@@ -24,6 +24,7 @@ router.get('/home/logout', [UsersController, 'logout'])
 router.get('/home/artikel/:id', [ListingsController, 'listingDetails'])
 router.get('/home/anzeige_aufgeben', [ListingsController, 'listingPage'])
 router.post('/home/anzeige_aufgeben', [ListingsController, 'postListing'])
+router.get('/home/eigene_anzeigen', [ListingsController, 'ownListing'])
 
 router.get('/home/kleine_preise', async ({ view, session }) => {
   return view.render('pages/kleine-preise', {user: session.get('user')})

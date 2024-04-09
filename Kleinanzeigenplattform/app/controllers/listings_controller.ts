@@ -30,4 +30,9 @@ export default class ListingsController {
     }
     return view.render('pages/anzeige-aufgeben', {success: 'Anzeige wurde erfolgreich erstellt'})
   }
+
+  public async ownListing({view, session}: HttpContext) {
+    const listings = await db.from('listing').select('*').where('user_id', session.get('user').user_id)
+    return view.render('pages/eigene-anzeigen.edge', {user: session.get('user'), listings})
+  }
 }

@@ -1,0 +1,27 @@
+<div class="container pageHeight">
+      <div class="row">
+        @each(listing in listings)
+          <div class="d-flex justify-content-center col-md-4 row-sm-4">
+            <div class="card shadow mb-3" style="width: 10rem;">
+              <img src="" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">{{ listing.title }}</h5>
+                <p class="card-text">{{ listing.description }}</p>
+                <p class="card-text">{{ listing.price }}€</p>
+                <p class="card-text">{{ listing.user_id }}</p>
+                <a href="/home/artikel/{{ listing.listing_id }}" class="btn btn-primary">Irgendwo</a>
+              </div>
+            </div>
+          </div>
+        @end
+        @if (listings.length === 0)
+          <div class="d-flex justify-content-center col-md-4 row-sm-4">
+            <div class="homepageAlert">
+              <div class="alert alert-danger" role="alert">
+                Kein Artikel gefunden!
+              </div>
+            </div>
+          </div>
+        @end
+      </div>
+  </div>
