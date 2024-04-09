@@ -26,3 +26,12 @@ svg a {
 #versteckterBtn {
   display: none;
 }
+
+.homepageAlert {
+  width: 10rem;
+  height: 20rem;
+}
+
+.pageHeight {
+  min-height: 20em;
+}
