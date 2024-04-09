@@ -35,8 +35,15 @@
             <input type="password" class="form-control" id="passwort" name="passwort" placeholder="Passwort">
           </div>
         </div>
+        @if(success != undefinded)
+          <div class="alert alert-success" role="alert">
+            {{ success }}
+          </div>
+        @end
         @if(error != undefined)
-          <p class="d-flex justify-content-center text-danger">{{error}}</p>
+          <div class="alert alert-danger" role="alert">
+            {{ error }}
+          </div>
         @end
         <div class="col-md-12 mb-4 d-flex d-flex justify-content-center">
           <button type="submit" class="btn btn-success">Einloggen</button>

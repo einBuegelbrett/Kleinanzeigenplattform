@@ -3,7 +3,7 @@ import db from "@adonisjs/lucid/services/db";
 import hash from "@adonisjs/core/services/hash";
 
 export default class UsersController {
-  public async registrierungsForm({view, response, session}: HttpContext) {
+  public async registrierungsForm({ view, response, session }: HttpContext) {
     if (session.get('user') != undefined) {
       return response.redirect('/home')
     }
@@ -11,10 +11,10 @@ export default class UsersController {
     return view.render('pages/registrieren')
   }
 
-  public async registrierungsProzess({view, request, response}: HttpContext) {
+  public async registrierungsProzess({ view, request }: HttpContext) {
     try {
-      const hashedPasswort = await hash.make(request.input('passwort'))
-      const passwortOk = await hash.verify(hashedPasswort, request.input('passwort_wiederholen'))
+      const hashedPasswort = await hash.make(request.input('passwort'));
+      const passwortOk = await hash.verify(hashedPasswort, request.input('passwort_wiederholen'));
 
       if(!passwortOk) {
         return view.render('pages/registrieren', { error: 'Passwörter müssen identisch sein' });
@@ -25,12 +25,12 @@ export default class UsersController {
         email: request.input('email'),
         firstname: request.input('vorname'),
         lastname: request.input('nachname'),
-        password: hashedPasswort})
+        password: hashedPasswort});
     } catch (error) {
       return view.render('pages/registrieren', { error: 'Fehler bei der Dateneingabe' });
     }
 
-    return response.redirect('/home/anmelden')
+    return view.render('pages/anmelden', {success: 'Sie haben sich erfolgreich registriert!'});
   }
 
   public async anmeldungsForm({ view, response, session }: HttpContext) {
