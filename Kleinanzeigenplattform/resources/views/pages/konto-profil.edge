@@ -16,7 +16,7 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-12">
-        <h2>Profil</h2>
+        <h2>Profil: {{ user.username }}</h2>
       </div>
     </div>
     <div class="row mt-3">
@@ -29,10 +29,6 @@
       <div class="col-md-12 mt-3">
         <form action="/home/konto/profil" method="post">
           {{csrfField()}}
-          <div class="mb-3">
-            <label for="benutzername" class="form-label">Benutzername:</label>
-            <input type="text" id="benutzername" class="form-control w-50" name="benutzername" placeholder="{{ user.username }}" value="{{ user.username }}" disabled>
-          </div>
           <div class="mb-4">
             <label for="email" class="form-label">E-Mail:</label>
             <input type="text" id="email" class="form-control w-50" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
@@ -45,6 +41,9 @@
             <label for="nachname" class="form-label">Nachname:</label>
             <input type="text" id="nachname" class="form-control w-50" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
           </div>
+          @if(error != undefined)
+            <p class="d-flex justify-content-center text-danger">{{error}}</p>
+          @end
           <button type="submit" id="versteckterBtn" class="btn btn-primary mb-4">Ändern</button>
         </form>
       </div>

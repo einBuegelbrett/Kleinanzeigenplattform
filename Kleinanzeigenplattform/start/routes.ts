@@ -48,19 +48,19 @@ router.get('/home/konto/profil', async ({ view, response, session }) => {
 router.post('/home/konto/profil', async ({ view, response, request, session}) => {
   try {
     const userId = session.get('user').user_id
+    const userBenutzername = session.get('user').username
 
     session.forget('user')
 
     session.put('user', {
       user_id: userId,
-      username: request.input('benutzername'),
+      username: userBenutzername,
       firstname: request.input('vorname'),
       lastname: request.input('nachname'),
       email: request.input('email')
     })
 
     await db.from('user').where('user_id', userId).update({
-      username: request.input('benutzername'),
       email: request.input('email'),
       firstname: request.input('vorname'),
       lastname: request.input('nachname')})
