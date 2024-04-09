@@ -10,4 +10,10 @@ export default class HomeController {
     const listings = await db.from('listing').select('*').limit(10);
     return view.render('pages/home', {user: session.get('user'), listings})
   }
+
+  public async listingDetails({ view, params }: HttpContext) {
+    const listing = await db.from('listing').select('*').where('listing_id', params.id).first()
+    const user = await db.from('user').select('*').where('user_id', listing.user_id).first()
+    return view.render('pages/anzeige-details', {listing, user})
+  }
 }

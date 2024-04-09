@@ -20,6 +20,7 @@ router.post('/home/registrieren', [UsersController, 'registrierungsProzess'])
 router.get('/home/anmelden', [UsersController, 'anmeldungsForm'])
 router.post('/home/anmelden', [UsersController, 'anmeldungsProzess'])
 router.get('/home/logout', [UsersController, 'logout'])
+router.get('/home/artikel/:id', [HomeController, 'listingDetails'])
 
 router.get('/home/kleine_preise', async ({ view, session }) => {
   return view.render('pages/kleine-preise', {user: session.get('user')})
