@@ -13,9 +13,9 @@ import UsersController from "#controllers/users_controller";
 import db from "@adonisjs/lucid/services/db";
 import ListingsController from "#controllers/listings_controller";
 
-// Home Controller für Startseite und Anmeldungsseite
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
 router.get('/home', [HomeController, 'getItems'])
+router.post('/home/test', [HomeController, 'filterListing'])
 router.get('/home/registrieren', [UsersController, 'registrierungsForm'])
 router.post('/home/registrieren', [UsersController, 'registrierungsProzess'])
 router.get('/home/anmelden', [UsersController, 'anmeldungsForm'])

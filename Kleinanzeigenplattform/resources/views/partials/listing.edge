@@ -1,20 +1,20 @@
 <div class="container pageHeight">
   <div class="row">
-    @each(listing in listings)
+    @each(item in listing)
       <div class="d-flex justify-content-center col-md-4 col-sm-6">
         <div class="card shadow mb-3 item">
           <img src="" class="card-img-top" alt="...">
           <div class="card-body">
-            <h5 class="card-title">{{ listing.title }}</h5>
-            <p class="card-text">{{ listing.description }}</p>
-            <p class="card-text">{{ listing.price }}€</p>
-            <p class="card-text">{{ listing.user_id }}</p>
-            <a href="/home/artikel/{{ listing.listing_id }}" class="btn btn-primary">Irgendwo</a>
+            <h5 class="card-title">{{ item.title }}</h5>
+            <p class="card-text">{{ item.description }}</p>
+            <p class="card-text">{{ item.price }}€</p>
+            <p class="card-text">{{ item.user_id }}</p>
+            <a href="/home/artikel/{{ item.listing_id }}" class="btn btn-primary">Irgendwo</a>
           </div>
         </div>
       </div>
     @end
-    @if (listings.length === 0)
+    @if (listing.length === 0)
       <div class="d-flex justify-content-center col-md-4 col-sm-6">
         <div class="homepageAlert">
           <div class="alert alert-danger" role="alert">
