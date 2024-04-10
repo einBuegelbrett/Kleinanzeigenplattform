@@ -35,3 +35,7 @@ svg a {
 .pageHeight {
   min-height: 24em;
 }
+
+.item {
+  width: 20rem;
+}

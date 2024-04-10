@@ -7,7 +7,7 @@ export default class HomeController {
   }
 
   public async getItems({ view, session }: HttpContext) {
-    const listings = await db.from('listing').select('*').limit(10);
+    const listings = await db.from('listing').select('*').limit(9);
     return view.render('pages/home', {user: session.get('user'), listings})
   }
 }
