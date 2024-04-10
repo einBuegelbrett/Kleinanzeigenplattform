@@ -13,8 +13,12 @@ export default class HomeController {
 
   public async filterListing({ request, view, session }: HttpContext) {
     const search = request.input('search');
-    const listing = await db.from('listing').select('*').where('title', 'like', `%${search}%`);
-
-    return view.render('pages/home', {user: session.get('user'), listing});
+    if(search === null) {
+      const listing = await db.from('listing').select('*').limit(9);
+      return view.render('pages/home', {user: session.get('user'), listing, search});
+    } else {
+      const listing = await db.from('listing').select('*').where('title', 'like', `%${search}%`);
+      return view.render('pages/home', {user: session.get('user'), listing, search});
+    }
   }
 }

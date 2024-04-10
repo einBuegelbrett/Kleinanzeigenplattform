@@ -15,7 +15,7 @@ import ListingsController from "#controllers/listings_controller";
 
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
 router.get('/home', [HomeController, 'getItems'])
-router.post('/home/test', [HomeController, 'filterListing'])
+router.post('/home', [HomeController, 'filterListing'])
 router.get('/home/registrieren', [UsersController, 'registrierungsForm'])
 router.post('/home/registrieren', [UsersController, 'registrierungsProzess'])
 router.get('/home/anmelden', [UsersController, 'anmeldungsForm'])

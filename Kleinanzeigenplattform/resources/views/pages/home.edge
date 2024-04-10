@@ -12,10 +12,12 @@
 <body class="bg-body-secondary">
   @include('partials/header')
   @include('partials/suchleiste')
-
-  <h3 class="ms-5 mb-4">Artikel:</h3>
+  @if(search != null)
+    <h3 class="ms-5 mb-4">Ergebnisse für "{{ search }}":</h3>
+  @else
+   <h3 class="ms-5 mb-4">Artikel:</h3>
+  @end
   @include('partials/listing')
-
   @include('partials/footer')
 </body>
 </html>
