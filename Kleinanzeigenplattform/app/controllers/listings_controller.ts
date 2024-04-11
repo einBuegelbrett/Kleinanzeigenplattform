@@ -18,17 +18,12 @@ export default class ListingsController {
 
   public async postListing({request, view, session}: HttpContext) {
     try {
-      const image = request.file('image',{ size: '5mb', extnames: ['jpg', 'png', 'jpeg']})
+      const images = request.files('images',{ size: '5mb', extnames: ['jpg', 'png', 'jpeg']})
 
-      if(image === null){
+      if(images === null){
         return view.render('pages/anzeige-aufgeben', {error: 'Bitte Bild hochladen'})
       }
 
-      if(!image.isValid){
-        return view.render('pages/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes'})
-      }
-
-      await image.move(app.publicPath('uploads'))
       const insertedItem = await db.table('listing').insert({
         title: request.input('titel'),
         description: request.input('beschreibung'),
@@ -36,12 +31,18 @@ export default class ListingsController {
         user_id: session.get('user').user_id
       })
 
-      const insertedItemId = insertedItem[0];
-      await db.table('image').insert({
-        link: image.fileName,
-        listing_id: insertedItemId
-      })
+      for (const image of images) {
+        if(!image.isValid){
+          view.render('pages/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes'});
+        }
 
+        await image.move(app.publicPath('uploads'));
+        const insertedItemId = insertedItem[0];
+        await db.table('image').insert({
+          link: image.fileName,
+          listing_id: insertedItemId
+        })
+      }
     } catch (error) {
       return view.render('pages/anzeige-aufgeben', {error: 'Fehler bei der Dateneingabe', user: session.get('user')})
     }
