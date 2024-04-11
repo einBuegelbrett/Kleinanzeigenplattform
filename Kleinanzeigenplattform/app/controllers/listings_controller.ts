@@ -24,9 +24,9 @@ export default class ListingsController {
         user_id: session.get('user').user_id
       })
     } catch (error) {
-      return view.render('pages/anzeige-aufgeben', {error: 'Fehler bei der Dateneingabe'})
+      return view.render('pages/anzeige-aufgeben', {error: 'Fehler bei der Dateneingabe', user: session.get('user')})
     }
-    return view.render('pages/anzeige-aufgeben', {success: 'Anzeige wurde erfolgreich erstellt'})
+    return view.render('pages/anzeige-aufgeben', {success: 'Anzeige wurde erfolgreich erstellt', user: session.get('user')})
   }
 
   public async ownListing({view, session}: HttpContext) {
