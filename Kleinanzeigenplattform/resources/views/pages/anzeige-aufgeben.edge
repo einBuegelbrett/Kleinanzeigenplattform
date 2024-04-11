@@ -14,7 +14,7 @@
 
   <div class="container my-4">
     <h1>Neue Anzeige:</h1>
-    <form action="/home/anzeige_aufgeben" method="POST">
+    <form action="/home/anzeige_aufgeben" method="POST" enctype="multipart/form-data">
       {{csrfField()}}
       <div class="mb-3">
         <label for="titel" class="form-label">Titel:</label>
@@ -23,6 +23,10 @@
       <div class="mb-3">
         <label for="beschreibung" class="form-label">Beschreibung:</label>
         <textarea class="form-control" id="beschreibung" name="beschreibung" rows="5"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Bild:</label>
+        <input type="file" class="form-control" name="image" id="image">
       </div>
       <div class="mb-3">
         <label for="preis" class="form-label">Preis:</label>

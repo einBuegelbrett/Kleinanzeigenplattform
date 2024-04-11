@@ -7,7 +7,7 @@ export default class HomeController {
   }
 
   public async getItems({ view, session }: HttpContext) {
-    const listing = await db.from('listing').select('*').limit(9);
+    const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').limit(9);
     return view.render('pages/home', {user: session.get('user'), listing});
   }
 

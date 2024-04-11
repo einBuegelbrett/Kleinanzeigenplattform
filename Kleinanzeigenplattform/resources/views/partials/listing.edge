@@ -3,7 +3,7 @@
     @each(item in listing)
       <div class="d-flex justify-content-center col-md-4 col-sm-6">
         <div class="card shadow mb-3 item">
-          <img src="" class="card-img-top" alt="...">
+          <img src="/uploads/{{ item.link }}" alt="{{ item.title }}" height="200">
           <div class="card-body">
             <h5 class="card-title">{{ item.title }}</h5>
             <p class="card-text">{{ item.description }}</p>
