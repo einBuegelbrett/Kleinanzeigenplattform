@@ -6,7 +6,8 @@ export default class ListingsController {
   public async listingDetails({ view, params }: HttpContext) {
     const listing = await db.from('listing').select('*').where('listing_id', params.id).first()
     const user = await db.from('user').select('*').where('user_id', listing.user_id).first()
-    return view.render('pages/anzeige-details', {listing, user})
+    const image = await db.from('image').select('*').where('listing_id', listing.listing_id).first()
+    return view.render('pages/anzeige-details', {listing, user, image})
   }
 
   public async listingPage({view, response, session}: HttpContext) {

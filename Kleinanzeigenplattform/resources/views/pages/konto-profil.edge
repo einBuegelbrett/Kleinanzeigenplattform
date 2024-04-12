@@ -13,47 +13,51 @@
   @include('partials/header')
   @include('partials/suchleiste')
 
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-12">
-        <h2>Profil: {{ user.username }}</h2>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-md-8">
-        @if(user.profile_image)
-          <img src="/uploads/{{ user.profile_image }}" class="rounded-circle profilBild" alt="{{ user.profile_image }}">
-        @else
-          <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle profilBild" alt="profil-bild">
-        @end
-      </div>
-      <div class="col-md-4 d-flex justify-content-end align-items-center">
-        <button type="button" id="enableInputBtn" class="btn btn-primary ml-auto">Daten ändern</button>
-      </div>
-      <div class="col-md-12 mt-3">
-        <form action="/home/konto/profil" method="POST" enctype="multipart/form-data">
-          {{csrfField()}}
-          <div class="mb-3">
-            <label for="profileImage" class="form-label">Profilbild:</label>
-            <input type="file" class="form-control" name="profileImage" id="profileImage" disabled>
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="container-lg w-50 shadow rounded my-4 mx-5 p-3 bg-white">
+      <div class="container mt-3">
+        <div class="row">
+          <div class="col-12">
+            <h2>Profil: {{ user.username }}</h2>
           </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">E-Mail:</label>
-            <input type="text" id="email" class="form-control w-50" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-8">
+            @if(user.profile_image)
+              <img src="/uploads/{{ user.profile_image }}" class="rounded-circle profilBild" alt="{{ user.profile_image }}">
+            @else
+              <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle profilBild" alt="profil-bild">
+            @end
           </div>
-          <div class="mb-3">
-            <label for="vorname" class="form-label">Vorname:</label>
-            <input type="text" id="vorname" class="form-control w-50" name="vorname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
+          <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <button type="button" id="enableInputBtn" class="btn btn-primary ml-auto">Daten ändern</button>
           </div>
-          <div class="mb-4">
-            <label for="nachname" class="form-label">Nachname:</label>
-            <input type="text" id="nachname" class="form-control w-50" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
+          <div class="col-md-12 mt-3">
+            <form action="/home/konto/profil" method="POST" enctype="multipart/form-data">
+              {{csrfField()}}
+              <div class="mb-3">
+                <label for="profileImage" class="form-label">Profilbild:</label>
+                <input type="file" class="form-control" name="profileImage" id="profileImage" disabled>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">E-Mail:</label>
+                <input type="text" id="email" class="form-control w-50" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
+              </div>
+              <div class="mb-3">
+                <label for="vorname" class="form-label">Vorname:</label>
+                <input type="text" id="vorname" class="form-control w-50" name="vorname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
+              </div>
+              <div class="mb-4">
+                <label for="nachname" class="form-label">Nachname:</label>
+                <input type="text" id="nachname" class="form-control w-50" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
+              </div>
+              @if(error != undefined)
+                <p class="d-flex justify-content-center text-danger">{{error}}</p>
+              @end
+              <button type="submit" id="versteckterBtn" class="btn btn-primary mb-4">Ändern</button>
+            </form>
           </div>
-          @if(error != undefined)
-            <p class="d-flex justify-content-center text-danger">{{error}}</p>
-          @end
-          <button type="submit" id="versteckterBtn" class="btn btn-primary mb-4">Ändern</button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
