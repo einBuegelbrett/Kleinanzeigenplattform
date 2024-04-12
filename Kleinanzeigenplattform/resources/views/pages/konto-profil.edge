@@ -21,15 +21,23 @@
     </div>
     <div class="row mt-3">
       <div class="col-md-8">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle profilBild" alt="profil-bild">
+        @if(user.profile_image)
+          <img src="/uploads/{{ user.profile_image }}" class="rounded-circle profilBild" alt="{{ user.profile_image }}">
+        @else
+          <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle profilBild" alt="profil-bild">
+        @end
       </div>
       <div class="col-md-4 d-flex justify-content-end align-items-center">
         <button type="button" id="enableInputBtn" class="btn btn-primary ml-auto">Daten ändern</button>
       </div>
       <div class="col-md-12 mt-3">
-        <form action="/home/konto/profil" method="post">
+        <form action="/home/konto/profil" method="POST" enctype="multipart/form-data">
           {{csrfField()}}
-          <div class="mb-4">
+          <div class="mb-3">
+            <label for="profileImage" class="form-label">Profilbild:</label>
+            <input type="file" class="form-control" name="profileImage" id="profileImage" disabled>
+          </div>
+          <div class="mb-3">
             <label for="email" class="form-label">E-Mail:</label>
             <input type="text" id="email" class="form-control w-50" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
           </div>

@@ -12,6 +12,7 @@ import HomeController from "#controllers/home_controller";
 import UsersController from "#controllers/users_controller";
 import db from "@adonisjs/lucid/services/db";
 import ListingsController from "#controllers/listings_controller";
+import app from "@adonisjs/core/services/app";
 
 router.get('/', [HomeController, 'geheAnmeldungsseite'])
 router.get('/home', [HomeController, 'getItems'])
@@ -46,24 +47,31 @@ router.post('/home/konto/profil', async ({ view, response, request, session}) =>
   try {
     const userId = session.get('user').user_id
     const userBenutzername = session.get('user').username
+    let profileImage = request.file('profileImage',{ size: '2mb', extnames: ['jpg', 'png', 'jpeg']})
 
-    session.forget('user')
+    if(!profileImage?.isValid){
+      profileImage = null;
+    } else {
+      await profileImage.move(app.publicPath('uploads'), {overwrite: true})
+    }
 
     session.put('user', {
       user_id: userId,
       username: userBenutzername,
       firstname: request.input('vorname'),
       lastname: request.input('nachname'),
-      email: request.input('email')
+      email: request.input('email'),
+      profile_image: profileImage? profileImage.fileName : session.get('user').profile_image
     })
 
     await db.from('user').where('user_id', userId).update({
       email: request.input('email'),
       firstname: request.input('vorname'),
-      lastname: request.input('nachname')})
+      lastname: request.input('nachname'),
+      profile_image: profileImage? profileImage.fileName : session.get('user').profile_image})
 
   } catch (error) {
-    return view.render('pages/konto-profil', { error: 'Fehler bei der Dateneingabe' });
+    return view.render('pages/konto-profil', { error: 'Fehler bei der Dateneingabe', user: session.get('user')});
   }
 
   return response.redirect('/home/konto/profil')
