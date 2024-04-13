@@ -6,8 +6,9 @@ export default class ListingsController {
   public async listingDetails({ view, params }: HttpContext) {
     const listing = await db.from('listing').select('*').where('listing_id', params.id).first()
     const user = await db.from('user').select('*').where('user_id', listing.user_id).first()
-    const image = await db.from('image').select('*').where('listing_id', listing.listing_id).first()
-    return view.render('pages/anzeige-details', {listing, user, image})
+    const images = await db.from('image').select('*').where('listing_id', listing.listing_id)
+    console.log(images)
+    return view.render('pages/anzeige-details', {listing, user, images})
   }
 
   public async listingPage({view, response, session}: HttpContext) {
@@ -22,7 +23,7 @@ export default class ListingsController {
       const images = request.files('images',{ size: '5mb', extnames: ['jpg', 'png', 'jpeg']})
 
       if(images === null){
-        return view.render('pages/anzeige-aufgeben', {error: 'Bitte Bild hochladen'})
+        return view.render('pages/anzeige-aufgeben', {error: 'Bitte Bild hochladen', user: session.get('user')})
       }
 
       const insertedItem = await db.table('listing').insert({
@@ -34,7 +35,7 @@ export default class ListingsController {
 
       for (const image of images) {
         if(!image.isValid){
-          view.render('pages/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes'});
+          view.render('pages/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes', user: session.get('user')});
         }
 
         await image.move(app.publicPath('uploads'));
@@ -51,7 +52,7 @@ export default class ListingsController {
   }
 
   public async ownListing({view, session}: HttpContext) {
-    const listings = await db.from('listing').select('*').where('user_id', session.get('user').user_id)
-    return view.render('pages/eigene-anzeigen.edge', {user: session.get('user'), listings})
+    const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').groupBy('listing.listing_id');
+    return view.render('pages/eigene-anzeigen.edge', {user: session.get('user'), listing})
   }
 }

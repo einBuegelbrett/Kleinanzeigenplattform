@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import db from "@adonisjs/lucid/services/db";
 import hash from "@adonisjs/core/services/hash";
+import app from "@adonisjs/core/services/app";
 
 export default class UsersController {
   public async registrierungsForm({ view, response, session }: HttpContext) {
@@ -59,7 +60,8 @@ export default class UsersController {
       username: result.username,
       firstname: result.firstname,
       lastname: result.lastname,
-      email: result.email
+      email: result.email,
+      profile_image: result.profile_image
     })
 
     return response.redirect('/home');
@@ -69,5 +71,47 @@ export default class UsersController {
     session.forget('user')
 
     return response.redirect('/home/anmelden')
+  }
+
+  public async userProfile({session, response, view }: HttpContext) {
+    if (session.get('user') === undefined) {
+      return response.redirect('/home/anmelden')
+    }
+
+    return view.render('pages/konto-profil', {user: session.get('user')})
+  }
+
+  public async updateProfile({ view, response, request, session }: HttpContext) {
+    try {
+      const userId = session.get('user').user_id
+      const userBenutzername = session.get('user').username
+      let profileImage = request.file('profileImage',{ size: '2mb', extnames: ['jpg', 'png', 'jpeg']})
+
+      if(!profileImage?.isValid){
+        profileImage = null;
+      } else {
+        await profileImage.move(app.publicPath('uploads'), {overwrite: true})
+      }
+
+      session.put('user', {
+        user_id: userId,
+        username: userBenutzername,
+        firstname: request.input('vorname'),
+        lastname: request.input('nachname'),
+        email: request.input('email'),
+        profile_image: profileImage? profileImage.fileName : session.get('user').profile_image
+      })
+
+      await db.from('user').where('user_id', userId).update({
+        email: request.input('email'),
+        firstname: request.input('vorname'),
+        lastname: request.input('nachname'),
+        profile_image: profileImage? profileImage.fileName : session.get('user').profile_image})
+
+    } catch (error) {
+      return view.render('pages/konto-profil', { error: 'Fehler bei der Dateneingabe', user: session.get('user')});
+    }
+
+    return response.redirect('/home/konto/profil')
   }
 }

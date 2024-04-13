@@ -12,14 +12,37 @@
 <body class="bg-body-secondary">
   @include('partials/header')
 
-  <h3 class="ms-5 my-4">{{ listing.title }}</h3>
-  <div class="container pageHeight">
-    <div class="row">
-      <img class="img-fluid mb-3" src="/uploads/{{ image.link }}" alt="{{ listing.title }}">
-      <p class="fw-bold">Beschreibung: {{ listing.description }}</p>
-      <p class="fw-bold">Preis: {{ listing.price }} €</p>
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="container-lg shadow rounded my-4 mx-5 p-5 bg-light pageHeight">
+      <h3 class="ms-5 my-4">{{ listing.title }}</h3>
+        <div class="row">
+          <p class="fw-bold">Beschreibung: {{ listing.description }}</p>
+          <p class="fw-bold">Preis: {{ listing.price }} €</p>
+        </div>
+        <div id="ImageCarouselIndicators" class="carousel carousel-dark slide">
+          <div class="carousel-indicators">
+            @each((image, index) in images)
+              <button type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide-to="{{ index }}" class="{{ index === 0 ? 'active' : '' }}" aria-current="{{ index === 0 ? 'true' : 'false' }}" aria-label="Slide {{ index }}"></button>
+            @end
+          </div>
+          <div class="carousel-inner">
+            @each((image, index) in images)
+              <div class="carousel-item {{ index === 0 ? 'active' : '' }}">
+                <img src="/uploads/{{ image.link }}" class="d-block img-fluid" alt="{{ image.link }}">
+              </div>
+            @end
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
 
   @include('partials/footer')
 </body>

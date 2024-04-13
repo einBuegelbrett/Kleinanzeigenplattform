@@ -22,7 +22,7 @@
         @if(user)
           <li><a class="dropdown-item" href="/home/konto/profil">Profil</a></li>
           <li><a class="dropdown-item" href="#">Nachrichten</a></li>
-          <li><a class="dropdown-item" href="/home/eigene_anzeigen">Eigene Anzeigen</a></li>
+          <li><a class="dropdown-item" href="/home/konto/eigene_anzeigen">Eigene Anzeigen</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="#">Einstellungen</a></li>
           <li><a class="dropdown-item" href="/home/logout">Ausloggen</a></li>
@@ -32,4 +32,7 @@
       </ul>
     </li>
   </ul>
+  @if(user)
+    <img class="img-fluid my-2 mx-2 pictureHeader" src="/uploads/{{ user.profile_image }}" alt="{{ user.profile_image }}">
+  @end
 </nav>

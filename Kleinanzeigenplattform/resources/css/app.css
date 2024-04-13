@@ -39,3 +39,15 @@ svg a {
 .item {
   width: 20rem;
 }
+
+.pictureHeader {
+  width: 2.5em;
+  border-radius: 50%;
+  background-color: white;
+}
+
+#ImageCarouselIndicators {
+  width: 22em;
+  height: 22em;
+}
+
