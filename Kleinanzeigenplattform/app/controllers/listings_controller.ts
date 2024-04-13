@@ -55,4 +55,32 @@ export default class ListingsController {
     const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').groupBy('listing.listing_id');
     return view.render('pages/eigene-anzeigen.edge', {user: session.get('user'), listing})
   }
+
+  public async listingChat({view, params, session}: HttpContext) {
+    const listing = await db.from('listing').select('*').where('listing_id', params.id).first();
+    return view.render('pages/listing-chat', {user: session.get('user'), listing})
+  }
+
+  public async sendMessage({view, params, request, session}: HttpContext) {
+    const listing = await db.from('listing').select('*').where('listing_id', params.id).first();
+    const timestamp = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+
+    await db.table('message').insert({
+      sender_id: session.get('user').user_id,
+      listing_id: listing.listing_id,
+      message_text: request.input('nachricht'),
+      timestamp: timestamp
+    })
+
+    const allMessages = await db.from('message')
+      .select('*')
+      .where('listing_id', listing.listing_id)
+      .andWhere(builder => {
+        builder.where('sender_id', session.get('user').user_id)
+          .orWhere('sender_id', '!=', session.get('user').user_id);
+      })
+      .orderBy('timestamp', 'asc');
+
+    return view.render('pages/listing-chat', { user: session.get('user'), listing, allMessages, timestamp })
+  }
 }

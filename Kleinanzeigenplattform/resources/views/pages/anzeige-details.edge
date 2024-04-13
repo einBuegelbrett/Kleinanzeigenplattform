@@ -43,6 +43,10 @@
       </div>
       <img src="/uploads/{{ user.profile_image }}" class="d-block img-fluid profilePictureSize" alt="Profilbild">
       <p class="fw-bold">Verkäufer: {{ user.username }}</p>
+      <form action="/home/artikel/{{ listing.listing_id }}/chat">
+          {{csrfField()}}
+          <button type="submit" class="btn btn-primary">Nachricht schreiben</button>
+      </form>
     </div>
   </div>
 
