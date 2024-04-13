@@ -46,6 +46,11 @@ svg a {
   background-color: white;
 }
 
+.profilePictureSize {
+  width: 5em;
+  height: 5em;
+}
+
 #ImageCarouselIndicators {
   width: 22em;
   height: 22em;
