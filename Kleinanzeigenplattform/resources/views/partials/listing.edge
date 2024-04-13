@@ -3,11 +3,13 @@
     @each(item in listing)
       <div class="d-flex justify-content-center col-md-3 col-sm-6">
         <div class="card shadow mb-3 item">
-          <img src="/uploads/{{ item.link }}" alt="{{ item.title }}" height="200">
+          <img class="d-block img-fluid" src="/uploads/{{ item.link }}" alt="{{ item.title }}">
           <div class="card-body">
             <h5 class="card-title">{{ item.title }}</h5>
             <p class="card-text">{{ item.price }}€</p>
-            <a href="/home/artikel/{{ item.listing_id }}" class="btn btn-primary">Zum Artikel</a>
+            <div class="d-flex justify-content-end">
+              <a href="/home/artikel/{{ item.listing_id }}" class="btn btn-primary">Zum Artikel</a>
+            </div>
           </div>
         </div>
       </div>
