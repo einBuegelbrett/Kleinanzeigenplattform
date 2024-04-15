@@ -78,7 +78,7 @@ export default class UsersController {
       return response.redirect('/home/anmelden')
     }
 
-    return view.render('pages/konto-profil', {user: session.get('user')})
+    return view.render('pages/konto-profil', { user: session.get('user') })
   }
 
   public async updateProfile({ view, response, request, session }: HttpContext) {
@@ -113,5 +113,22 @@ export default class UsersController {
     }
 
     return response.redirect('/home/konto/profil')
+  }
+
+  public async conversationList({ response, view, session }: HttpContext) {
+    const user = await session.get('user');
+
+    if (user === undefined) {
+      return response.redirect('/home/anmelden');
+    }
+
+    const conversations = await db.from('message as m')
+      .select('m.*', 'l.*', 'u.*')
+      .join('listing as l', 'm.listing_id', 'l.listing_id')
+      .join('user as u', 'l.user_id', 'u.user_id')
+      .where('m.sender_id', user.user_id)
+      .groupBy('m.sender_id', 'm.listing_id');
+
+    return view.render('pages/nachrichten-liste', { user: session.get('user'), conversations })
   }
 }
