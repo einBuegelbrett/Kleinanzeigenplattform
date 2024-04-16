@@ -7,53 +7,53 @@
 
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="{{ asset("resources/js/app.js") }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <body class="bg-body-secondary">
   @include('partials/header')
 
-  <div class="d-flex justify-content-center align-items-center">
-    <div class="container-lg w-50 shadow rounded my-4 mx-5 p-3 bg-light">
+  <div class="d-flex justify-content-center align-items-center pageHeight">
+    <div class="container-lg w-75 shadow rounded my-4 mx-5 p-3 bg-light">
       <div class="container mt-3">
         <div class="row">
-          <div class="col-12">
-            <h2>Profil: {{ user.username }}</h2>
+          <div class="d-flex justify-content-center align-items-start">
+            <h2 class="mb-3 mt-auto">Profil: {{ user.username }}</h2>
+            <img src="/uploads/{{ user.profile_image }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark mx-2 my-2" alt="{{ user.profile_image }}">
           </div>
         </div>
-        <div class="row mt-3">
-          <div class="col-md-8">
-            @if(user.profile_image)
-              <img src="/uploads/{{ user.profile_image }}" class="rounded-circle profilBild" alt="{{ user.profile_image }}">
-            @else
-              <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle profilBild" alt="profil-bild">
-            @end
-          </div>
-          <div class="col-md-4 d-flex justify-content-end align-items-center">
-            <button type="button" id="enableInputBtn" class="btn btn-primary ml-auto">Daten ändern</button>
-          </div>
-          <div class="col-md-12 mt-3">
+        <div class="row">
+          <div class="col-md-12">
             <form action="/home/konto/profil" method="POST" enctype="multipart/form-data">
               {{csrfField()}}
-              <div class="mb-3">
-                <label for="profileImage" class="form-label">Profilbild:</label>
-                <input type="file" class="form-control" name="profileImage" id="profileImage" disabled>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="profileImage" class="form-label">Profilbild:</label>
+                  <input type="file" class="form-control" name="profileImage" id="profileImage" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">E-Mail:</label>
+                  <input type="text" id="email" class="form-control" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">E-Mail:</label>
-                <input type="text" id="email" class="form-control w-50" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
-              </div>
-              <div class="mb-3">
-                <label for="vorname" class="form-label">Vorname:</label>
-                <input type="text" id="vorname" class="form-control w-50" name="vorname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
-              </div>
-              <div class="mb-4">
-                <label for="nachname" class="form-label">Nachname:</label>
-                <input type="text" id="nachname" class="form-control w-50" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="vorname" class="form-label">Vorname:</label>
+                  <input type="text" id="vorname" class="form-control" name="vorname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label for="nachname" class="form-label">Nachname:</label>
+                  <input type="text" id="nachname" class="form-control" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
+                </div>
               </div>
               @if(error != undefined)
                 <p class="d-flex justify-content-center text-danger">{{error}}</p>
               @end
-              <button type="submit" id="versteckterBtn" class="btn btn-primary mb-4">Ändern</button>
+              <div class="col-md-12 d-flex justify-content-center align-items-cente mt-4 mb-4">
+                <button type="button" id="changeDataBtn" class="btn btn-primary" onclick="enableInputs()">Daten ändern</button>
+                <button type="button" id="cancelBtn" class="btn btn-danger d-none me-3" onclick="disableInputs()">Abbrechen</button>
+                <button type="submit" id="doChangeBtn" class="btn btn-success d-none" onclick="enableInputs()">Ändern</button>
+              </div>
             </form>
           </div>
         </div>

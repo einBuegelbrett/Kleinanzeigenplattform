@@ -18,18 +18,8 @@ svg a {
   color: white;
 }
 
-.profilBild {
-  width: 75px;
-  height: 75px;
-}
-
 #versteckterBtn {
   display: none;
-}
-
-.homepageAlert {
-  width: 10rem;
-  height: 20rem;
 }
 
 .pageHeight {
@@ -42,8 +32,7 @@ svg a {
 
 .pictureHeader {
   width: 2.5em;
-  border-radius: 50%;
-  background-color: white;
+  height: 2.5em;
 }
 
 .profilePicture {

@@ -33,6 +33,6 @@
     </li>
   </ul>
   @if(user)
-    <img class="img-fluid my-2 mx-2 pictureHeader" src="/uploads/{{ user.profile_image }}" alt="{{ user.profile_image }}">
+    <img class="d-block object-fit-cover pictureHeader border rounded-circle border-2 border-light mx-2 my-2" src="/uploads/{{ user.profile_image }}" alt="{{ user.profile_image }}">
   @end
 </nav>
