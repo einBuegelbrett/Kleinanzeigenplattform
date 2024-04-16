@@ -12,9 +12,9 @@
 <body class="bg-body-secondary">
   @include('partials/header')
 
-  <div class="d-flex justify-content-center align-items-center pageHeight">
-    <div class="container-lg w-50 shadow rounded my-4 mx-5 p-3 bg-light">
-      <div class="d-flex flex-row">
+  <div class="d-flex justify-content-center align-items-center">
+    <div id="chatBox" class="container-lg w-50 shadow rounded my-4 mx-5 p-3 bg-light chatBoxSize overflow-auto">
+      <div class="d-flex flex-row sticky-top bg-light border rounded shadow p-2">
         <h3>{{ listing.title }} | {{ listing.user_id }}</h3>
       </div>
       @each (message in allMessages)
@@ -30,7 +30,7 @@
   <div class="d-flex justify-content-center py-3 border-bottom bg-dark-subtle">
     <form action="/home/artikel/{{ listing.listing_id }}/user/{{ allMessages[0] ? allMessages[0].sender_id : user.user_id }}/chat" method="POST" class="d-flex">
       {{ csrfField() }}
-      <input class="form-control me-2" type="search" placeholder="Schreibe eine Nachricht..." name="nachricht" aria-label="Schreibe eine Nachricht..." autofocus>
+      <input class="form-control me-2" type="search" placeholder="Schreibe eine Nachricht..." name="nachricht" aria-label="Schreibe eine Nachricht..." maxlength="100" autofocus>
       <button class="btn btn-success" type="submit">Senden</button>
     </form>
   </div>

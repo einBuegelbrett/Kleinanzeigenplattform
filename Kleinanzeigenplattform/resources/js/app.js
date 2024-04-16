@@ -18,6 +18,14 @@ function disableInputs() {
   document.getElementById("doChangeBtn").classList.add("d-none");
 }
 
+function scrollToBottom() {
+  let chatBox = document.getElementById('chatBox');
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Call scrollToBottom when the page loads or new messages are added
+window.onload = scrollToBottom;
+
 function previewImages() {
   let preview = document.getElementById('image-preview');
   let files = document.getElementById('imageID').files;

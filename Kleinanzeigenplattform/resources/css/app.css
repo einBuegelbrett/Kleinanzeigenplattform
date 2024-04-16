@@ -52,6 +52,8 @@ svg a {
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 10px;
+  word-wrap: break-word;
+  position: relative;
 }
 
 .sender {
@@ -74,4 +76,8 @@ svg a {
 
 .carousel-item {
   height: 19em;
+}
+
+.chatBoxSize {
+  height: 21em;
 }
