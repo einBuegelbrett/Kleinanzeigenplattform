@@ -46,9 +46,9 @@ svg a {
   background-color: white;
 }
 
-.profilePictureSize {
-  width: 5em;
-  height: 5em;
+.profilePicture {
+  width: 3em;
+  height: 3em;
 }
 
 #ImageCarouselIndicators {
@@ -71,4 +71,18 @@ svg a {
 
 .receiver {
   background-color: #c7d2fe;
+}
+
+.imageRatio {
+  height: 12em;
+  overflow: hidden;
+}
+
+.imageRatioSmall {
+  height: 3em;
+  overflow: hidden;
+}
+
+.carousel-item {
+  height: 19em;
 }

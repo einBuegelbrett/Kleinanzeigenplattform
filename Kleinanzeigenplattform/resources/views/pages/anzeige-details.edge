@@ -13,49 +13,68 @@
   @include('partials/header')
 
   <div class="d-flex justify-content-center align-items-center">
-    <div class="container-lg shadow rounded my-4 mx-5 p-5 bg-light pageHeight">
-      <div id="ImageCarouselIndicators" class="carousel carousel-dark slide">
-        <div class="carousel-indicators">
-          @each((image, index) in images)
-            <button type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide-to="{{ index }}" class="{{ index === 0 ? 'active' : '' }}" aria-current="{{ index === 0 ? 'true' : 'false' }}" aria-label="Slide {{ index }}"></button>
-          @end
-        </div>
-        <div class="carousel-inner">
-          @each((image, index) in images)
-            <div class="carousel-item {{ index === 0 ? 'active' : '' }}">
-              <img src="/uploads/{{ image.link }}" class="d-block img-fluid" alt="{{ image.link }}">
+   <div class="container-lg w-75 shadow rounded my-4 mx-5 p-5 bg-light">
+     <div class="row">
+       <div class="col-md-7">
+         <div id="ImageCarouselIndicators" class="carousel carousel-dark slide">
+           <div class="carousel-indicators">
+             @each((image, index) in images)
+             <button type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide-to="{{ index }}" class="{{ index === 0 ? 'active' : '' }}" aria-current="{{ index === 0 }}" aria-label="Slide {{ index }}"></button>
+             @end
+           </div>
+           <div class="carousel-inner">
+             @each((image, index) in images)
+             <div class="carousel-item {{ index === 0 ? 'active' : '' }}">
+               <img src="/uploads/{{ image.link }}" class="d-block object-fit-cover w-100 h-100" alt="{{ image.link }}">
+             </div>
+             @end
+           </div>
+           <button class="carousel-control-prev" type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide="prev">
+             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+             <span class="visually-hidden">Previous</span>
+           </button>
+           <button class="carousel-control-next" type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide="next">
+             <span class="carousel-control-next-icon" aria-hidden="true"></span>
+             <span class="visually-hidden">Next</span>
+           </button>
+         </div>
+       </div>
+       <div class="col-md-5 d-flex flex-column justify-content-between bg-body-secondary rounded shadow p-4">
+         <div class="d-flex flex-row justify-content-between">
+           <h3 class="fw-bold mb-4">{{ listing.title }}</h3>
+           <h3 class="fw-bold d-flex justify-content-end">{{ listing.price }} €</h3>
+         </div>
+         <div class="d-flex justify-content-between">
+           <div class="d-flex justify-content-start align-items-start">
+             <img src="/uploads/{{ seller.profile_image }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
+             <p class="fw-bold mb-3 mt-auto">{{ seller.username }}</p>
+           </div>
+           <div>
+            <a href="/home/artikel/{{ listing.listing_id }}/user/{{ user.user_id }}/chat" class="btn btn-primary me-2 shadow">Nachricht schreiben</a>
+           </div>
+         </div>
+         @if (user.user_id != seller.user_id)
+           <p class="overflow-scroll mt-4">{{ listing.description }}</p>
+         @end
+         <div>
+           @if (user.user_id != seller.user_id)
+            <div class="d-flex justify-content-end">
+              <a href="/home/artikel/{{ listing.listing_id }}/kaufen" class="btn btn-success shadow">Artikel kaufen</a>
             </div>
-          @end
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#ImageCarouselIndicators" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
-      <div class="row">
-        <h3 class="my-4">Artikel: {{ listing.title }}</h3>
-        <p class="fw-bold">Beschreibung: {{ listing.description }}</p>
-        <p class="fw-bold">Preis: {{ listing.price }} €</p>
-      </div>
-      <img src="/uploads/{{ seller.profile_image }}" class="d-block img-fluid profilePictureSize" alt="Profilbild">
-      <p class="fw-bold">Verkäufer: {{ seller.username }}</p>
-      @if (user.user_id === seller.user_id)
-        <form action="/home/artikel/{{ listing.listing_id }}" method="post">
-          {{csrfField()}}
-          @if (listing.active === 1)
-            <button class="btn btn-danger" type="submit">Anzeige deaktivieren</button>
-          @else
-            <button class="btn btn-success" type="submit">Anzeige aktivieren</button>
-          @end
-        </form>
-      @else
-        <a href="/home/artikel/{{ listing.listing_id }}/user/{{ user.user_id }}/chat" class="btn btn-primary">Nachricht schreiben</a>
-      @end
-    </div>
+           @else
+             <form action="/home/artikel/{{ listing.listing_id }}" method="post">
+               {{csrfField()}}
+               @if (listing.active === 1)
+               <button class="btn btn-danger" type="submit">Anzeige deaktivieren</button>
+               @else
+               <button class="btn btn-success" type="submit">Anzeige aktivieren</button>
+               @end
+             </form>
+           @end
+         </div>
+       </div>
+     </div>
+   </div>
   </div>
 
   @include('partials/footer')
