@@ -28,7 +28,9 @@ function sendWasLetztePreis() {
 
 function scrollToBottom() {
   let chatBox = document.getElementById('chatBox');
-  chatBox.scrollTop = chatBox.scrollHeight;
+  if(chatBox) {
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
 }
 
 // Call scrollToBottom when the page loads or new messages are added
