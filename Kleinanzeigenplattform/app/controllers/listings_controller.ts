@@ -66,11 +66,16 @@ export default class ListingsController {
 
   public async ownListing({view, session}: HttpContext) {
     const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').where('user_id', session.get('user').user_id).groupBy('listing.listing_id');
-    return view.render('pages/eigene-anzeigen.edge', {user: session.get('user'), listing})
+    return view.render('pages/eigene-anzeigen.edge', {user: session.get('user'), listing});
   }
 
   public async listingChat({view, params, session}: HttpContext) {
     const listing = await db.from('listing').select('*').where('listing_id', params.listing_id).first();
+
+    if ((await session.get('user')).user_id != params.user_id && (await session.get('user')).user_id != listing.user_id) {
+
+      return view.render('pages/nicht-erlaubt.edge', { user: session.get('user'), error: 'Nicht erlaubt'})
+    }
 
     const allMessages = await db.from('message')
       .select('*')
@@ -81,9 +86,7 @@ export default class ListingsController {
       })
       .orderBy('timestamp', 'asc');
 
-    console.log(allMessages)
-
-    return view.render('pages/listing-chat', {user: session.get('user'), listing, allMessages})
+    return view.render('pages/listing-chat', { user: session.get('user'), listing, allMessages })
   }
 
   public async sendMessage({view, params, request, session}: HttpContext) {

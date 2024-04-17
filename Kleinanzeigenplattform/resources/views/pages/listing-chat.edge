@@ -28,6 +28,7 @@
   </div>
 
   <div class="d-flex justify-content-center py-3 border-bottom bg-dark-subtle">
+    <a href="/home/konto/nachrichten" class="btn btn-danger shadow me-2">Zurück</a>
     <form action="/home/artikel/{{ listing.listing_id }}/user/{{ allMessages[0] ? allMessages[0].sender_id : user.user_id }}/chat" method="POST" class="d-flex">
       {{ csrfField() }}
       <input class="form-control me-2" type="search" placeholder="Schreibe eine Nachricht..." name="nachricht" aria-label="Schreibe eine Nachricht..." maxlength="100" autofocus>

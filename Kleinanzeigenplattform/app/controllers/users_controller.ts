@@ -27,6 +27,7 @@ export default class UsersController {
         firstname: request.input('vorname'),
         lastname: request.input('nachname'),
         password: hashedPasswort});
+
     } catch (error) {
       return view.render('pages/registrieren', { error: 'Fehler bei der Dateneingabe' });
     }
@@ -122,13 +123,23 @@ export default class UsersController {
       return response.redirect('/home/anmelden');
     }
 
-    const conversations = await db.from('message as m')
-      .select('m.*', 'l.*', 'u.*')
+    const allConversations = await db.from('message as m')
+      .select('m.sender_id', 'l.listing_id', 'l.title', 'u.user_id as receiver_id', 'u.username as receiver_username', 's.username as sender_username')
       .join('listing as l', 'm.listing_id', 'l.listing_id')
       .join('user as u', 'l.user_id', 'u.user_id')
+      .join('user as s', 'm.sender_id', 's.user_id') // Join to get sender username
       .where('m.sender_id', user.user_id)
-      .groupBy('m.sender_id', 'm.listing_id');
+      .whereNot('l.user_id', user.user_id) // Exclude where user_id equals sender_id
+      .union(builder => {
+        builder.select('m.sender_id', 'l.listing_id', 'l.title', 'u.user_id as receiver_id', 'u.username as receiver_username', 's.username as sender_username')
+          .from('message as m')
+          .join('listing as l', 'm.listing_id', 'l.listing_id')
+          .join('user as u', 'l.user_id', 'u.user_id')
+          .join('user as s', 'm.sender_id', 's.user_id') // Join to get sender username
+          .where('l.user_id', user.user_id)
+          .groupBy('l.user_id', 'm.listing_id');
+      });
 
-    return view.render('pages/nachrichten-liste', { user: session.get('user'), conversations })
+    return view.render('pages/nachrichten-liste', { user: session.get('user'), allConversations })
   }
 }
