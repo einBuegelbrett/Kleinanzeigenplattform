@@ -18,6 +18,14 @@ function disableInputs() {
   document.getElementById("doChangeBtn").classList.add("d-none");
 }
 
+function sendWasLetztePreis() {
+  let messageInput = document.querySelector('input[name="nachricht"]');
+  if (messageInput) {
+    messageInput.value = "Was letzte Preis?";
+    document.querySelector('form').submit();
+  }
+}
+
 function scrollToBottom() {
   let chatBox = document.getElementById('chatBox');
   chatBox.scrollTop = chatBox.scrollHeight;

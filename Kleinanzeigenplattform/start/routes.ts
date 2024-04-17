@@ -31,10 +31,6 @@ router.get('/home/anzeige_aufgeben', [ListingsController, 'listingPage'])
 router.post('/home/anzeige_aufgeben', [ListingsController, 'postListing'])
 router.get('/home/konto/eigene_anzeigen', [ListingsController, 'ownListing'])
 
-router.get('/home/kleine_preise', async ({ view, session }) => {
-  return view.render('pages/kleine-preise', {user: session.get('user')})
-})
-
 router.get('/home/hilfe', async ({ view, session }) => {
   return view.render('pages/hilfe', {user: session.get('user')})
 })
