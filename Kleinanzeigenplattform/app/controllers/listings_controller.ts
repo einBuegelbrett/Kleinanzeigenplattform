@@ -67,7 +67,18 @@ export default class ListingsController {
 
   public async ownListing({view, session}: HttpContext) {
     const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').where('user_id', session.get('user').user_id).groupBy('listing.listing_id');
-    return view.render('pages/eigene-anzeigen.edge', {user: session.get('user'), listing});
+    return view.render('pages/eigene-anzeigen.edge', { user: session.get('user'), listing });
+  }
+
+  public async deleteListing({view, params, session}: HttpContext) {
+    try {
+      await db.from('listing').where('listing_id', params.listing_id).delete();
+      const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').where('listing.user_id', session.get('user').user_id).groupBy('listing.listing_id');
+
+      return view.render('pages/eigene-anzeigen.edge', { user: session.get('user'), listing, success: 'Anzeige wurde erfolgreich gelöscht' });
+    } catch (error) {
+      return view.render('pages/nicht-erlaubt.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
+    }
   }
 
   public async listingChat({view, params, session}: HttpContext) {

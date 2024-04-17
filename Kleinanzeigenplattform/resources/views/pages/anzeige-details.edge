@@ -59,16 +59,22 @@
             <div class="d-flex justify-content-end">
               <a href="/home/artikel/{{ listing.listing_id }}/kaufen" class="btn btn-success shadow">Artikel kaufen</a>
             </div>
-           @else
-             <form action="/home/artikel/{{ listing.listing_id }}" method="post">
-               {{csrfField()}}
-               @if (listing.active === 1)
-               <button class="btn btn-danger" type="submit">Anzeige deaktivieren</button>
-               @else
-               <button class="btn btn-success" type="submit">Anzeige aktivieren</button>
-               @end
-             </form>
-           @end
+            @else
+              <div class="d-flex justify-content-end">
+                <form action="/home/artikel/{{ listing.listing_id }}" class="me-2" method="post">
+                  {{csrfField()}}
+                  @if (listing.active === 1)
+                    <button class="btn btn-warning" type="submit">Deaktivieren</button>
+                  @else
+                    <button class="btn btn-success" type="submit">Aktivieren</button>
+                  @end
+                </form>
+                <form action="/home/konto/eigene_anzeigen/{{ listing.listing_id }}" method="POST">
+                  {{csrfField()}}
+                  <button class="btn btn-danger" type="submit">Löschen</button>
+                </form>
+              </div>
+            @end
          </div>
        </div>
      </div>

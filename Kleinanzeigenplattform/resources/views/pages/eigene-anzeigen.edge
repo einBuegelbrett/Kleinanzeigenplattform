@@ -12,7 +12,14 @@
 <body class="bg-body-secondary">
   @include('partials/header')
 
-  <h3 class="ms-5 my-4">Eigene Anzeigen:</h3>
+  @if(success)
+    <div class="d-flex justify-content-center mt-4" role="alert">
+      <div class="alert alert-success" role="alert">
+        {{ success }}
+      </div>
+    </div>
+  @end
+  <h3 class="ms-5 mb-4">Eigene Anzeigen:</h3>
   @include('partials/listing')
 
   @include('partials/footer')

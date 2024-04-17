@@ -30,6 +30,7 @@ router.post('/home/artikel/:listing_id/user/:user_id/chat', [ListingsController,
 router.get('/home/anzeige_aufgeben', [ListingsController, 'listingPage'])
 router.post('/home/anzeige_aufgeben', [ListingsController, 'postListing'])
 router.get('/home/konto/eigene_anzeigen', [ListingsController, 'ownListing'])
+router.post('/home/konto/eigene_anzeigen/:listing_id', [ListingsController, 'deleteListing'])
 
 router.get('/home/hilfe', async ({ view, session }) => {
   return view.render('pages/hilfe', {user: session.get('user')})
