@@ -79,7 +79,8 @@ export default class ListingsController {
     }
 
     const allMessages = await db.from('message')
-      .select('*')
+      .select('message.*', 'user.username as sender_username')
+      .join('user', 'message.sender_id', 'user.user_id')
       .where('listing_id', listing.listing_id)
       .andWhere(builder => {
         builder.where('sender_id', session.get('user').user_id)
@@ -87,7 +88,12 @@ export default class ListingsController {
       })
       .orderBy('timestamp', 'asc');
 
-    return view.render('pages/listing-chat', { user: session.get('user'), listing, allMessages })
+    const receiverUsername = await db.from('listing')
+      .select('user.username as receiver_username')
+      .join('user', 'listing.user_id', 'user.user_id')
+      .where('listing_id', listing.listing_id);
+
+    return view.render('pages/listing-chat', { user: session.get('user'), listing, allMessages, receiverUsername })
   }
 
   public async sendMessage({view, params, request, session}: HttpContext) {
@@ -102,7 +108,8 @@ export default class ListingsController {
     })
 
     const allMessages = await db.from('message')
-      .select('*')
+      .select('message.*', 'user.username as sender_username')
+      .join('user', 'message.sender_id', 'user.user_id')
       .where('listing_id', listing.listing_id)
       .andWhere(builder => {
         builder.where('sender_id', session.get('user').user_id)
@@ -110,8 +117,11 @@ export default class ListingsController {
       })
       .orderBy('timestamp', 'asc');
 
-    console.log(allMessages)
+    const receiverUsername = await db.from('listing')
+      .select('user.username as receiver_username')
+      .join('user', 'listing.user_id', 'user.user_id')
+      .where('listing_id', listing.listing_id);
 
-    return view.render('pages/listing-chat', {user: session.get('user'), listing, allMessages, timestamp})
+    return view.render('pages/listing-chat', {user: session.get('user'), listing, allMessages, receiverUsername, timestamp})
   }
 }

@@ -81,3 +81,7 @@ svg a {
 .chatBoxSize {
   height: 21em;
 }
+
+.small-font {
+  font-size: 0.7em;
+}

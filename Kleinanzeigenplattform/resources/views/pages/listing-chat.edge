@@ -14,13 +14,19 @@
 
   <div class="d-flex justify-content-center align-items-center">
     <div id="chatBox" class="container-lg w-50 shadow rounded my-4 mx-5 p-3 bg-light chatBoxSize overflow-auto">
-      <div class="d-flex flex-row sticky-top bg-light border rounded shadow p-2">
-        <h3>{{ listing.title }} | {{ listing.user_id }}</h3>
+      <div class="d-flex flex-row sticky-top bg-light border rounded shadow p-2 mb-4">
+        @if (user.user_id === listing.user_id)
+          <h3>{{ allMessages[0].sender_username }} | {{ listing.title }}</h3>
+        @else
+          <h3>{{ receiverUsername[0].receiver_username }} | {{ listing.title }}</h3>
+        @end
+
       </div>
       @each (message in allMessages)
         <div class="d-flex {{ message.sender_id == user.user_id ? 'justify-content-end' : 'justify-content-start' }}">
-          <div class="message-bubble text-break {{ message.sender_id == user.user_id ? 'sender' : 'receiver' }}">
-              <p>{{ message.message_text }}</p>
+          <div class="message-bubble text-break shadow {{ message.sender_id == user.user_id ? 'sender' : 'receiver' }}">
+              <p class="mb-0">{{ message.message_text }}</p>
+              <p class="d-flex justify-content-end fw-lighter small-font my-0">{{ message.timestamp }}</p>
           </div>
         </div>
       @end
@@ -31,8 +37,8 @@
     <a href="/home/konto/nachrichten" class="btn btn-danger shadow me-2">Zurück</a>
     <form action="/home/artikel/{{ listing.listing_id }}/user/{{ allMessages[0] ? allMessages[0].sender_id : user.user_id }}/chat" method="POST" class="d-flex">
       {{ csrfField() }}
-      <input class="form-control me-2" type="search" placeholder="Schreibe eine Nachricht..." name="nachricht" aria-label="Schreibe eine Nachricht..." maxlength="100" autofocus>
-      <button class="btn btn-success" type="submit">Senden</button>
+      <input class="form-control me-2 shadow" type="search" placeholder="Schreibe eine Nachricht..." name="nachricht" aria-label="Schreibe eine Nachricht..." maxlength="100" autofocus>
+      <button class="btn btn-success shadow" type="submit">Senden</button>
     </form>
   </div>
 
