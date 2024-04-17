@@ -19,7 +19,7 @@
       </div>
       @each (message in allMessages)
         <div class="d-flex {{ message.sender_id == user.user_id ? 'justify-content-end' : 'justify-content-start' }}">
-          <div class="message-bubble {{ message.sender_id == user.user_id ? 'sender' : 'receiver' }}">
+          <div class="message-bubble text-break {{ message.sender_id == user.user_id ? 'sender' : 'receiver' }}">
               <p>{{ message.message_text }}</p>
           </div>
         </div>
