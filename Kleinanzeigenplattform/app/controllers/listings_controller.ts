@@ -1,6 +1,7 @@
 import type {HttpContext} from "@adonisjs/core/http";
 import db from "@adonisjs/lucid/services/db";
 import app from "@adonisjs/core/services/app";
+import {cuid} from "@adonisjs/core/helpers";
 
 export default class ListingsController {
   public async listingDetails({view, params, session}: HttpContext) {
@@ -48,7 +49,7 @@ export default class ListingsController {
           view.render('pages/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes', user: session.get('user')});
         }
 
-        await image.move(app.publicPath('uploads'));
+        await image.move(app.publicPath('uploads'), { name: `${cuid()}.${image.extname}`, overwrite: true });
         const insertedItemId = insertedItem[0];
         await db.table('image').insert({
           link: image.fileName,

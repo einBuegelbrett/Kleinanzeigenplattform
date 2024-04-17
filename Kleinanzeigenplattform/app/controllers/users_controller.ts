@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from "@adonisjs/lucid/services/db";
 import hash from "@adonisjs/core/services/hash";
 import app from "@adonisjs/core/services/app";
+import { cuid } from '@adonisjs/core/helpers'
 
 export default class UsersController {
   public async registrierungsForm({ view, response, session }: HttpContext) {
@@ -21,12 +22,13 @@ export default class UsersController {
         return view.render('pages/registrieren', { error: 'Passwörter müssen identisch sein' });
       }
 
+      // database puts the default profile picture
       await db.table('user').insert({
         username: request.input('benutzername'),
         email: request.input('email'),
         firstname: request.input('vorname'),
         lastname: request.input('nachname'),
-        password: hashedPasswort});
+        password: hashedPasswort });
 
     } catch (error) {
       return view.render('pages/registrieren', { error: 'Fehler bei der Dateneingabe' });
@@ -91,7 +93,7 @@ export default class UsersController {
       if(!profileImage?.isValid){
         profileImage = null;
       } else {
-        await profileImage.move(app.publicPath('uploads'), {overwrite: true})
+        await profileImage.move(app.publicPath('uploads'), { name: `${cuid()}.${profileImage.extname}`, overwrite: true })
       }
 
       session.put('user', {
