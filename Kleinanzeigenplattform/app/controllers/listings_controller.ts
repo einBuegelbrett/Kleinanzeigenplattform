@@ -135,4 +135,21 @@ export default class ListingsController {
 
     return view.render('pages/listing-chat', {user: session.get('user'), listing, allMessages, receiverUsername, timestamp})
   }
+
+  public async buyingPage({view, params, session}: HttpContext) {
+    const listing = await db.from('listing').select('*').where('listing_id', params.listing_id).first()
+    const seller = await db.from('user').select('*').where('user_id', listing.user_id).first()
+
+    return view.render('pages/kaufen', { user: session.get('user'), listing, seller })
+  }
+
+  public async buyItem({ view, params, session }: HttpContext) {
+    try {
+      await db.from('listing').where('listing_id', params.listing_id).delete();
+
+      return view.render('pages/kaufen', { user: session.get('user'), success: 'Kauf erfolgreich' });
+    } catch (error) {
+      return view.render('pages/nicht-erlaubt.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
+    }
+  }
 }
