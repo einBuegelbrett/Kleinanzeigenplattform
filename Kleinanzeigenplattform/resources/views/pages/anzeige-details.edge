@@ -38,23 +38,23 @@
               <span class="visually-hidden">Next</span>
             </button>
           </div>
-        </div>
-        <div class="col-md-5 d-flex flex-column justify-content-between bg-body-secondary rounded shadow p-4">
-          <div class="d-flex flex-row justify-content-between">
-            <h3 class="text-break fw-bold mb-4 me-2">{{ listing.title }}</h3>
-            <h3 class="fw-bold d-flex justify-content-end">{{ listing.price }}€</h3>
-          </div>
-          <div class="d-flex justify-content-between">
-            <div class="d-flex justify-content-start align-items-start">
+          <div class="bg-body-secondary rounded shadow p-4 d-flex flex-row col-9 mb-3 p-3">
+            <div class="d-flex justify-content-start align-items-start me-3">
               <img src="/uploads/{{ seller.profile_image }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
               <p class="fw-bold mb-3 mt-auto">{{ seller.username }}</p>
             </div>
             @if (user && user.user_id != seller.user_id)
               <form action="/home/artikel/{{ listing.listing_id }}/user/{{ user.user_id }}/chat" method="GET">
                 {{csrfField()}}
-                <button class="btn btn-primary" type="submit">Nachricht schreiben</button>
+                <button class="btn btn-primary shadow"  type="submit">Nachricht</button>
               </form>
             @end
+          </div>
+        </div>
+        <div class="col-md-5 d-flex flex-column justify-content-between bg-body-secondary rounded shadow p-4 h-75">
+          <div class="d-flex flex-column justify-content-between">
+            <h3 class="text-break fw-bold mb-4 me-2">{{ listing.title }}</h3>
+            <h3 class="fw-bold d-flex">{{ listing.price }}€</h3>
           </div>
           <p class="text-break overflow-auto mt-4">{{ listing.description }}</p>
           <div>
@@ -68,14 +68,14 @@
             <form action="/home/artikel/{{ listing.listing_id }}" class="me-2" method="post">
               {{csrfField()}}
               @if (listing.active === 1)
-                <button class="btn btn-warning" type="submit">Deaktivieren</button>
+                <button class="btn btn-warning shadow" type="submit">Deaktivieren</button>
               @else
-                <button class="btn btn-success" type="submit">Aktivieren</button>
+                <button class="btn btn-success shadow" type="submit">Aktivieren</button>
               @end
             </form>
             <form action="/home/konto/eigene_anzeigen/{{ listing.listing_id }}" method="POST">
               {{csrfField()}}
-              <button class="btn btn-danger" type="submit">Löschen</button>
+              <button class="btn btn-danger shadow" type="submit">Löschen</button>
             </form>
           </div>
           @end

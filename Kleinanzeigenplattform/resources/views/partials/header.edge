@@ -3,9 +3,6 @@
     <li class="nav-item">
       <a class="nav-link active" aria-current="page" href="/home">Schwarzes Bügelbrett</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/home/hilfe">Hilfe</a>
-    </li>
   </ul>
   <ul class="navbar-nav ms-auto mb-auto mb-lg-0">
     <li class="nav-item">
@@ -21,7 +18,6 @@
           <li><a class="dropdown-item" href="/home/konto/nachrichten">Nachrichten</a></li>
           <li><a class="dropdown-item" href="/home/konto/eigene_anzeigen">Eigene Anzeigen</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Einstellungen</a></li>
           <li><a class="dropdown-item" href="/home/logout">Ausloggen</a></li>
         @else
           <li><a class="dropdown-item" href="/home/anmelden">einloggen oder neu anmelden</a></li>
@@ -30,6 +26,6 @@
     </li>
   </ul>
   @if(user)
-    <img class="d-block object-fit-cover pictureHeader border rounded-circle border-2 border-light mx-2 my-2" src="/uploads/{{ user.profile_image }}" alt="{{ user.profile_image }}">
+    <a href="/home/konto/profil"><img class="d-block object-fit-cover pictureHeader border rounded-circle border-2 border-light mx-2 my-2" src="/uploads/{{ user.profile_image }}" alt="{{ user.profile_image }}"></a>
   @end
 </nav>

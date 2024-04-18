@@ -22,25 +22,25 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label for="titel" class="form-label">Titel:</label>
-              <input type="text" class="form-control" name="titel" id="titel" minlength="1" maxlength="50">
+              <input type="text" class="form-control shadow" name="titel" id="titel" minlength="1" maxlength="50">
             </div>
             <div class="mb-3">
               <label for="image" class="form-label">Bild(er):</label>
-              <input type="file" class="form-control" name="images" id="imageID" multiple onchange="previewImages()">
+              <input type="file" class="form-control shadow" name="images" id="imageID" multiple onchange="previewImages()">
               <div id="image-preview" class="d-flex flex-row"></div>
             </div>
             <div class="mb-3">
               <label for="preis" class="form-label">Preis:</label>
-              <input type="number" class="form-control" id="preis" name="preis" min="0" max="9999999999" step="0.01">
+              <input type="number" class="form-control shadow" id="preis" name="preis" min="0" max="9999999999" step="0.01">
             </div>
           </div>
           <div class="col-md-6 d-flex flex-column justify-content-between">
             <div class="mb-3">
               <label for="beschreibung" class="form-label">Beschreibung:</label>
-              <textarea class="form-control" id="beschreibung" name="beschreibung" rows="5" minlength="1" maxlength="250"></textarea>
+              <textarea class="form-control shadow" id="beschreibung" name="beschreibung" rows="5" minlength="1" maxlength="250"></textarea>
             </div>
             <div class="mb-3 d-flex justify-content-end">
-              <button type="submit" class="btn btn-success">Anzeige aufgeben</button>
+              <button type="submit" class="btn btn-success shadow">Anzeige aufgeben</button>
             </div>
           </div>
         </div>

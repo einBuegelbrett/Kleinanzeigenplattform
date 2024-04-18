@@ -29,30 +29,30 @@
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="profileImage" class="form-label">Profilbild:</label>
-                  <input type="file" class="form-control" name="profileImage" id="profileImage" disabled>
+                  <input type="file" class="form-control shadow" name="profileImage" id="profileImage" disabled>
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="email" class="form-label">E-Mail:</label>
-                  <input type="text" id="email" class="form-control" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
+                  <input type="text" id="email" class="form-control shadow" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="vorname" class="form-label">Vorname:</label>
-                  <input type="text" id="vorname" class="form-control" name="vorname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
+                  <input type="text" id="vorname" class="form-control shadow" name="vorname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
                 </div>
                 <div class="col-md-6">
                   <label for="nachname" class="form-label">Nachname:</label>
-                  <input type="text" id="nachname" class="form-control" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
+                  <input type="text" id="nachname" class="form-control shadow" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
                 </div>
               </div>
               @if(error != undefined)
                 <p class="d-flex justify-content-center text-danger">{{error}}</p>
               @end
               <div class="col-md-12 d-flex justify-content-center align-items-cente mt-4 mb-4">
-                <button type="button" id="changeDataBtn" class="btn btn-primary" onclick="enableInputs()">Daten ändern</button>
-                <button type="button" id="cancelBtn" class="btn btn-danger d-none me-3" onclick="disableInputs()">Abbrechen</button>
-                <button type="submit" id="doChangeBtn" class="btn btn-success d-none" onclick="enableInputs()">Ändern</button>
+                <button type="button" id="changeDataBtn" class="btn btn-primary shadow" onclick="enableInputs()">Daten ändern</button>
+                <button type="button" id="cancelBtn" class="btn btn-danger shadow d-none me-3" onclick="disableInputs()">Abbrechen</button>
+                <button type="submit" id="doChangeBtn" class="btn btn-success shadow d-none" onclick="enableInputs()">Ändern</button>
               </div>
             </form>
           </div>
