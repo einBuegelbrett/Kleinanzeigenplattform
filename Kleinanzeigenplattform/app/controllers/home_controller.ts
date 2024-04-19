@@ -9,7 +9,7 @@ export default class HomeController {
   public async getItems({ view, session }: HttpContext) {
     const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').groupBy('listing.listing_id').where('listing.active', 1).limit(12);
 
-    return view.render('pages/home', { user: session.get('user'), listing });
+    return view.render('pages/home/home', { user: session.get('user'), listing });
   }
 
   public async filterListing({ request, view, session }: HttpContext) {
@@ -17,11 +17,11 @@ export default class HomeController {
     if(search === null) {
       const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').groupBy('listing.listing_id').where('listing.active', 1).limit(12);
 
-      return view.render('pages/home', { user: session.get('user'), listing, search });
+      return view.render('pages/home/home', { user: session.get('user'), listing, search });
     } else {
       const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').groupBy('listing.listing_id').where('title', 'like', `%${search}%`).andWhere('listing.active', 1).limit(12);
 
-      return view.render('pages/home', { user: session.get('user'), listing, search });
+      return view.render('pages/home/home', { user: session.get('user'), listing, search });
     }
   }
 }

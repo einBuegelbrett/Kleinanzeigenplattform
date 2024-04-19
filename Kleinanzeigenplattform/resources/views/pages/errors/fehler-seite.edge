@@ -12,10 +12,11 @@
 <body class="bg-body-secondary">
   @include('partials/header')
 
-  <div class="container pageHeight">
+  <div class="container mt-4 pageHeight">
     <div class="alert alert-danger" role="alert">
       <p>{{ error }}</p>
     </div>
+    <a href="/home" class="btn btn-primary shadow">Zurück zur Homepage</a>
   </div>
 
   @include('partials/footer')

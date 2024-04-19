@@ -9,7 +9,7 @@ export default class ListingsController {
     const seller = await db.from('user').select('*').where('user_id', listing.user_id).first()
     const images = await db.from('image').select('*').where('listing_id', listing.listing_id)
 
-    return view.render('pages/anzeige-details', { user: session.get('user'), listing, seller, images })
+    return view.render('pages/listing/anzeige-details', { user: session.get('user'), listing, seller, images })
   }
 
   public async activateListing({view, params, session}: HttpContext) {
@@ -19,14 +19,14 @@ export default class ListingsController {
     const seller = await db.from('user').select('*').where('user_id', listing.user_id).first();
     const images = await db.from('image').select('*').where('listing_id', listing.listing_id);
 
-    return view.render('pages/anzeige-details', { user: session.get('user'), listing, seller, images })
+    return view.render('pages/listing/anzeige-details', { user: session.get('user'), listing, seller, images })
   }
 
   public async listingPage({view, response, session}: HttpContext) {
     if (session.get('user') === undefined) {
       return response.redirect('/home/anmelden')
     }
-    return view.render('pages/anzeige-aufgeben', {user: session.get('user')})
+    return view.render('pages/listing/anzeige-aufgeben', {user: session.get('user')})
   }
 
   public async postListing({request, view, session}: HttpContext) {
@@ -34,7 +34,7 @@ export default class ListingsController {
       const images = request.files('images', {size: '5mb', extnames: ['jpg', 'png', 'jpeg']})
 
       if (images === null) {
-        return view.render('pages/anzeige-aufgeben', {error: 'Bitte Bild hochladen', user: session.get('user')})
+        return view.render('pages/listing/anzeige-aufgeben', {error: 'Bitte Bild hochladen', user: session.get('user')})
       }
 
       const insertedItem = await db.table('listing').insert({
@@ -46,7 +46,7 @@ export default class ListingsController {
 
       for (const image of images) {
         if (!image.isValid) {
-          view.render('pages/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes', user: session.get('user')});
+          view.render('pages/listing/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes', user: session.get('user')});
         }
 
         await image.move(app.publicPath('uploads'), { name: `${cuid()}.${image.extname}`, overwrite: true });
@@ -59,7 +59,7 @@ export default class ListingsController {
     } catch (error) {
       return view.render('pages/anzeige-aufgeben', {error: 'Fehler bei der Dateneingabe', user: session.get('user')})
     }
-    return view.render('pages/anzeige-aufgeben', {
+    return view.render('pages/listing/anzeige-aufgeben', {
       success: 'Anzeige wurde erfolgreich erstellt',
       user: session.get('user')
     })
@@ -67,17 +67,18 @@ export default class ListingsController {
 
   public async ownListing({view, session}: HttpContext) {
     const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').where('user_id', session.get('user').user_id).groupBy('listing.listing_id');
-    return view.render('pages/eigene-anzeigen.edge', { user: session.get('user'), listing });
+    return view.render('pages/listing/eigene-anzeigen.edge', { user: session.get('user'), listing });
   }
 
   public async deleteListing({view, params, session}: HttpContext) {
     try {
+      const deletedItemTitle = await db.from('listing').select('*').where('listing_id', params.listing_id).first();
       await db.from('listing').where('listing_id', params.listing_id).delete();
       const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').where('listing.user_id', session.get('user').user_id).groupBy('listing.listing_id');
 
-      return view.render('pages/eigene-anzeigen.edge', { user: session.get('user'), listing, success: 'Anzeige wurde erfolgreich gelöscht' });
+      return view.render('pages/listing/eigene-anzeigen.edge', { user: session.get('user'), listing, success: deletedItemTitle.title + ' wurde erfolgreich gelöscht' });
     } catch (error) {
-      return view.render('pages/nicht-erlaubt.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
+      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
     }
   }
 
@@ -86,7 +87,7 @@ export default class ListingsController {
 
     if ((await session.get('user')).user_id != params.user_id && (await session.get('user')).user_id != listing.user_id) {
 
-      return view.render('pages/nicht-erlaubt.edge', { user: session.get('user'), error: 'Nicht erlaubt'})
+      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Nicht erlaubt'})
     }
 
     const allMessages = await db.from('message')
@@ -104,7 +105,7 @@ export default class ListingsController {
       .join('user', 'listing.user_id', 'user.user_id')
       .where('listing_id', listing.listing_id);
 
-    return view.render('pages/listing-chat', { user: session.get('user'), listing, allMessages, receiverUsername })
+    return view.render('pages/communication/listing-chat', { user: session.get('user'), listing, allMessages, receiverUsername })
   }
 
   public async sendMessage({view, params, request, session}: HttpContext) {
@@ -133,23 +134,23 @@ export default class ListingsController {
       .join('user', 'listing.user_id', 'user.user_id')
       .where('listing_id', listing.listing_id);
 
-    return view.render('pages/listing-chat', {user: session.get('user'), listing, allMessages, receiverUsername, timestamp})
+    return view.render('pages/communication/listing-chat', {user: session.get('user'), listing, allMessages, receiverUsername, timestamp})
   }
 
   public async buyingPage({view, params, session}: HttpContext) {
     const listing = await db.from('listing').select('*').where('listing_id', params.listing_id).first()
     const seller = await db.from('user').select('*').where('user_id', listing.user_id).first()
 
-    return view.render('pages/kaufen', { user: session.get('user'), listing, seller })
+    return view.render('pages/listing/kaufen', { user: session.get('user'), listing, seller })
   }
 
   public async buyItem({ view, params, session }: HttpContext) {
     try {
       await db.from('listing').where('listing_id', params.listing_id).delete();
 
-      return view.render('pages/kaufen', { user: session.get('user'), success: 'Kauf erfolgreich' });
+      return view.render('pages/listing/kaufen', { user: session.get('user'), success: 'Kauf erfolgreich' });
     } catch (error) {
-      return view.render('pages/nicht-erlaubt.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
+      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
     }
   }
 }

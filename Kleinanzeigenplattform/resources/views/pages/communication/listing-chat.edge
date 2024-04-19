@@ -15,7 +15,7 @@
 
   <div class="d-flex justify-content-center align-items-center">
     <div id="chatBox" class="container-lg w-50 shadow rounded my-4 mx-5 p-3 bg-light chatBoxSize overflow-auto">
-      <div class="d-flex flex-row sticky-top bg-light border rounded shadow p-2 mb-4">
+      <div class="d-flex flex-row sticky-top bg-light border rounded shadow p-2 mb-4 overflow-auto">
         @if (user.user_id != listing.user_id)
            <h3>{{ receiverUsername[0].receiver_username }} | {{ listing.title }}</h3>
         @else

@@ -10,7 +10,7 @@ export default class UsersController {
       return response.redirect('/home')
     }
 
-    return view.render('pages/registrieren')
+    return view.render('pages/authentication/registrieren')
   }
 
   public async registrierungsProzess({ view, request }: HttpContext) {
@@ -19,7 +19,7 @@ export default class UsersController {
       const passwortOk = await hash.verify(hashedPasswort, request.input('passwort_wiederholen'));
 
       if(!passwortOk) {
-        return view.render('pages/registrieren', { error: 'Passwörter müssen identisch sein' });
+        return view.render('pages/authentication/registrieren', { error: 'Passwörter müssen identisch sein' });
       }
 
       // database puts the default profile picture
@@ -31,10 +31,10 @@ export default class UsersController {
         password: hashedPasswort });
 
     } catch (error) {
-      return view.render('pages/registrieren', { error: 'Fehler bei der Dateneingabe' });
+      return view.render('pages/authentication/registrieren', { error: 'Fehler bei der Dateneingabe' });
     }
 
-    return view.render('pages/anmelden', {success: 'Sie haben sich erfolgreich registriert!'});
+    return view.render('pages/authentication/anmelden', {success: 'Sie haben sich erfolgreich registriert!'});
   }
 
   public async anmeldungsForm({ view, response, session }: HttpContext) {
@@ -42,20 +42,20 @@ export default class UsersController {
       return response.redirect('/home')
     }
 
-    return view.render('pages/anmelden')
+    return view.render('pages/authentication/anmelden')
   }
 
   public async anmeldungsProzess({ response, request, view, session }: HttpContext) {
     let result = await db.from('user').select('*').where('username', request.input('benutzername')).first()
 
     if(!result) {
-      return view.render('pages/anmelden', {error: 'Benutzername oder Passwort falsch'})
+      return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
     }
 
     const passwordOk = await hash.verify(result.password, request.input('passwort'))
 
     if(!passwordOk) {
-       return view.render('pages/anmelden', {error: 'Benutzername oder Passwort falsch'})
+       return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
     }
 
     session.put('user', {
@@ -81,7 +81,7 @@ export default class UsersController {
       return response.redirect('/home/anmelden')
     }
 
-    return view.render('pages/konto-profil', { user: session.get('user') })
+    return view.render('pages/user/konto-profil', { user: session.get('user') })
   }
 
   public async updateProfile({ view, response, request, session }: HttpContext) {
@@ -112,7 +112,7 @@ export default class UsersController {
         profile_image: profileImage? profileImage.fileName : session.get('user').profile_image})
 
     } catch (error) {
-      return view.render('pages/konto-profil', { error: 'Fehler bei der Dateneingabe', user: session.get('user')});
+      return view.render('pages/user/konto-profil', { error: 'Fehler bei der Dateneingabe', user: session.get('user')});
     }
 
     return response.redirect('/home/konto/profil')
@@ -142,6 +142,6 @@ export default class UsersController {
           .groupBy('l.user_id', 'm.listing_id');
       });
 
-    return view.render('pages/nachrichten-liste', { user: session.get('user'), allConversations })
+    return view.render('pages/communication/nachrichten-liste', { user: session.get('user'), allConversations })
   }
 }
