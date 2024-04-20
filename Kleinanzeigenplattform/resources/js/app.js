@@ -1,5 +1,5 @@
 function enableInputs() {
-  document.getElementById("profileImage").disabled = false;
+  document.getElementById("imageInputId").disabled = false;
   document.getElementById("email").disabled = false;
   document.getElementById("vorname").disabled = false;
   document.getElementById("nachname").disabled = false;
@@ -9,7 +9,7 @@ function enableInputs() {
 }
 
 function disableInputs() {
-  document.getElementById("profileImage").disabled = true;
+  document.getElementById("imageInputId").disabled = true;
   document.getElementById("email").disabled = true;
   document.getElementById("vorname").disabled = true;
   document.getElementById("nachname").disabled = true;
@@ -38,7 +38,7 @@ window.onload = scrollToBottom;
 
 function previewImages() {
   let preview = document.getElementById('image-preview');
-  let files = document.getElementById('imageID').files;
+  let files = document.getElementById('imageInputId').files;
 
   preview.innerHTML = '';
 
@@ -48,32 +48,15 @@ function previewImages() {
 
     reader.onload = function (event) {
       let imageContainer = document.createElement('div');
-      imageContainer.setAttribute('class', 'd-flex flex-column justify-content-start mt-2 me-2');
+      imageContainer.setAttribute('class', 'd-flex flex-column align-items-center mt-2 me-2');
 
       let image = document.createElement('img');
       image.setAttribute('src', event.target.result);
-      image.setAttribute('class', 'imageRatioSmall');
-
-      let closeButton = document.createElement('button');
-      closeButton.setAttribute('class', 'btn btn-danger btn-sm mt-2');
-      closeButton.setAttribute('type', 'button');
-      closeButton.innerText = 'Entfernen';
-      closeButton.addEventListener('click', function () {
-        preview.removeChild(imageContainer);
-        if (preview.childElementCount === 0) {
-          preview.classList.remove('overflow-scroll');
-        }
-      });
-
+      image.setAttribute('class', 'd-block object-fit-cover profilePicture');
       imageContainer.appendChild(image);
-      imageContainer.appendChild(closeButton);
       preview.appendChild(imageContainer);
     }
 
     reader.readAsDataURL(file);
-  }
-
-  if (files.length > 0) {
-    preview.classList.add('overflow-scroll');
   }
 }

@@ -26,7 +26,7 @@
             </div>
             <div class="mb-3">
               <label for="image" class="form-label">Bild(er):</label>
-              <input type="file" class="form-control shadow" name="images" id="imageID" multiple onchange="previewImages()">
+              <input type="file" class="form-control shadow" name="images" id="imageInputId" multiple onchange="previewImages()">
               <div id="image-preview" class="d-flex flex-row"></div>
             </div>
             <div class="mb-3">
@@ -38,6 +38,9 @@
             <div class="mb-3">
               <label for="beschreibung" class="form-label">Beschreibung:</label>
               <textarea class="form-control shadow" id="beschreibung" name="beschreibung" rows="5" minlength="1" maxlength="250"></textarea>
+            </div>
+            <div class="mb-3">
+              <p class="text fs-6 fw-light">Hinweis: Um mehrere Bilder auszuwählen, halten Sie die STRG-Taste gedrückt und klicken Sie mit der linken Maustaste auf die gewünschten Bilder</p>
             </div>
             <div class="mb-3 d-flex justify-content-end">
               <button type="submit" class="btn btn-success shadow">Anzeige aufgeben</button>
