@@ -2,6 +2,8 @@ import type {HttpContext} from "@adonisjs/core/http";
 import db from "@adonisjs/lucid/services/db";
 import app from "@adonisjs/core/services/app";
 import {cuid} from "@adonisjs/core/helpers";
+import mail from '@adonisjs/mail/services/main'
+import env from "#start/env";
 
 export default class ListingsController {
   public async listingDetails({view, params, session}: HttpContext) {
@@ -146,11 +148,27 @@ export default class ListingsController {
 
   public async buyItem({ view, params, session }: HttpContext) {
     try {
+
+      const listing = await db.from('listing').select('*').where('listing_id', params.listing_id).first()
+      const recipient = await session.get('user').email;
+      const receiver = `${env.get("MAIL_USERNAME")}`;
+
+      await mail.send((message) => {
+        message
+          .to(recipient)
+          .from(receiver)
+          .subject('Kauf erfolgreich abgeschlossen')
+          .htmlView('pages/purchase/buy', {
+            seller: session.get('user').username,
+            listing: listing.title
+          })
+      })
+
       await db.from('listing').where('listing_id', params.listing_id).delete();
 
-      return view.render('pages/listing/kaufen', { user: session.get('user'), success: 'Kauf erfolgreich' });
+      return view.render('pages/successes/erfolg-seite', { user: session.get('user'), success: 'Kauf erfolgreich abgeschlossen, Sie erhalten in Kürze eine Bestätigung per E-Mail.' });
     } catch (error) {
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
+      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Fehler beim Kaufen der Anzeige' });
     }
   }
 }
