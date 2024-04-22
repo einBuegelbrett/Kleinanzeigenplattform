@@ -13,15 +13,12 @@
   @include('partials/header')
 
   <main class="mt-4">
-    <h3 class="ms-5 mb-4">Eigene Anzeigen</h3>
-      @if(success)
-        <div class="d-flex justify-content-center mb-2" role="alert">
-          <div class="alert alert-success" role="alert">
-            {{ success }}
-          </div>
-        </div>
-      @end
-    @include('partials/listing')
+    <div class="container">
+      <div class="alert alert-success" role="alert">
+        <p>{{ success }}</p>
+      </div>
+      <a href="/home" class="btn btn-primary shadow">Zurück zur Homepage</a>
+    </div>
   </main>
 
   @include('partials/footer')

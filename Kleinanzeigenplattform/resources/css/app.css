@@ -8,6 +8,15 @@ body {
   height: 100%;
   width: 100%;
   margin: 0;
+  padding: 0;
+}
+
+.bg-body-secondary {
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
 }
 
 footer {
@@ -21,10 +30,6 @@ svg a {
 
 #versteckterBtn {
   display: none;
-}
-
-.pageHeight {
-  height: 100%;
 }
 
 .item {

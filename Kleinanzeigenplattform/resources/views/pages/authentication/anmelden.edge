@@ -15,53 +15,55 @@
     }
   </style>
 </head>
-<body class="bg-body-secondary">
+<body class="bg-body-secondary d-flex flex-column">
   @include('partials/header')
 
-  <div class="d-flex justify-content-center align-items-center">
-    <div class="container-lg w-50 shadow rounded my-4 mx-5 p-5 bg-light">
-      <h2 class="mb-4 d-flex justify-content-center">Anmelden</h2>
-      <form action="/home/anmelden" method="post">
-        {{csrfField()}}
-        <div class="row mb-3 d-flex justify-content-center">
-          <div class="col-md-6">
-            <label for="benutzername" class="form-label">Benutzername:</label>
-            <input type="text" class="form-control shadow" id="benutzername" name="benutzername" placeholder="Benutzername">
+  <main class="mt-4">
+    <div class="d-flex justify-content-center align-items-center">
+      <div class="container-lg w-50 shadow rounded mb-4 mx-5 p-5 bg-light">
+        <h2 class="mb-4 d-flex justify-content-center">Anmelden</h2>
+        <form action="/home/anmelden" method="post">
+          {{csrfField()}}
+          <div class="row mb-3 d-flex justify-content-center">
+            <div class="col-md-6">
+              <label for="benutzername" class="form-label">Benutzername:</label>
+              <input type="text" class="form-control shadow" id="benutzername" name="benutzername" placeholder="Benutzername">
+            </div>
           </div>
-        </div>
-        <div class="row mb-4 d-flex justify-content-center">
-          <div class="col-md-6">
-            <label for="passwort" class="form-label">Passwort:</label>
-            <input type="password" class="form-control shadow" id="passwort" name="passwort" placeholder="Passwort">
+          <div class="row mb-4 d-flex justify-content-center">
+            <div class="col-md-6">
+              <label for="passwort" class="form-label">Passwort:</label>
+              <input type="password" class="form-control shadow" id="passwort" name="passwort" placeholder="Passwort">
+            </div>
           </div>
-        </div>
-        @if(success != undefinded)
-          <div class="alert alert-success" role="alert">
-            {{ success }}
+          @if(success != undefinded)
+            <div class="alert alert-success" role="alert">
+              {{ success }}
+            </div>
+          @end
+          @if(error != undefined)
+            <div class="alert alert-danger" role="alert">
+              {{ error }}
+            </div>
+          @end
+          <div class="col-md-12 mb-4 d-flex d-flex justify-content-center">
+            <button type="submit" class="btn btn-success shadow">Einloggen</button>
           </div>
-        @end
-        @if(error != undefined)
-          <div class="alert alert-danger" role="alert">
-            {{ error }}
+        </form>
+        <div class="row justify-content-between">
+          <div class="col-auto">
+            <div class="d-flex align-items-center">
+              <p class="mb-0 me-2">Neu?</p>
+              <a href="/home/registrieren" class="link-primary">Hier geht’s zur Registrierung</a>
+            </div>
           </div>
-        @end
-        <div class="col-md-12 mb-4 d-flex d-flex justify-content-center">
-          <button type="submit" class="btn btn-success shadow">Einloggen</button>
-        </div>
-      </form>
-      <div class="row justify-content-between">
-        <div class="col-auto">
-          <div class="d-flex align-items-center">
-            <p class="mb-0 me-2">Neu?</p>
-            <a href="/home/registrieren" class="link-primary">Hier geht’s zur Registrierung</a>
+          <div class="col-auto">
+            <a href="/home" class="link-danger">Als Gast fortfahren</a>
           </div>
-        </div>
-        <div class="col-auto">
-          <a href="/home" class="link-danger">Als Gast fortfahren</a>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
   @include('partials/footer')
 </body>
