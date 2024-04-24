@@ -13,14 +13,14 @@
   @include('partials/header')
 
   <main class="mt-4">
-    <h3 class="ms-5 mb-4">Eigene Anzeigen</h3>
-      @if(success)
-        <div class="d-flex justify-content-center mb-2" role="alert">
-          <div class="alert alert-success" role="alert">
+    <h3 class="ms-5 mb-3">Eigene Anzeigen</h3>
+      <div class="d-flex justify-content-start ms-3">
+        @if(success)
+          <div class="alert alert-success d-inline" role="alert">
             {{ success }}
           </div>
-        </div>
-      @end
+        @end
+      </div>
     @include('partials/listing')
   </main>
 

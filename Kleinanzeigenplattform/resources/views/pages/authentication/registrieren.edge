@@ -22,6 +22,13 @@
     <div class="d-flex justify-content-center align-items-center">
       <div class="container-lg w-50 shadow rounded mb-4 mx-5 p-5 bg-light">
         <h2 class="mb-4 d-flex justify-content-center">Registrieren</h2>
+        <div class="d-flex justify-content-center">
+          @if(error != undefined)
+            <div class="alert alert-danger d-inline" role="alert">
+              {{ error }}
+            </div>
+          @end
+        </div>
         <form action="/home/registrieren" method="post" class="row">
           {{csrfField()}}
           <div class="col-md-6 mb-3">
@@ -48,9 +55,6 @@
             <label for="passwort_wiederholen" class="form-label">Passwort wiederholen:</label>
             <input type="password" class="form-control shadow" id="passwort_wiederholen" name="passwort_wiederholen" placeholder="Passwort wiederholen">
           </div>
-          @if(error != undefined)
-              <p class="d-flex justify-content-center text-danger">{{ error }}</p>
-          @end
           <div class="col-md-12 mb-4 d-flex justify-content-center">
             <button type="submit" class="btn btn-success shadow">Registrieren</button>
           </div>

@@ -59,7 +59,7 @@ export default class ListingsController {
         })
       }
     } catch (error) {
-      return view.render('pages/anzeige-aufgeben', {error: 'Fehler bei der Dateneingabe', user: session.get('user')})
+      return view.render('pages/listing/anzeige-aufgeben', { error: 'Fehler bei der Dateneingabe', user: session.get('user') })
     }
     return view.render('pages/listing/anzeige-aufgeben', {
       success: 'Anzeige wurde erfolgreich erstellt',

@@ -12,14 +12,14 @@
 <body class="bg-body-secondary d-flex flex-column">
   @include('partials/header')
 
-  <main class="mt-4">
-    <div class="container">
-      <div class="alert alert-success" role="alert">
-        <p>{{ success }}</p>
-      </div>
-      <a href="/home" class="btn btn-primary shadow">Zurück zur Homepage</a>
-    </div>
-  </main>
+ <main class="mt-4">
+   <div class="d-inline-block ms-5">
+     <div class="alert alert-success" role="alert">
+       <p>{{ success }}</p>
+     </div>
+     <a href="/home" class="btn btn-primary shadow">Zurück zur Homepage</a>
+   </div>
+ </main>
 
   @include('partials/footer')
 </body>

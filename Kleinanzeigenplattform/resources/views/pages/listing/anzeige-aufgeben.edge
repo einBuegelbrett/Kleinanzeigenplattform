@@ -16,7 +16,19 @@
   <main class="mt-4">
     <div class="d-flex justify-content-center align-items-center">
       <div class="container-lg w-75 shadow rounded mb-4 mx-5 p-5 bg-light">
-        <h1>Neue Anzeige:</h1>
+        <div class="d-flex flex-row">
+          <h1>Neue Anzeige</h1>
+          @if(success != undefinded)
+            <div class="alert alert-success d-inline ms-3" role="alert">
+              {{ success }}
+            </div>
+          @end
+          @if(error != undefined)
+            <div class="alert alert-danger d-inline ms-3" role="alert">
+              {{ error }}
+            </div>
+          @end
+        </div>
         <form action="/home/anzeige_aufgeben" method="POST" enctype="multipart/form-data">
           {{csrfField()}}
           <div class="row">
@@ -48,16 +60,6 @@
               </div>
             </div>
           </div>
-          @if(success != undefinded)
-            <div class="alert alert-success" role="alert">
-              {{ success }}
-            </div>
-          @end
-          @if(error != undefined)
-            <div class="alert alert-danger" role="alert">
-              {{ error }}
-            </div>
-          @end
         </form>
       </div>
     </div>
