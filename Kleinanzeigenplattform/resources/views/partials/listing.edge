@@ -20,12 +20,19 @@
         </div>
       </div>
     @end
-    @if (listing === undefined || listing.length === 0)
-        <div class="d-flex justify-content-start d-inline-block ms-3">
-          <div class="alert alert-danger" role="alert">
-            <p>Es gibt keine eigene Anzeige</p>
-          </div>
+    <div class="d-flex justify-content-start ms-3">
+      @if(success)
+        <div class="alert alert-success d-inline" role="alert">
+          <p>{{ success }}</p>
         </div>
+      @end
+    </div>
+    @if (listing === undefined || listing.length === 0)
+      <div class="d-flex justify-content-start d-inline-block ms-3">
+        <div class="alert alert-danger" role="alert">
+          <p>Es gibt keine eigene Anzeige</p>
+        </div>
+      </div>
     @end
   </div>
 </div>
