@@ -18,9 +18,9 @@
       <div id="chatBox" class="container-lg w-50 shadow rounded mb-4 mx-5 p-3 bg-light chatBoxSize overflow-auto">
         <div class="d-flex flex-row sticky-top bg-light border rounded shadow p-2 mb-4 overflow-auto">
           @if (user.user_id != listing.user_id)
-             <h3>{{ receiverUsername[0].receiver_username }} | {{ listing.title }}</h3>
+             <h3>{{ receiverUsername[0].receiver_username }} | <a href="/home/artikel/{{ listing.listing_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ listing.title }}</a></h3>
           @else
-            <h3>{{ allMessages[0].sender_username }} | {{ listing.title }}</h3>
+            <h3>{{ allMessages[0].sender_username }} | <a href="/home/artikel/{{ listing.listing_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ listing.title }}</a></h3>
           @end
 
         </div>
