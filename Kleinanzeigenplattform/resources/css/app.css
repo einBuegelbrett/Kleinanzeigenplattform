@@ -83,8 +83,8 @@ svg a {
   height: 19em;
 }
 
-.chatBoxSize {
-  height: 21em;
+#chatBox {
+  max-height: 40vh;
 }
 
 .small-font {

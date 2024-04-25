@@ -23,7 +23,7 @@
               @else
                 <h4 class="me-2">{{ conversation.receiver_username }}: </h4>
               @end
-              <a class="pt-1" href="/home/artikel/{{ conversation.listing_id }}/user/{{ conversation.sender_id }}/chat" class="link-primary">{{ conversation.title }}</a>
+              <h4><a href="/home/artikel/{{ conversation.listing_id }}/user/{{ conversation.sender_id }}/chat" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-1">{{ conversation.title }}</a></h4>
             </div>
           @end
       </div>

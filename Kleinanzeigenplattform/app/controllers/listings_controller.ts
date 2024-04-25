@@ -48,7 +48,7 @@ export default class ListingsController {
 
       for (const image of images) {
         if (!image.isValid) {
-          view.render('pages/listing/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes', user: session.get('user')});
+          return await view.render('pages/listing/anzeige-aufgeben', {error: 'Fehler beim Hochladen des Bildes', user: session.get('user')});
         }
 
         await image.move(app.publicPath('uploads'), { name: `${cuid()}.${image.extname}`, overwrite: true });
@@ -93,7 +93,7 @@ export default class ListingsController {
     }
 
     const allMessages = await db.from('message')
-      .select('message.*', 'user.username as sender_username')
+      .select('message.*', 'user.username as sender_username', 'user.profile_image as sender_profile_image')
       .join('user', 'message.sender_id', 'user.user_id')
       .where('listing_id', listing.listing_id)
       .andWhere(builder => {
@@ -103,7 +103,7 @@ export default class ListingsController {
       .orderBy('timestamp', 'asc');
 
     const receiverUsername = await db.from('listing')
-      .select('user.username as receiver_username')
+      .select('user.username as receiver_username', 'user.profile_image as receiver_profile_image')
       .join('user', 'listing.user_id', 'user.user_id')
       .where('listing_id', listing.listing_id);
 
@@ -122,7 +122,7 @@ export default class ListingsController {
     })
 
     const allMessages = await db.from('message')
-      .select('message.*', 'user.username as sender_username')
+      .select('message.*', 'user.username as sender_username', 'user.profile_image as sender_profile_image')
       .join('user', 'message.sender_id', 'user.user_id')
       .where('listing_id', listing.listing_id)
       .andWhere(builder => {
@@ -132,7 +132,7 @@ export default class ListingsController {
       .orderBy('timestamp', 'asc');
 
     const receiverUsername = await db.from('listing')
-      .select('user.username as receiver_username')
+      .select('user.username as receiver_username', 'user.profile_image as receiver_profile_image')
       .join('user', 'listing.user_id', 'user.user_id')
       .where('listing_id', listing.listing_id);
 
@@ -158,7 +158,7 @@ export default class ListingsController {
           .to(recipient)
           .from(receiver)
           .subject('Kauf erfolgreich abgeschlossen')
-          .htmlView('pages/purchase/buy', {
+          .htmlView('email_template/buy', {
             seller: session.get('user').username,
             listing: listing.title
           })

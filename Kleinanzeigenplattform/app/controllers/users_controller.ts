@@ -44,7 +44,7 @@ export default class UsersController {
           .to(email)
           .from(sender)
           .subject('Bestätigungsmail')
-          .htmlView('pages/confirmation-mail', {
+          .htmlView('email_template/confirmation_mail', {
             urlName
           })
       })
