@@ -55,7 +55,11 @@
           <div class="bg-body rounded shadow p-4 col-md-5 d-flex flex-column justify-content-between  h-75">
             <div class="d-flex flex-column justify-content-between">
               <h3 class="text-break fw-bold mb-4 me-2">{{ listing.title }}</h3>
-              <h3 class="fw-bold d-flex">{{ listing.price }}€</h3>
+              @if(listing.price === 0)
+                <h3 class="fw-bold d-flex text-primary">Kostenlos</h3>
+              @else
+                <h3 class="fw-bold d-flex text-primary">{{ listing.price }}€</h3>
+              @end
             </div>
             <p class="text-break overflow-auto mt-4">{{ listing.description }}</p>
             <div>
