@@ -2,7 +2,9 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from "@adonisjs/lucid/services/db";
 import hash from "@adonisjs/core/services/hash";
 import app from "@adonisjs/core/services/app";
+import mail from '@adonisjs/mail/services/main'
 import { cuid } from '@adonisjs/core/helpers'
+import env from "#start/env";
 
 export default class UsersController {
   public async registrierungsForm({ view, response, session }: HttpContext) {
@@ -17,6 +19,9 @@ export default class UsersController {
     try {
       const hashedPasswort = await hash.make(request.input('passwort'));
       const passwortOk = await hash.verify(hashedPasswort, request.input('passwort_wiederholen'));
+      const email = request.input('email');
+      const username = request.input('benutzername');
+      const token = cuid();
 
       if(!passwortOk) {
         return view.render('pages/authentication/registrieren', { error: 'Passwörter müssen identisch sein' });
@@ -24,17 +29,47 @@ export default class UsersController {
 
       // database puts the default profile picture
       await db.table('user').insert({
-        username: request.input('benutzername'),
-        email: request.input('email'),
+        username: username,
+        email: email,
         firstname: request.input('vorname'),
         lastname: request.input('nachname'),
-        password: hashedPasswort });
+        password: hashedPasswort,
+        token: token});
+
+      const sender = `${env.get("MAIL_USERNAME")}`;
+      const urlName = `${env.get("APP_URL")}/home/registrieren/bestaetigen/${username}/${token}`;
+
+      await mail.send((message) => {
+        message
+          .to(email)
+          .from(sender)
+          .subject('Bestätigungsmail')
+          .htmlView('pages/confirmation-mail', {
+            urlName
+          })
+      })
 
     } catch (error) {
       return view.render('pages/authentication/registrieren', { error: 'Fehler bei der Dateneingabe' });
     }
 
-    return view.render('pages/authentication/anmelden', {success: 'Sie haben sich erfolgreich registriert!'});
+    return view.render('pages/authentication/anmelden', {success: 'Sie haben sich erfolgreich registriert! Bitte bestätigen Sie Ihre E-Mail-Adresse, um sich einzuloggen.'});
+  }
+
+  public async confirmationMail({ view, params, response }: HttpContext) {
+    try {
+      const user = await db.from('user').select('*').where('username', params.username).first()
+
+      if (!user) {
+        return response.redirect('/home/registrieren')
+      }
+
+      await db.from('user').where('username', params.username).andWhere('token', params.token).update('verified', 1)
+
+      return view.render('pages/authentication/anmelden', { success: 'E-Mail-Adresse bestätigt, bitte anmelden.' })
+    } catch (error) {
+      return view.render('pages/authentication/anmelden', { error: 'Fehler bei der Bestätigung der E-Mail-Adresse' });
+    }
   }
 
   public async anmeldungsForm({ view, response, session }: HttpContext) {
@@ -46,25 +81,29 @@ export default class UsersController {
   }
 
   public async anmeldungsProzess({ response, request, view, session }: HttpContext) {
-    let result = await db.from('user').select('*').where('username', request.input('benutzername')).first()
+    let user = await db.from('user').select('*').where('username', request.input('benutzername')).first()
 
-    if(!result) {
+    if(!user) {
       return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
     }
 
-    const passwordOk = await hash.verify(result.password, request.input('passwort'))
+    if(user.verified === 0) {
+      return view.render('pages/authentication/anmelden', {error: 'Bitte bestätigen Sie Ihre E-Mail-Adresse'})
+    }
+
+    const passwordOk = await hash.verify(user.password, request.input('passwort'))
 
     if(!passwordOk) {
        return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
     }
 
     session.put('user', {
-      user_id: result.user_id,
-      username: result.username,
-      firstname: result.firstname,
-      lastname: result.lastname,
-      email: result.email,
-      profile_image: result.profile_image
+      user_id: user.user_id,
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      profile_image: user.profile_image
     })
 
     return response.redirect('/home');
