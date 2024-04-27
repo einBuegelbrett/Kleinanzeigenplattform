@@ -5,6 +5,7 @@ import app from "@adonisjs/core/services/app";
 import mail from '@adonisjs/mail/services/main'
 import { cuid } from '@adonisjs/core/helpers'
 import env from "#start/env";
+import User from "#models/user";
 
 export default class UsersController {
   public async registrierungsForm({ view, response, session }: HttpContext) {
@@ -17,40 +18,30 @@ export default class UsersController {
 
   public async registrierungsProzess({ view, request }: HttpContext) {
     try {
-      const hashedPasswort = await hash.make(request.input('passwort'));
-      const passwortOk = await hash.verify(hashedPasswort, request.input('passwort_wiederholen'));
-      const email = request.input('email');
-      const username = request.input('benutzername');
-      const token = cuid();
-
-      if(!passwortOk) {
-        return view.render('pages/authentication/registrieren', { error: 'Passwörter müssen identisch sein' });
-      }
-
-      // database puts the default profile picture
-      await db.table('user').insert({
-        username: username,
-        email: email,
-        firstname: request.input('vorname'),
-        lastname: request.input('nachname'),
-        password: hashedPasswort,
-        token: token});
+      const user = new User();
+      user.firstname = await request.input('vorname')
+      user.lastname = await request.input('nachname')
+      user.password = await request.input('passwort')
+      user.email = await request.input('email')
+      user.username = await request.input('benutzername')
+      user.token = cuid()
+      await user.save()
 
       const sender = `${env.get("MAIL_USERNAME")}`;
-      const urlName = `${env.get("APP_URL")}/home/registrieren/bestaetigen/${username}/${token}`;
+      const urlName = `${env.get("APP_URL")}/home/registrieren/bestaetigen/${user.user_id}/${user.token}`;
 
       await mail.send((message) => {
         message
-          .to(email)
+          .to(user.email)
           .from(sender)
           .subject('Bestätigungsmail')
-          .htmlView('email_template/confirmation_mail', {
+          .htmlView('email_template/confirmation-mail', {
             urlName
           })
       })
 
     } catch (error) {
-      return view.render('pages/authentication/registrieren', { error: 'Fehler bei der Dateneingabe' });
+      return view.render('pages/authentication/registrieren', { error});
     }
 
     return view.render('pages/authentication/anmelden', {success: 'Sie haben sich erfolgreich registriert! Bitte bestätigen Sie Ihre E-Mail-Adresse, um sich einzuloggen.'});
@@ -58,15 +49,19 @@ export default class UsersController {
 
   public async confirmationMail({ view, params, response }: HttpContext) {
     try {
-      const user = await db.from('user').select('*').where('username', params.username).first()
+      const user = await User.find(params.user_id)
 
       if (!user) {
         return response.redirect('/home/registrieren')
       }
 
-      await db.from('user').where('username', params.username).andWhere('token', params.token).update('verified', 1)
-
-      return view.render('pages/authentication/anmelden', { success: 'E-Mail-Adresse bestätigt, bitte anmelden.' })
+      if (user.token === params.token) {
+        user.verified = true;
+        await user.save()
+        return view.render('pages/authentication/anmelden', { success: 'E-Mail-Adresse bestätigt, bitte anmelden.' })
+      } else {
+        return view.render('pages/authentication/anmelden', { error: 'Invalider Token.' });
+      }
     } catch (error) {
       return view.render('pages/authentication/anmelden', { error: 'Fehler bei der Bestätigung der E-Mail-Adresse' });
     }
@@ -81,32 +76,36 @@ export default class UsersController {
   }
 
   public async anmeldungsProzess({ response, request, view, session }: HttpContext) {
-    let user = await db.from('user').select('*').where('username', request.input('benutzername')).first()
+    try {
+      const user = await User.findBy('username', request.input('benutzername'))
 
-    if(!user) {
-      return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
+      if(!user) {
+        return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
+      }
+
+      if(!user.verified) {
+        return view.render('pages/authentication/anmelden', {error: 'Bitte bestätigen Sie Ihre E-Mail-Adresse'})
+      }
+
+      const passwordOk = await hash.verify(user.password, request.input('passwort'))
+
+      if(!passwordOk) {
+         return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
+      }
+
+      session.put('user', {
+        user_id: user.user_id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        profile_image: user.profile_picture
+      })
+
+      return response.redirect('/home');
+    } catch (error) {
+      return view.render('pages/authentication/anmelden', {error: 'Anmeldung fehlgeschlagen'})
     }
-
-    if(user.verified === 0) {
-      return view.render('pages/authentication/anmelden', {error: 'Bitte bestätigen Sie Ihre E-Mail-Adresse'})
-    }
-
-    const passwordOk = await hash.verify(user.password, request.input('passwort'))
-
-    if(!passwordOk) {
-       return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
-    }
-
-    session.put('user', {
-      user_id: user.user_id,
-      username: user.username,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      email: user.email,
-      profile_image: user.profile_image
-    })
-
-    return response.redirect('/home');
   }
 
   public async logout({session, response}: HttpContext) {
