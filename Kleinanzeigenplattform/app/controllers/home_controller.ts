@@ -2,26 +2,27 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from "@adonisjs/lucid/services/db";
 
 export default class HomeController {
-  public async geheAnmeldungsseite({ response }: HttpContext) {
+  public async getLoginPage({ response }: HttpContext) {
     return response.redirect('/home/anmelden');
   }
 
   public async getItems({ view, session }: HttpContext) {
-    const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').groupBy('listing.listing_id').where('listing.active', 1).limit(12);
+    const items = await db.from('items').select('*').innerJoin('images', 'items.item_id', 'images.item_id').groupBy('items.item_id').where('items.active', 1).limit(12);
 
-    return view.render('pages/home/home', { user: session.get('user'), listing });
+    return view.render('pages/home/home', { user: session.get('user'), items });
   }
 
-  public async filterListing({ request, view, session }: HttpContext) {
+  public async filterItems({ request, view, session }: HttpContext) {
     const search = request.input('search');
+
     if(search === null) {
-      const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').groupBy('listing.listing_id').where('listing.active', 1).limit(12);
+      const items = await db.from('items').select('*').innerJoin('images', 'items.item_id', 'images.item_id').groupBy('items.item_id').where('items.active', 1).limit(12);
 
-      return view.render('pages/home/home', { user: session.get('user'), listing, search });
+      return view.render('pages/home/home', { user: session.get('user'), items });
     } else {
-      const listing = await db.from('listing').select('*').innerJoin('image', 'listing.listing_id', 'image.listing_id').groupBy('listing.listing_id').where('title', 'like', `%${search}%`).andWhere('listing.active', 1).limit(12);
+      const items = await db.from('items').select('*').innerJoin('images', 'items.item_id', 'images.item_id').groupBy('items.item_id').where('items.title', 'like', `%${search}%`).andWhere('items.active', 1).limit(12);
 
-      return view.render('pages/home/home', { user: session.get('user'), listing, search });
+      return view.render('pages/home/home', { user: session.get('user'), listing: items, search });
     }
   }
 }

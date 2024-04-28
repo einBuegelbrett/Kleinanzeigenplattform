@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    @each(item in listing)
+    @each(item in items)
       <div class="d-flex justify-content-center col-md-3 col-sm-6">
         <div class="card shadow mb-3 item">
           <div class="imageRatio">
@@ -27,10 +27,10 @@
         </div>
       @end
     </div>
-    @if (listing === undefined || listing.length === 0)
+    @if (items === undefined || items.length === 0)
       <div class="d-flex justify-content-start d-inline-block ms-3">
         <div class="alert alert-danger" role="alert">
-          <p>Es gibt keine eigene Anzeige</p>
+          <p>Keine Anzeige gefunden</p>
         </div>
       </div>
     @end

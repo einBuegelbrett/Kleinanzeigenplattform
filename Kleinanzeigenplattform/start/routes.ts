@@ -12,9 +12,9 @@ import HomeController from "#controllers/home_controller";
 import UsersController from "#controllers/users_controller";
 import ListingsController from "#controllers/listings_controller";
 
-router.get('/', [HomeController, 'geheAnmeldungsseite'])
+router.get('/', [HomeController, 'getLoginPage'])
 router.get('/home', [HomeController, 'getItems'])
-router.post('/home', [HomeController, 'filterListing'])
+router.post('/home', [HomeController, 'filterItems'])
 router.get('/home/registrieren', [UsersController, 'registrierungsForm'])
 router.post('/home/registrieren', [UsersController, 'registrierungsProzess'])
 router.get('/home/registrieren/bestaetigen/:user_id/:token', [UsersController, 'confirmationMail'])
