@@ -8,24 +8,29 @@ import env from "#start/env";
 import User from "#models/user";
 
 export default class UsersController {
-  public async registrierungsForm({ view, response, session }: HttpContext) {
+  public async getSignInPage({ view, response, session }: HttpContext) {
     if (session.get('user') != undefined) {
       return response.redirect('/home')
     }
 
-    return view.render('pages/authentication/registrieren')
+    return view.render('pages/authentication/signin')
   }
 
-  public async registrierungsProzess({ view, request }: HttpContext) {
+  public async signInProcess({ view, request }: HttpContext) {
     try {
       const user = new User();
-      user.firstname = await request.input('vorname')
-      user.lastname = await request.input('nachname')
-      user.password = await request.input('passwort')
+      user.firstname = await request.input('firstname')
+      user.lastname = await request.input('lastname')
+      user.password = await request.input('password')
       user.email = await request.input('email')
-      user.username = await request.input('benutzername')
+      user.username = await request.input('username')
       user.token = cuid()
-      await user.save()
+
+      if(user.password === request.input('repeat_password')) {
+        await user.save()
+      } else {
+        return view.render('pages/authentication/signin', { error: 'Passwort stimmt nicht überein' })
+      }
 
       const sender = `${env.get("MAIL_USERNAME")}`;
       const urlName = `${env.get("APP_URL")}/home/registrieren/bestaetigen/${user.user_id}/${user.token}`;
@@ -41,10 +46,10 @@ export default class UsersController {
       })
 
     } catch (error) {
-      return view.render('pages/authentication/registrieren', { error});
+      return view.render('pages/authentication/signin', { error : 'Fehler bei der Registrierung'});
     }
 
-    return view.render('pages/authentication/anmelden', {success: 'Sie haben sich erfolgreich registriert! Bitte bestätigen Sie Ihre E-Mail-Adresse, um sich einzuloggen.'});
+    return view.render('pages/authentication/login', {success: 'Sie haben sich erfolgreich registriert! Bitte bestätigen Sie Ihre E-Mail-Adresse, um sich einzuloggen.'});
   }
 
   public async confirmationMail({ view, params, response }: HttpContext) {
@@ -58,63 +63,63 @@ export default class UsersController {
       if (user.token === params.token) {
         user.verified = true;
         await user.save()
-        return view.render('pages/authentication/anmelden', { success: 'E-Mail-Adresse bestätigt, bitte anmelden.' })
+        return view.render('pages/authentication/login', { success: 'E-Mail-Adresse bestätigt, bitte anmelden.' })
       } else {
-        return view.render('pages/authentication/anmelden', { error: 'Invalider Token.' });
+        return view.render('pages/authentication/login', { error: 'Invalider Token.' });
       }
     } catch (error) {
-      return view.render('pages/authentication/anmelden', { error: 'Fehler bei der Bestätigung der E-Mail-Adresse' });
+      return view.render('pages/authentication/login', { error: 'Fehler bei der Bestätigung der E-Mail-Adresse' });
     }
   }
 
-  public async anmeldungsForm({ view, response, session }: HttpContext) {
+  public async getLogInPage({ view, response, session }: HttpContext) {
     if (session.get('user') != undefined) {
       return response.redirect('/home')
     }
 
-    return view.render('pages/authentication/anmelden')
+    return view.render('pages/authentication/login')
   }
 
-  public async anmeldungsProzess({ response, request, view, session }: HttpContext) {
+  public async logInProcess({ response, request, view, session }: HttpContext) {
     try {
-      const user = await User.findBy('username', request.input('benutzername'))
+      const user = await User.findBy('username', request.input('username'))
 
       if(!user) {
-        return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
+        return view.render('pages/authentication/login', { error: 'Benutzername oder Passwort falsch' })
       }
 
       if(!user.verified) {
-        return view.render('pages/authentication/anmelden', {error: 'Bitte bestätigen Sie Ihre E-Mail-Adresse'})
+        return view.render('pages/authentication/login', { error: 'Bitte bestätigen Sie Ihre E-Mail-Adresse' })
       }
 
-      const passwordOk = await hash.verify(user.password, request.input('passwort'))
+      const verifyPassword = await hash.verify(user.password, request.input('password'))
 
-      if(!passwordOk) {
-         return view.render('pages/authentication/anmelden', {error: 'Benutzername oder Passwort falsch'})
+      if(verifyPassword) {
+        session.put('user', {
+          user_id: user.user_id,
+          username: user.username,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          profile_image: user.profile_picture
+        })
+
+        return response.redirect('/home');
+      } else {
+         return view.render('pages/authentication/login', {error: 'Benutzername oder Passwort falsch'})
       }
-
-      session.put('user', {
-        user_id: user.user_id,
-        username: user.username,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        profile_image: user.profile_picture
-      })
-
-      return response.redirect('/home');
     } catch (error) {
-      return view.render('pages/authentication/anmelden', {error: 'Anmeldung fehlgeschlagen'})
+      return view.render('pages/authentication/login', {error: 'Anmeldung fehlgeschlagen'})
     }
   }
 
-  public async logout({session, response}: HttpContext) {
+  public async logOut({session, response}: HttpContext) {
     session.forget('user')
 
     return response.redirect('/home/anmelden')
   }
 
-  public async userProfile({session, response, view }: HttpContext) {
+  public async getProfile({session, response, view }: HttpContext) {
     if (session.get('user') === undefined) {
       return response.redirect('/home/anmelden')
     }
@@ -122,44 +127,48 @@ export default class UsersController {
     return view.render('pages/user/konto-profil', { user: session.get('user') })
   }
 
-  public async updateProfile({ view, response, request, session }: HttpContext) {
+  public async updateProfile({ view, request, session }: HttpContext) {
     try {
-      const userId = session.get('user').user_id
-      const userBenutzername = session.get('user').username
-      let profileImage = request.file('profileImage',{ size: '2mb', extnames: ['jpg', 'png', 'jpeg']})
+      const user = await User.findBy('user_id', session.get('user').user_id)
 
-      if(!profileImage?.isValid){
-        profileImage = null;
-      } else {
-        await profileImage.move(app.publicPath('uploads'), { name: `${cuid()}.${profileImage.extname}`, overwrite: true })
+      if(!user) {
+        return view.render('pages/authentication/login', { error: 'Fehler beim Laden des Profils' })
       }
 
+      let profilePicture = request.file('profile_picture',{ size: '2mb', extnames: ['jpg', 'png', 'jpeg']})
+
+      if(!profilePicture?.isValid){
+        profilePicture = null;
+      } else {
+        await profilePicture.move(app.publicPath('uploads'), { name: `${cuid()}.${profilePicture.extname}`, overwrite: true })
+      }
+
+      user.email = await request.input('email')
+      user.firstname = await request.input('firstname')
+      user.lastname = await request.input('lastname')
+      user.profile_picture = profilePicture? profilePicture.fileName : await session.get('user').profile_image
+
       session.put('user', {
-        user_id: userId,
-        username: userBenutzername,
-        firstname: request.input('vorname'),
-        lastname: request.input('nachname'),
-        email: request.input('email'),
-        profile_image: profileImage? profileImage.fileName : session.get('user').profile_image
+        user_id: user.user_id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        profile_image: profilePicture? profilePicture.fileName : session.get('user').profile_image
       })
 
-      await db.from('user').where('user_id', userId).update({
-        email: request.input('email'),
-        firstname: request.input('vorname'),
-        lastname: request.input('nachname'),
-        profile_image: profileImage? profileImage.fileName : session.get('user').profile_image})
+      await user.save()
 
+      return view.render('pages/user/konto-profil', { success: 'Profil erfolgreich aktualisiert', user: session.get('user')});
     } catch (error) {
       return view.render('pages/user/konto-profil', { error: 'Fehler bei der Dateneingabe', user: session.get('user')});
     }
-
-    return response.redirect('/home/konto/profil')
   }
 
   public async conversationList({ response, view, session }: HttpContext) {
-    const user = await session.get('user');
+    const user = await User.findBy('user_id', session.get('user').user_id)
 
-    if (user === undefined) {
+    if (!user) {
       return response.redirect('/home/anmelden');
     }
 

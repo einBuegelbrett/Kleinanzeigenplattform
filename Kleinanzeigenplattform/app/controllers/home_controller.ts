@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import db from "@adonisjs/lucid/services/db";
 
 export default class HomeController {
-  public async getLoginPage({ response }: HttpContext) {
+  public async getLogInPage({ response }: HttpContext) {
     return response.redirect('/home/anmelden');
   }
 
