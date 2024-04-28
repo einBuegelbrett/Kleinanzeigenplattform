@@ -29,8 +29,8 @@
                 {{csrfField()}}
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="profileImage" class="form-label">Profilbild:</label>
-                    <input type="file" class="form-control shadow" name="profileImage" id="imageInputId" onchange="previewImages()" disabled>
+                    <label for="profile_picture" class="form-label">Profilbild:</label>
+                    <input type="file" class="form-control shadow" name="profile_picture" id="profile_picture" onchange="previewImages()" disabled>
                     <div id="image-preview" class="d-flex flex-row"></div>
                   </div>
                   <div class="col-md-6 mb-3">
@@ -40,12 +40,12 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="vorname" class="form-label">Vorname:</label>
-                    <input type="text" id="vorname" class="form-control shadow" name="vorname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
+                    <label for="firstname" class="form-label">Vorname:</label>
+                    <input type="text" id="firstname" class="form-control shadow" name="firstname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
                   </div>
                   <div class="col-md-6">
-                    <label for="nachname" class="form-label">Nachname:</label>
-                    <input type="text" id="nachname" class="form-control shadow" name="nachname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
+                    <label for="lastname" class="form-label">Nachname:</label>
+                    <input type="text" id="lastname" class="form-control shadow" name="lastname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
                   </div>
                 </div>
                 @if(error != undefined)

@@ -1,18 +1,18 @@
 function enableInputs() {
-  document.getElementById("imageInputId").disabled = false;
+  document.getElementById("profile_picture").disabled = false;
   document.getElementById("email").disabled = false;
-  document.getElementById("vorname").disabled = false;
-  document.getElementById("nachname").disabled = false;
+  document.getElementById("firstname").disabled = false;
+  document.getElementById("lastname").disabled = false;
   document.getElementById("changeDataBtn").classList.add("d-none");
   document.getElementById("cancelBtn").classList.remove("d-none");
   document.getElementById("doChangeBtn").classList.remove("d-none");
 }
 
 function disableInputs() {
-  document.getElementById("imageInputId").disabled = true;
+  document.getElementById("profile_picture").disabled = true;
   document.getElementById("email").disabled = true;
-  document.getElementById("vorname").disabled = true;
-  document.getElementById("nachname").disabled = true;
+  document.getElementById("firstname").disabled = true;
+  document.getElementById("lastname").disabled = true;
   document.getElementById("changeDataBtn").classList.remove("d-none");
   document.getElementById("cancelBtn").classList.add("d-none");
   document.getElementById("doChangeBtn").classList.add("d-none");
