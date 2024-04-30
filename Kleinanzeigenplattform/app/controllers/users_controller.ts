@@ -147,6 +147,7 @@ export default class UsersController {
       user.firstname = await request.input('firstname')
       user.lastname = await request.input('lastname')
       user.profile_picture = profilePicture? profilePicture.fileName : await session.get('user').profile_image
+      await user.save()
 
       session.put('user', {
         user_id: user.user_id,
@@ -156,8 +157,6 @@ export default class UsersController {
         email: user.email,
         profile_image: profilePicture? profilePicture.fileName : session.get('user').profile_image
       })
-
-      await user.save()
 
       return view.render('pages/user/konto-profil', { success: 'Profil erfolgreich aktualisiert', user: session.get('user')});
     } catch (error) {

@@ -9,6 +9,9 @@ export default class Message extends BaseModel {
   declare sender_id: number
 
   @column()
+  declare receiver_id: number
+
+  @column()
   declare item_id: number
 
   @column()

@@ -121,22 +121,29 @@ export default class ItemsController {
       return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Nicht erlaubt'})
     }
 
-    const allMessages = await db.from('messages')
-      .select('messages.*', 'users.username as sender_username', 'users.profile_picture as sender_profile_picture')
-      .join('users', 'messages.sender_id', 'users.user_id')
-      .where('item_id', item.item_id)
-      .andWhere(builder => {
-        builder.where('sender_id', session.get('user').user_id)
-          .orWhere('sender_id', '!=', session.get('user').user_id);
+    const allMessages = await Message.query()
+      .where(function (query) {
+        query
+          .where('sender_id', item.user_id)
+          .where('receiver_id', params.user_id)
+          .where('item_id', item.item_id)
       })
-      .orderBy('created_at', 'asc');
+      .orWhere(function (query) {
+        query
+          .where('sender_id', params.user_id)
+          .where('receiver_id', item.user_id)
+          .where('item_id', item.item_id)
+      }).orderBy('created_at', 'asc')
 
-    const receiverUsername = await db.from('items')
-      .select('users.username as receiver_username', 'users.profile_picture as receiver_profile_picture')
-      .join('users', 'items.user_id', 'users.user_id')
-      .where('item_id', item.item_id);
+    // The first message always comes from the person that is interested in the item
+    let chatPartner
+    if(session.get('user').user_id === item.user_id) {
+      chatPartner = await User.findBy('user_id', allMessages[0].sender_id)
+    } else {
+      chatPartner = await User.findBy('user_id', allMessages[0].receiver_id)
+    }
 
-    return view.render('pages/communication/item-chat', { user: session.get('user'), item, allMessages, receiverUsername })
+    return view.render('pages/communication/item-chat', { user: session.get('user'), item, allMessages, chatPartner })
   }
 
   public async sendMessage({view, params, request, session}: HttpContext) {
@@ -147,27 +154,40 @@ export default class ItemsController {
       return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
     }
 
-    message.sender_id = session.get('user').user_id
+    if(session.get('user').user_id === item.user_id) {
+      message.sender_id = item.user_id
+      message.receiver_id = params.user_id
+    } else {
+      message.sender_id = params.user_id
+      message.receiver_id = item.user_id
+    }
+
     message.item_id = item.item_id
     message.content = request.input('nachricht');
     await message.save()
 
-    const allMessages = await db.from('messages')
-      .select('messages.*', 'users.username as sender_username', 'users.profile_picture as sender_profile_picture')
-      .join('users', 'messages.sender_id', 'users.user_id')
-      .where('item_id', item.item_id)
-      .andWhere(builder => {
-        builder.where('sender_id', session.get('user').user_id)
-          .orWhere('sender_id', '!=', session.get('user').user_id);
+    const allMessages = await Message.query()
+      .where(function (query) {
+        query
+          .where('sender_id', item.user_id)
+          .where('receiver_id', params.user_id)
+          .where('item_id', item.item_id)
       })
-      .orderBy('created_at', 'asc');
+      .orWhere(function (query) {
+        query
+          .where('sender_id', params.user_id)
+          .where('receiver_id', item.user_id)
+          .where('item_id', item.item_id)
+      }).orderBy('created_at', 'asc')
 
-    const receiverUsername = await db.from('items')
-      .select('users.username as receiver_username', 'users.profile_picture as receiver_profile_picture')
-      .join('users', 'items.user_id', 'users.user_id')
-      .where('item_id', item.item_id);
+    let chatPartner
+    if(session.get('user').user_id === item.user_id) {
+      chatPartner = await User.findBy('user_id', allMessages[0].sender_id)
+    } else {
+      chatPartner = await User.findBy('user_id', allMessages[0].receiver_id)
+    }
 
-    return view.render('pages/communication/item-chat', {user: session.get('user'), item, allMessages, receiverUsername })
+    return view.render('pages/communication/item-chat', {user: session.get('user'), item, allMessages, chatPartner })
   }
 
   public async buyingPage({view, params, session}: HttpContext) {
