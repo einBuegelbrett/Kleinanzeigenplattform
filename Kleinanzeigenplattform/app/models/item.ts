@@ -5,7 +5,7 @@ export default class Item extends BaseModel {
   declare item_id: number
 
   @column()
-  declare tile: string
+  declare title: string
 
   @column()
   declare description: string
@@ -18,5 +18,4 @@ export default class Item extends BaseModel {
 
   @column()
   declare user_id: number
-
 }

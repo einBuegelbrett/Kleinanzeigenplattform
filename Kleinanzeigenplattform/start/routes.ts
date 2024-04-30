@@ -10,7 +10,7 @@
 import router from '@adonisjs/core/services/router'
 import HomeController from "#controllers/home_controller";
 import UsersController from "#controllers/users_controller";
-import ListingsController from "#controllers/listings_controller";
+import ListingsController from "#controllers/items_controller";
 
 router.get('/', [HomeController, 'getLogInPage'])
 router.get('/home', [HomeController, 'getItems'])
@@ -24,13 +24,13 @@ router.get('/home/logout', [UsersController, 'logOut'])
 router.get('/home/konto/profil', [UsersController, 'getProfile'])
 router.post('/home/konto/profil', [UsersController, 'updateProfile'])
 router.get('/home/konto/nachrichten', [UsersController, 'conversationList'])
-router.get('/home/artikel/:listing_id', [ListingsController, 'listingDetails'])
-router.post('/home/artikel/:listing_id', [ListingsController, 'activateListing'])
-router.get('/home/artikel/:listing_id/kaufen', [ListingsController, 'buyingPage'])
-router.post('/home/artikel/:listing_id/kaufen', [ListingsController, 'buyItem'])
-router.get('/home/artikel/:listing_id/user/:user_id/chat', [ListingsController, 'listingChat'])
-router.post('/home/artikel/:listing_id/user/:user_id/chat', [ListingsController, 'sendMessage'])
-router.get('/home/anzeige_aufgeben', [ListingsController, 'listingPage'])
-router.post('/home/anzeige_aufgeben', [ListingsController, 'postListing'])
-router.get('/home/konto/eigene_anzeigen', [ListingsController, 'ownListing'])
-router.post('/home/konto/eigene_anzeigen/:listing_id', [ListingsController, 'deleteListing'])
+router.get('/home/artikel/:item_id', [ListingsController, 'itemDetail'])
+router.post('/home/artikel/:item_id', [ListingsController, 'activateItem'])
+router.get('/home/artikel/:item_id/kaufen', [ListingsController, 'buyingPage'])
+router.post('/home/artikel/:item_id/kaufen', [ListingsController, 'buyItem'])
+router.get('/home/artikel/:item_id/user/:user_id/chat', [ListingsController, 'itemChat'])
+router.post('/home/artikel/:item_id/user/:user_id/chat', [ListingsController, 'sendMessage'])
+router.get('/home/anzeige_aufgeben', [ListingsController, 'getSubmitItemPage'])
+router.post('/home/anzeige_aufgeben', [ListingsController, 'postItem'])
+router.get('/home/konto/eigene_anzeigen', [ListingsController, 'ownItems'])
+router.post('/home/konto/eigene_anzeigen/:listing_id', [ListingsController, 'deleteItem'])

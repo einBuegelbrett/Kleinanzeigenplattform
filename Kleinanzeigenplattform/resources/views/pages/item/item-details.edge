@@ -26,7 +26,7 @@
               <div class="carousel-inner">
                 @each((image, index) in images)
                 <div class="carousel-item {{ index === 0 ? 'active' : '' }}">
-                  <img src="/uploads/{{ image.link }}" class="d-block object-fit-cover w-100 h-100" alt="{{ image.link }}">
+                  <img src="/uploads/{{ image.path }}" class="d-block object-fit-cover w-100 h-100" alt="Bild Artikel">
                 </div>
                 @end
               </div>
@@ -45,7 +45,7 @@
                 <p class="fw-bold mb-3 mt-auto">{{ seller.username }}</p>
               </div>
               @if (user && user.user_id != seller.user_id)
-                <form action="/home/artikel/{{ listing.listing_id }}/user/{{ user.user_id }}/chat" method="GET">
+                <form action="/home/artikel/{{ item.item_id }}/user/{{ user.user_id }}/chat" method="GET">
                   {{csrfField()}}
                   <button class="btn btn-primary shadow mt-1"  type="submit">Nachricht</button>
                 </form>
@@ -54,31 +54,31 @@
           </div>
           <div class="bg-body rounded shadow p-4 col-md-5 d-flex flex-column justify-content-between  h-75">
             <div class="d-flex flex-column justify-content-between">
-              <h3 class="text-break fw-bold mb-4 me-2">{{ listing.title }}</h3>
-              @if(listing.price === 0)
+              <h3 class="text-break fw-bold mb-4 me-2">{{ item.title }}</h3>
+              @if(item.price === 0)
                 <h3 class="fw-bold d-flex text-primary">Kostenlos</h3>
               @else
-                <h3 class="fw-bold d-flex text-primary">{{ listing.price }}€</h3>
+                <h3 class="fw-bold d-flex text-primary">{{ item.price }}€</h3>
               @end
             </div>
-            <p class="text-break overflow-auto mt-4">{{ listing.description }}</p>
+            <p class="text-break overflow-auto mt-4">{{ item.description }}</p>
             <div>
             @if (user && user.user_id != seller.user_id)
               <div class="d-flex justify-content-end">
-                <a href="/home/artikel/{{ listing.listing_id }}/kaufen" class="btn btn-success shadow">Artikel kaufen</a>
+                <a href="/home/artikel/{{ item.item_id }}/kaufen" class="btn btn-success shadow">Artikel kaufen</a>
               </div>
             @end
             @if (user && user.user_id === seller.user_id)
               <div class="d-flex justify-content-end">
-              <form action="/home/artikel/{{ listing.listing_id }}" class="me-2" method="post">
+              <form action="/home/artikel/{{ item.item_id }}" class="me-2" method="post">
                 {{csrfField()}}
-                @if (listing.active === 1)
+                @if (item.active === 1)
                   <button class="btn btn-warning shadow" type="submit">Deaktivieren</button>
                 @else
                   <button class="btn btn-success shadow" type="submit">Aktivieren</button>
                 @end
               </form>
-              <form action="/home/konto/eigene_anzeigen/{{ listing.listing_id }}" method="POST">
+              <form action="/home/konto/eigene_anzeigen/{{ item.item_id }}" method="POST">
                 {{csrfField()}}
                 <button class="btn btn-danger shadow" type="submit">Löschen</button>
               </form>

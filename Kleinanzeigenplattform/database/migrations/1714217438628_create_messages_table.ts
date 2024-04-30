@@ -6,9 +6,9 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('message_id').primary()
-      table.integer('sender_id').notNullable().references('user_id').inTable('user').onDelete('CASCADE')
-      table.integer('item_id').notNullable().references('item_id').inTable('item').onDelete('CASCADE')
-      table.string('message').notNullable()
+      table.integer('sender_id').notNullable().references('user_id').inTable('users').onDelete('CASCADE')
+      table.integer('item_id').notNullable().references('item_id').inTable('items').onDelete('CASCADE')
+      table.string('content').notNullable()
       table.timestamp('created_at')
     })
   }

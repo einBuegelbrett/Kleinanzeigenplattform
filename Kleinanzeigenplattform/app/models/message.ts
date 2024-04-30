@@ -12,7 +12,7 @@ export default class Message extends BaseModel {
   declare item_id: number
 
   @column()
-  declare message: string
+  declare content: string
 
   @column.dateTime({ autoCreate: true })
   declare created_at: DateTime

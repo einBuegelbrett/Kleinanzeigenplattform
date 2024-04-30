@@ -172,21 +172,21 @@ export default class UsersController {
       return response.redirect('/home/anmelden');
     }
 
-    const allConversations = await db.from('message as m')
-      .select('m.sender_id', 'l.listing_id', 'l.title', 'u.user_id as receiver_id', 'u.username as receiver_username', 's.username as sender_username')
-      .join('listing as l', 'm.listing_id', 'l.listing_id')
-      .join('user as u', 'l.user_id', 'u.user_id')
-      .join('user as s', 'm.sender_id', 's.user_id') // Join to get sender username
+    const allConversations = await db.from('messages as m')
+      .select('m.sender_id', 'i.item_id', 'i.title', 'u.user_id as receiver_id', 'u.username as receiver_username', 's.username as sender_username')
+      .join('items as i', 'm.item_id', 'i.item_id')
+      .join('users as u', 'i.user_id', 'u.user_id')
+      .join('users as s', 'm.sender_id', 's.user_id') // Join to get sender username
       .where('m.sender_id', user.user_id)
-      .whereNot('l.user_id', user.user_id) // Exclude where user_id equals sender_id
+      .whereNot('i.user_id', user.user_id) // Exclude where user_id equals sender_id
       .union(builder => {
-        builder.select('m.sender_id', 'l.listing_id', 'l.title', 'u.user_id as receiver_id', 'u.username as receiver_username', 's.username as sender_username')
-          .from('message as m')
-          .join('listing as l', 'm.listing_id', 'l.listing_id')
-          .join('user as u', 'l.user_id', 'u.user_id')
-          .join('user as s', 'm.sender_id', 's.user_id') // Join to get sender username
-          .where('l.user_id', user.user_id)
-          .groupBy('l.user_id', 'm.listing_id');
+        builder.select('m.sender_id', 'i.item_id', 'i.title', 'u.user_id as receiver_id', 'u.username as receiver_username', 's.username as sender_username')
+          .from('messages as m')
+          .join('items as i', 'm.item_id', 'i.item_id')
+          .join('users as u', 'i.user_id', 'u.user_id')
+          .join('users as s', 'm.sender_id', 's.user_id') // Join to get sender username
+          .where('i.user_id', user.user_id)
+          .groupBy('i.user_id', 'm.item_id');
       });
 
     return view.render('pages/communication/nachrichten-liste', { user: session.get('user'), allConversations })

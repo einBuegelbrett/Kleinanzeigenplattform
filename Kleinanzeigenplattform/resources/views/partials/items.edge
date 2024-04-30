@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-center col-md-3 col-sm-6">
         <div class="card shadow mb-3 item">
           <div class="imageRatio">
-            <img class="d-block object-fit-cover w-100 h-100" src="/uploads/{{ item.link }}" alt="{{ item.title }}">
+            <img class="d-block object-fit-cover w-100 h-100" src="/uploads/{{ item.path }}" alt="{{ item.path }}">
           </div>
           <div class="card-body">
             <h5 class="card-title">{{ item.title }}</h5>
@@ -14,7 +14,7 @@
               <p class="fw-bold d-flex text-primary">{{ item.price }}€</p>
             @end
             <div class="d-flex justify-content-end">
-              <a href="/home/artikel/{{ item.listing_id }}" class="btn btn-primary shadow">Zum Artikel</a>
+              <a href="/home/artikel/{{ item.item_id }}" class="btn btn-primary shadow">Zum Artikel</a>
             </div>
           </div>
         </div>

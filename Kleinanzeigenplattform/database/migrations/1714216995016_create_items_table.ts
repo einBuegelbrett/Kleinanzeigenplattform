@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.text('description').notNullable()
       table.float('price').notNullable()
       table.boolean('active').notNullable().defaultTo(true)
-      table.integer('user_id').notNullable().references('user_id').inTable('user').onDelete('CASCADE')
+      table.integer('user_id').notNullable().references('user_id').inTable('users').onDelete('CASCADE')
     })
   }
 

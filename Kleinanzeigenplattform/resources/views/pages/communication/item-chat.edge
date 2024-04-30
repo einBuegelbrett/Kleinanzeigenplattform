@@ -17,15 +17,15 @@
     <div class="d-flex justify-content-center align-items-center">
       <div class="container-lg w-50 shadow rounded mb-4 mx-5 p-3 bg-light">
         <div class="d-flex flex-row sticky-top p-2 overflow-auto">
-          @if (user.user_id != listing.user_id)
+          @if (user.user_id != item.user_id)
             <div class="d-flex justify-content-start align-items-start me-3">
-              <img src="/uploads/{{ receiverUsername[0].receiver_profile_image }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
-              <h3 class="mt-1">{{ receiverUsername[0].receiver_username }} | <a href="/home/artikel/{{ listing.listing_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ listing.title }}</a></h3>
+              <img src="/uploads/{{ receiverUsername[0].receiver_profile_picture }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
+              <h3 class="mt-1">{{ receiverUsername[0].receiver_username }} | <a href="/home/artikel/{{ item.item_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ item.title }}</a></h3>
             </div>
           @else
           <div class="d-flex justify-content-start align-items-start me-3">
-            <img src="/uploads/{{ allMessages[0].sender_profile_image }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
-            <h3 class="mt-1">{{ allMessages[0].sender_username }} | <a href="/home/artikel/{{ listing.listing_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ listing.title }}</a></h3>
+            <img src="/uploads/{{ allMessages[0].sender_profile_picture }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
+            <h3 class="mt-1">{{ allMessages[0].sender_username }} | <a href="/home/artikel/{{ item.item_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ item.title }}</a></h3>
           </div>
           @end
         </div>
@@ -34,8 +34,8 @@
           @each (message in allMessages)
             <div class="d-flex {{ message.sender_id == user.user_id ? 'justify-content-end' : 'justify-content-start' }}">
               <div class="message-bubble text-break shadow {{ message.sender_id == user.user_id ? 'sender' : 'receiver' }} mx-3">
-                  <p class="mb-0">{{ message.message_text }}</p>
-                  <p class="d-flex justify-content-end fw-lighter small-font my-0">{{ message.timestamp }}</p>
+                  <p class="mb-0">{{ message.content }}</p>
+                  <p class="d-flex justify-content-end fw-lighter small-font my-0">{{ message.created_at }}</p>
               </div>
             </div>
           @end
@@ -45,12 +45,12 @@
 
     <div class="d-flex justify-content-center py-3 border-bottom bg-dark-subtle">
       <a href="/home/konto/nachrichten" class="btn btn-danger shadow me-2">Zurück</a>
-      <form action="/home/artikel/{{ listing.listing_id }}/user/{{ allMessages[0] ? allMessages[0].sender_id : user.user_id }}/chat" method="POST" class="d-flex">
+      <form action="/home/artikel/{{ item.item_id }}/user/{{ allMessages[0] ? allMessages[0].sender_id : user.user_id }}/chat" method="POST" class="d-flex">
         {{ csrfField() }}
         <input class="form-control shadow me-2" type="search" placeholder="Schreibe eine Nachricht..." name="nachricht" aria-label="Schreibe eine Nachricht..." maxlength="100" required autofocus>
         <button class="btn btn-success shadow me-2" type="submit">Senden</button>
       </form>
-        @if (user.user_id != listing.user_id)
+        @if (user.user_id != item.user_id)
           <button class="btn btn-warning shadow" onclick="sendWasLetztePreis()">Was letzte Preis?</button>
         @end
     </div>
