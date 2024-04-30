@@ -33,4 +33,4 @@ router.post('/home/artikel/:item_id/user/:user_id/chat', [ListingsController, 's
 router.get('/home/anzeige_aufgeben', [ListingsController, 'getSubmitItemPage'])
 router.post('/home/anzeige_aufgeben', [ListingsController, 'postItem'])
 router.get('/home/konto/eigene_anzeigen', [ListingsController, 'ownItems'])
-router.post('/home/konto/eigene_anzeigen/:listing_id', [ListingsController, 'deleteItem'])
+router.post('/home/konto/eigene_anzeigen/:item_id', [ListingsController, 'deleteItem'])
