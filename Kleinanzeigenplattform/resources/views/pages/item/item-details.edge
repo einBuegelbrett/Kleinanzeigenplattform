@@ -72,13 +72,13 @@
               <div class="d-flex justify-content-end">
               <form action="/home/artikel/{{ item.item_id }}" class="me-2" method="post">
                 {{csrfField()}}
-                @if (item.active === 1)
+                @if (item.active)
                   <button class="btn btn-warning shadow" type="submit">Deaktivieren</button>
                 @else
                   <button class="btn btn-success shadow" type="submit">Aktivieren</button>
                 @end
               </form>
-              <form action="/home/konto/eigene_anzeigen/{{ item.item_id }}" method="POST">
+              <form action="/home/konto/eigene_anzeigen/{{ item.item_id }}" method="post">
                 {{csrfField()}}
                 <button class="btn btn-danger shadow" type="submit">Löschen</button>
               </form>

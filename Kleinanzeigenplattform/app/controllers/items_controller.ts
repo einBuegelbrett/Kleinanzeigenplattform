@@ -32,11 +32,11 @@ export default class ItemsController {
 
     // change the state of the item
     item.active = !item.active
+    await item.save()
     const seller = await User.findBy('user_id', item.user_id)
     const images = await Image.findManyBy('item_id', item.item_id)
-    await item.save()
 
-    return view.render('pages/item/item-detail', { user: session.get('user'), item, seller, images })
+    return view.render('pages/item/item-details', { user: session.get('user'), item, seller, images })
   }
 
   public async getSubmitItemPage({view, response, session}: HttpContext) {
@@ -150,7 +150,7 @@ export default class ItemsController {
     message.sender_id = session.get('user').user_id
     message.item_id = item.item_id
     message.content = request.input('nachricht');
-    message.save()
+    await message.save()
 
     const allMessages = await db.from('messages')
       .select('messages.*', 'users.username as sender_username', 'users.profile_picture as sender_profile_picture')
