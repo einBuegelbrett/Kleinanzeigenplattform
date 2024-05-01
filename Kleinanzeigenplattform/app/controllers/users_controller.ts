@@ -188,6 +188,6 @@ export default class UsersController {
           .groupBy('i.user_id', 'm.item_id');
       });
 
-    return view.render('pages/communication/nachrichten-liste', { user: session.get('user'), allConversations })
+    return view.render('pages/communication/list-chat', { user: session.get('user'), allConversations })
   }
 }
