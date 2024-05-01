@@ -8,6 +8,9 @@ import Item from "#models/item";
 import Image from "#models/image";
 import User from "#models/user";
 import Message from "#models/message";
+import {creditCardValidator} from "#validators/purchase_validator";
+import {submitItem} from "#validators/item_validator";
+import {messageValidator} from "#validators/user_validator";
 
 export default class ItemsController {
   public async itemDetail({view, params, session}: HttpContext) {
@@ -47,6 +50,8 @@ export default class ItemsController {
   }
 
   public async postItem({request, view, session}: HttpContext) {
+    await submitItem.validate(request.all())
+
     try {
       const item = new Item()
       const image = new Image()
@@ -56,9 +61,9 @@ export default class ItemsController {
         return view.render('pages/item/submit-item-page', {error: 'Bitte Bild hochladen', user: session.get('user')})
       }
 
-      item.title = request.input('titel')
-      item.description = request.input('beschreibung')
-      item.price = request.input('preis')
+      item.title = request.input('title')
+      item.description = request.input('description')
+      item.price = request.input('price')
       item.user_id = session.get('user').user_id
       await item.save()
 
@@ -140,71 +145,88 @@ export default class ItemsController {
     if(session.get('user').user_id === item.user_id) {
       chatPartner = await User.findBy('user_id', allMessages[0].sender_id)
     } else {
-      chatPartner = await User.findBy('user_id', allMessages[0].receiver_id)
+      chatPartner = allMessages[0] ? await User.findBy('user_id', allMessages[0].receiver_id) : await User.findBy('user_id', session.get('user').user_id)
     }
 
     return view.render('pages/communication/item-chat', { user: session.get('user'), item, allMessages, chatPartner })
   }
 
   public async sendMessage({view, params, request, session}: HttpContext) {
-    const item = await Item.findBy('item_id', params.item_id)
-    const message = new Message()
+    await messageValidator.validate(request.all())
 
-    if(!item){
-      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+    try {
+      const item = await Item.findBy('item_id', params.item_id)
+      const message = new Message()
+
+      if(!item){
+        return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      }
+
+      if(session.get('user').user_id === item.user_id) {
+        message.sender_id = item.user_id
+        message.receiver_id = params.user_id
+      } else {
+        message.sender_id = params.user_id
+        message.receiver_id = item.user_id
+      }
+
+      message.item_id = item.item_id
+      message.content = request.input('nachricht');
+      await message.save()
+
+      const allMessages = await Message.query()
+        .where(function (query) {
+          query
+            .where('sender_id', item.user_id)
+            .where('receiver_id', params.user_id)
+            .where('item_id', item.item_id)
+        })
+        .orWhere(function (query) {
+          query
+            .where('sender_id', params.user_id)
+            .where('receiver_id', item.user_id)
+            .where('item_id', item.item_id)
+        }).orderBy('created_at', 'asc')
+
+      let chatPartner
+      if(session.get('user').user_id === item.user_id) {
+        chatPartner = await User.findBy('user_id', allMessages[0].sender_id)
+      } else {
+        chatPartner = await User.findBy('user_id', allMessages[0].receiver_id)
+      }
+
+      return view.render('pages/communication/item-chat', {user: session.get('user'), item, allMessages, chatPartner })
+    } catch (error) {
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Fehler beim Senden der Nachricht' });
     }
-
-    if(session.get('user').user_id === item.user_id) {
-      message.sender_id = item.user_id
-      message.receiver_id = params.user_id
-    } else {
-      message.sender_id = params.user_id
-      message.receiver_id = item.user_id
-    }
-
-    message.item_id = item.item_id
-    message.content = request.input('nachricht');
-    await message.save()
-
-    const allMessages = await Message.query()
-      .where(function (query) {
-        query
-          .where('sender_id', item.user_id)
-          .where('receiver_id', params.user_id)
-          .where('item_id', item.item_id)
-      })
-      .orWhere(function (query) {
-        query
-          .where('sender_id', params.user_id)
-          .where('receiver_id', item.user_id)
-          .where('item_id', item.item_id)
-      }).orderBy('created_at', 'asc')
-
-    let chatPartner
-    if(session.get('user').user_id === item.user_id) {
-      chatPartner = await User.findBy('user_id', allMessages[0].sender_id)
-    } else {
-      chatPartner = await User.findBy('user_id', allMessages[0].receiver_id)
-    }
-
-    return view.render('pages/communication/item-chat', {user: session.get('user'), item, allMessages, chatPartner })
   }
 
   public async buyingPage({view, params, session}: HttpContext) {
-    const item = await Item.findBy('item_id', params.item_id)
+    try {
+      const item = await Item.findBy('item_id', params.item_id)
 
-    if(!item){
-      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      if(!item){
+        return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      }
+
+      const seller = await User.findBy('user_id', item.user_id)
+
+    return view.render('pages/purchase/purchase-page', { user: session.get('user'), item, seller })
+    } catch (error) {
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Fehler beim Kaufen der Anzeige' });
     }
-
-    const seller = await db.from('user').select('*').where('user_id', item.user_id).first()
-
-    return view.render('pages/item/kaufen', { user: session.get('user'), item, seller })
   }
 
-  public async buyItem({ view, params, session }: HttpContext) {
+  public async buyItem({ view, params, request, session }: HttpContext) {
+    await creditCardValidator.validate(request.all())
+
     try {
-      const listing = await db.from('listing').select('*').where('listing_id', params.listing_id).first()
+      const item = await Item.findBy('item_id', params.item_id)
+
+      if(!item){
+        return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      }
+
       const recipient = await session.get('user').email;
       const receiver = `${env.get("MAIL_USERNAME")}`;
 
@@ -213,13 +235,13 @@ export default class ItemsController {
           .to(recipient)
           .from(receiver)
           .subject('Kauf erfolgreich abgeschlossen')
-          .htmlView('email_template/buy', {
+          .htmlView('email_template/purchase-mail', {
             seller: session.get('user').username,
-            listing: listing.title
+            item: item.title
           })
       })
 
-      await db.from('listing').where('listing_id', params.listing_id).delete();
+      await item.delete()
 
       return view.render('pages/errors-and-successes/error-and-success-page', { user: session.get('user'), success: 'Kauf erfolgreich abgeschlossen, Sie erhalten in Kürze eine Bestätigung per E-Mail.' });
     } catch (error) {

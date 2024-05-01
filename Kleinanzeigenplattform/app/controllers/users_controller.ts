@@ -6,6 +6,8 @@ import mail from '@adonisjs/mail/services/main'
 import { cuid } from '@adonisjs/core/helpers'
 import env from "#start/env";
 import User from "#models/user";
+import {logInValidator, signInValidator} from "#validators/authentication_validator";
+import {profileValidator} from "#validators/user_validator";
 
 export default class UsersController {
   public async getSignInPage({ view, response, session }: HttpContext) {
@@ -17,6 +19,8 @@ export default class UsersController {
   }
 
   public async signInProcess({ view, request }: HttpContext) {
+    await signInValidator.validate(request.all())
+
     try {
       const user = new User();
       user.firstname = await request.input('firstname')
@@ -81,8 +85,10 @@ export default class UsersController {
   }
 
   public async logInProcess({ response, request, view, session }: HttpContext) {
+    await logInValidator.validate(request.all())
+
     try {
-      const user = await User.findBy('username', request.input('username'))
+      const user = await User.findBy('email', request.input('email'))
 
       if(!user) {
         return view.render('pages/authentication/login', { error: 'Benutzername oder Passwort falsch' })
@@ -124,10 +130,12 @@ export default class UsersController {
       return response.redirect('/home/anmelden')
     }
 
-    return view.render('pages/user/konto-profil', { user: session.get('user') })
+    return view.render('pages/user/profile', { user: session.get('user') })
   }
 
   public async updateProfile({ view, request, session }: HttpContext) {
+    await profileValidator.validate(request.all())
+
     try {
       const user = await User.findBy('user_id', session.get('user').user_id)
 
@@ -158,9 +166,9 @@ export default class UsersController {
         profile_image: profilePicture? profilePicture.fileName : session.get('user').profile_image
       })
 
-      return view.render('pages/user/konto-profil', { success: 'Profil erfolgreich aktualisiert', user: session.get('user')});
+      return view.render('pages/user/profile', { success: 'Profil erfolgreich aktualisiert', user: session.get('user')});
     } catch (error) {
-      return view.render('pages/user/konto-profil', { error: 'Fehler bei der Dateneingabe', user: session.get('user')});
+      return view.render('pages/user/profile', { error: 'Fehler bei der Dateneingabe', user: session.get('user')});
     }
   }
 

@@ -36,16 +36,25 @@
                   <div class="col-md-6 mb-3">
                     <label for="email" class="form-label">E-Mail:</label>
                     <input type="text" id="email" class="form-control shadow" name="email" placeholder="{{ user.email }}" value="{{ user.email }}" disabled>
+                    @inputError('email')
+                      <p class="text-danger mt-2">Bitte geben Sie eine gültige E-Mail-Adresse ein.</p>
+                    @end
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="firstname" class="form-label">Vorname:</label>
                     <input type="text" id="firstname" class="form-control shadow" name="firstname" placeholder="{{ user.firstname }}" value="{{ user.firstname }}" disabled>
+                    @inputError('firstname')
+                      <p class="text-danger mt-2">Der Vorname muss zwischen 1 und 50 Zeichen lang sein.</p>
+                    @end
                   </div>
                   <div class="col-md-6">
                     <label for="lastname" class="form-label">Nachname:</label>
                     <input type="text" id="lastname" class="form-control shadow" name="lastname" placeholder="{{ user.lastname }}" value="{{ user.lastname }}" disabled>
+                    @inputError('lastname')
+                      <p class="text-danger mt-2">Der Nachname muss zwischen 1 und 50 Zeichen lang sein.</p>
+                    @end
                   </div>
                 </div>
                 @if(error != undefined)

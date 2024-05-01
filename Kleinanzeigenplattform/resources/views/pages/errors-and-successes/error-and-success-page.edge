@@ -14,12 +14,16 @@
 
   <main class="mt-4">
     <div class="d-inline-block ms-5">
-      <div class="alert alert-danger" role="alert">
-        <p>{{ error }}</p>
-      </div>
-      <div class="alert alert-success" role="alert">
-        <p>{{ success }}</p>
-      </div>
+      @if(error != undefined)
+        <div class="alert alert-danger" role="alert">
+          <p>{{ error }}</p>
+        </div>
+      @end
+      @if(success != undefined)
+        <div class="alert alert-success" role="alert">
+          <p>{{ success }}</p>
+        </div>
+      @end
       <a href="/home" class="btn btn-primary shadow">Zurück zur Homepage</a>
     </div>
   </main>

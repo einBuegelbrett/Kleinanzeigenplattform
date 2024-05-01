@@ -15,7 +15,7 @@
   <main class="mt-4">
     <div class="d-flex justify-content-center align-items-center">
       <div class="container-lg w-50 shadow rounded mb-4 mx-5 p-5 bg-light">
-        <h3 class="mb-3">{{ seller.username }} | {{ listing.title }}</h3>
+        <h3 class="mb-3">{{ seller.username }} | {{ item.title }}</h3>
           <div class="d-flex justify-content-center">
             @if(success != undefinded)
               <div class="alert alert-success" role="alert">
@@ -28,22 +28,31 @@
               </div>
             @end
           </div>
-        <form action="/home/artikel/{{ listing.listing_id }}/kaufen" method="post">
+        <form action="/home/artikel/{{ item.item_id }}/kaufen" method="post">
           {{csrfField()}}
-          <div class="row mb-3">
+          <div class="row mb-2">
             <div class="col-md-6">
-              <label for="kartennummer" class="form-label">Kartennummer:</label>
-              <input type="text" class="form-control shadow" id="kartennummer" name="kartennummer" placeholder="Kartennummer">
+              <label for="cardNumber" class="form-label">Kartennummer:</label>
+              <input type="text" class="form-control shadow" id="cardNumber" name="cardNumber" placeholder="Kartennummer" minlength="16" maxlength="16">
+              @inputError('cardNumber')
+                <p class="text-danger mt-2">Bitte geben Sie eine gültige Kartennummer ein.</p>
+              @end
             </div>
             <div class="col-md-6">
-              <label for="verfallsdatum" class="form-label">Verfallsdatum:</label>
-              <input type="text" class="form-control shadow" id="verfallsdatum" name="verfallsdatum" placeholder="Verfallsdatum">
+              <label for="expirationDate" class="form-label">Verfallsdatum:</label>
+              <input type="text" class="form-control shadow" id="expirationDate" name="expirationDate" placeholder="Verfallsdatum" minlength="5" maxlength="5">
+              @inputError('expirationDate')
+                <p class="text-danger mt-2">Bitte geben Sie ein gültiges Verfallsdatum an (Format mm/yy). </p>
+              @end
             </div>
           </div>
           <div class="row mb-4">
             <div class="col-md-6">
-              <label for="cvcode" class="form-label">CV Code:</label>
-              <input type="text" class="form-control shadow" id="cvcode" name="cvcode" placeholder="CV Code">
+              <label for="cvv" class="form-label">CVV:</label>
+              <input type="text" class="form-control shadow" id="cvv" name="cvv" placeholder="CVV" minlength="3" maxlength="3">
+              @inputError('cvv')
+                <p class="text-danger mt-2">Bitte geben Sie eine gültige CVV ein.</p>
+              @end
             </div>
             <div class="col-md-6 d-flex justify-content-end align-items-end">
               <button type="submit" class="btn btn-success shadow">Kaufen</button>

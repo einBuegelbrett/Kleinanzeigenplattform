@@ -40,12 +40,15 @@
       <a href="/home/konto/nachrichten" class="btn btn-danger shadow me-2">Zurück</a>
       <form action="/home/artikel/{{ item.item_id }}/user/{{ allMessages[0] ? allMessages[0].sender_id : user.user_id }}/chat" method="POST" class="d-flex">
         {{ csrfField() }}
-        <input class="form-control shadow me-2" type="search" placeholder="Schreibe eine Nachricht..." name="nachricht" aria-label="Schreibe eine Nachricht..." maxlength="100" required autofocus>
+        <input class="form-control shadow me-2" type="search" placeholder="Schreibe eine Nachricht..." name="message" aria-label="Schreibe eine Nachricht..." maxlength="100" required autofocus>
         <button class="btn btn-success shadow me-2" type="submit">Senden</button>
       </form>
-        @if (user.user_id != item.user_id)
-          <button class="btn btn-warning shadow" onclick="sendWasLetztePreis()">Was letzte Preis?</button>
-        @end
+      @if (user.user_id != item.user_id)
+        <button class="btn btn-warning shadow" onclick="sendWasLetztePreis()">Was letzte Preis?</button>
+      @end
+      @inputError('message')
+        <p class="text-danger ms-2 mt-2">Die Nachricht muss zwischen 1 und 100 Zeichen lang sein.</p>
+      @end
     </div>
   </main>
 

@@ -36,16 +36,22 @@
         </div>
         <form action="/home/anmelden" method="post">
           {{csrfField()}}
-          <div class="row mb-3 d-flex justify-content-center">
+          <div class="row mb-2 d-flex justify-content-center">
             <div class="col-md-6">
-              <label for="username" class="form-label">Benutzername:</label>
-              <input type="text" class="form-control shadow" id="username" name="username" placeholder="Benutzername">
+              <label for="email" class="form-label">E-mail:</label>
+              <input type="email" class="form-control shadow" id="email" name="email" placeholder="E-Mail">
+              @inputError('email')
+                <p class="text-danger mt-2">Bitte geben Sie eine gültige E-Mail-Adresse ein.</p>
+              @end
             </div>
           </div>
           <div class="row mb-4 d-flex justify-content-center">
             <div class="col-md-6">
               <label for="password" class="form-label">Passwort:</label>
               <input type="password" class="form-control shadow" id="password" name="password" placeholder="Passwort">
+              @inputError('password')
+                <p class="text-danger mt-2">Das Passwortfeld muss definiert sein.</p>
+              @end
             </div>
           </div>
           <div class="col-md-12 mb-4 d-flex d-flex justify-content-center">

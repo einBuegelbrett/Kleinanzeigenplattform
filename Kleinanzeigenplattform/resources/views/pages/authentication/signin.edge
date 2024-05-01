@@ -31,29 +31,47 @@
         </div>
         <form action="/home/registrieren" method="post" class="row">
           {{csrfField()}}
-          <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-2">
             <label for="username" class="form-label">Benutzername:</label>
             <input type="text" class="form-control shadow" id="username" name="username" placeholder="Benutzername" minlength="1" maxlength="15">
+            @inputError('username')
+              <p class="text-danger mt-2">Der Benutzername muss zwischen 1 und 15 Zeichen lang sein.</p>
+            @end
           </div>
-          <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-2">
             <label for="email" class="form-label">E-Mail:</label>
             <input type="email" class="form-control shadow" id="email" name="email" placeholder="E-Mail">
+            @inputError('email')
+              <p class="text-danger mt-2">Bitte geben Sie eine gültige E-Mail-Adresse ein.</p>
+            @end
           </div>
-          <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-2">
             <label for="firstname" class="form-label">Vorname:</label>
-            <input type="text" class="form-control shadow" id="firstname" name="firstname" placeholder="Vorname">
+            <input type="text" class="form-control shadow" id="firstname" name="firstname" placeholder="Vorname" minlength="1" maxlength="50">
+            @inputError('firstname')
+              <p class="text-danger mt-2">Der Vorname muss zwischen 1 und 50 Zeichen lang sein.</p>
+            @end
           </div>
-          <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-2">
             <label for="lastname" class="form-label">Nachname:</label>
-            <input type="text" class="form-control shadow" id="lastname" name="lastname" placeholder="Nachname">
+            <input type="text" class="form-control shadow" id="lastname" name="lastname" placeholder="Nachname" minlength="1" maxlength="50">
+            @inputError('lastname')
+              <p class="text-danger mt-2">Der Nachname muss zwischen 1 und 50 Zeichen lang sein.</p>
+            @end
           </div>
-          <div class="col-md-6 mb-3">
+          <div class="col-md-6 mb-2">
             <label for="password" class="form-label">Passwort:</label>
-            <input type="password" class="form-control shadow" id="password" name="password" placeholder="Passwort">
+            <input type="password" class="form-control shadow" id="password" name="password" placeholder="Passwort" minlength="8" maxlength="16">
+            @inputError('password')
+              <p class="text-danger mt-2">Anforderungen: ein Kleinbuchstabe, ein Großbuchstabe, eine Zahl, ein Symbol, zwischen 8 und 16 Zeichen.</p>
+            @end
           </div>
           <div class="col-md-6 mb-4">
             <label for="repeat_password" class="form-label">Passwort wiederholen:</label>
-            <input type="password" class="form-control shadow" id="repeat_password" name="repeat_password" placeholder="Passwort wiederholen">
+            <input type="password" class="form-control shadow" id="repeat_password" name="repeat_password" placeholder="Passwort wiederholen" minlength="1" maxlength="15">
+            @inputError('password')
+              <p class="text-danger mt-2">Anforderungen: ein Kleinbuchstabe, ein Großbuchstabe, eine Zahl, ein Symbol, zwischen 8 und 16 Zeichen.</p>
+            @end
           </div>
           <div class="col-md-12 mb-4 d-flex justify-content-center">
             <button type="submit" class="btn btn-success shadow">Registrieren</button>

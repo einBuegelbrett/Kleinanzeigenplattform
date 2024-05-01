@@ -34,23 +34,32 @@
           <div class="row">
             <div class="col-md-6">
               <div class="mb-3">
-                <label for="titel" class="form-label">Titel:</label>
-                <input type="text" class="form-control shadow" name="titel" id="titel" minlength="1" maxlength="50">
+                <label for="title" class="form-label">Titel:</label>
+                <input type="text" class="form-control shadow" name="title" id="title" minlength="1" maxlength="50">
+                @inputError('title')
+                  <p class="text-danger ms-2 mt-2">Der Titel muss zwischen 1 und 50 Zeichen lang sein.</p>
+                @end
               </div>
               <div class="mb-3">
-                <label for="image" class="form-label">Bild(er):</label>
+                <label for="images" class="form-label">Bild(er):</label>
                 <input type="file" class="form-control shadow" name="images" id="imageInputId" multiple onchange="previewImages()">
                 <div id="image-preview" class="d-flex flex-row"></div>
               </div>
               <div class="mb-3">
-                <label for="preis" class="form-label">Preis:</label>
-                <input type="number" class="form-control shadow" id="preis" name="preis" min="0" max="9999999999" step="0.01">
+                <label for="price" class="form-label">Preis:</label>
+                <input type="number" class="form-control shadow" id="price" name="price" min="0" max="9999999999.99" step="0.01">
+                @inputError('price')
+                  <p class="text-danger ms-2 mt-2">Der Preis muss zwischen 1 € und 9999999999 € liegen.</p>
+                @end
               </div>
             </div>
             <div class="col-md-6 d-flex flex-column justify-content-between">
               <div class="mb-3">
-                <label for="beschreibung" class="form-label">Beschreibung:</label>
-                <textarea class="form-control shadow" id="beschreibung" name="beschreibung" rows="5" minlength="1" maxlength="250"></textarea>
+                <label for="description" class="form-label">Beschreibung:</label>
+                <textarea class="form-control shadow" id="description" name="description" rows="5" minlength="1" maxlength="250"></textarea>
+                @inputError('description')
+                  <p class="text-danger ms-2 mt-2">Die Beschreibung muss zwischen 1 und 250 Zeichen lang sein.</p>
+                @end
               </div>
               <div class="mb-3">
                 <p class="text fs-6 fw-light">Hinweis: Um mehrere Bilder auszuwählen, halten Sie die STRG-Taste gedrückt und klicken Sie mit der linken Maustaste auf die gewünschten Bilder</p>
