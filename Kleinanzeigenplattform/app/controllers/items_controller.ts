@@ -14,7 +14,7 @@ export default class ItemsController {
     const item = await Item.findBy('item_id', params.item_id)
 
     if(!item){
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
     }
 
     const seller = await User.findBy('user_id', item.user_id)
@@ -27,7 +27,7 @@ export default class ItemsController {
     const item = await Item.findBy('item_id', params.item_id)
 
     if(!item){
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
     }
 
     // change the state of the item
@@ -97,7 +97,7 @@ export default class ItemsController {
       const item = await Item.findBy('item_id', params.item_id)
 
       if(!item){
-        return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+        return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
       }
 
       const deletedItemTitle = item.title
@@ -106,7 +106,7 @@ export default class ItemsController {
 
       return view.render('pages/item/own-items.edge', { user: session.get('user'), items, success: deletedItemTitle + ' wurde erfolgreich gelöscht' });
     } catch (error) {
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Fehler beim Löschen der Anzeige' });
     }
   }
 
@@ -114,11 +114,11 @@ export default class ItemsController {
     const item = await Item.findBy('item_id', params.item_id)
 
     if(!item){
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
     }
 
     if ((await session.get('user')).user_id != params.user_id && (await session.get('user')).user_id != item.user_id) {
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Nicht erlaubt'})
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Nicht erlaubt'})
     }
 
     const allMessages = await Message.query()
@@ -151,7 +151,7 @@ export default class ItemsController {
     const message = new Message()
 
     if(!item){
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
     }
 
     if(session.get('user').user_id === item.user_id) {
@@ -194,7 +194,7 @@ export default class ItemsController {
     const item = await Item.findBy('item_id', params.item_id)
 
     if(!item){
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Anzeige nicht gefunden' });
     }
 
     const seller = await db.from('user').select('*').where('user_id', item.user_id).first()
@@ -221,9 +221,9 @@ export default class ItemsController {
 
       await db.from('listing').where('listing_id', params.listing_id).delete();
 
-      return view.render('pages/successes/erfolg-seite', { user: session.get('user'), success: 'Kauf erfolgreich abgeschlossen, Sie erhalten in Kürze eine Bestätigung per E-Mail.' });
+      return view.render('pages/errors-and-successes/error-and-success-page', { user: session.get('user'), success: 'Kauf erfolgreich abgeschlossen, Sie erhalten in Kürze eine Bestätigung per E-Mail.' });
     } catch (error) {
-      return view.render('pages/errors/fehler-seite.edge', { user: session.get('user'), error: 'Fehler beim Kaufen der Anzeige' });
+      return view.render('pages/errors-and-successes/error-and-success-page.edge', { user: session.get('user'), error: 'Fehler beim Kaufen der Anzeige' });
     }
   }
 }
