@@ -54,7 +54,6 @@ export default class ItemsController {
 
     try {
       const item = new Item()
-      const image = new Image()
       const uploadedImages = request.files('images', {size: '5mb', extnames: ['jpg', 'png', 'jpeg']})
 
       if (uploadedImages === null) {
@@ -68,6 +67,7 @@ export default class ItemsController {
       await item.save()
 
       for (const uploadedImage of uploadedImages) {
+        const image = new Image()
         await uploadedImage.move(app.publicPath('uploads'), { name: `${cuid()}.${uploadedImage.extname}`, overwrite: true });
 
         if (!uploadedImage.isValid || !uploadedImage.fileName){

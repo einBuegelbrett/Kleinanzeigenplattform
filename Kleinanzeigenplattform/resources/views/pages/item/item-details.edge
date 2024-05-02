@@ -41,7 +41,7 @@
             </div>
             <div class="bg-body rounded shadow p-4 d-flex flex-row col-9 flex-wrap mb-3 p-3">
               <div class="d-flex justify-content-start align-items-start me-3">
-                <img src="/uploads/{{ seller.profile_image }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
+                <img src="/uploads/{{ seller.profile_picture }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
                 <p class="fw-bold mb-3 mt-auto">{{ seller.username }}</p>
               </div>
               @if (user && user.user_id != seller.user_id)
