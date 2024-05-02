@@ -15,6 +15,7 @@ export default class HomeController {
 
   public async filterItems({ request, view, session }: HttpContext) {
     await searchbar.validate(request.all())
+
     try {
       const search = request.input('search');
 

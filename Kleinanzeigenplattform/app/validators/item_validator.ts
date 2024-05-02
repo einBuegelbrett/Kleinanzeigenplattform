@@ -4,7 +4,7 @@ const regexPrice = /^(?!0{1,11}(,0{2})?$)\d{1,10}(?:[.,]\d{1,2})?$/
 
 export const searchbar = vine.compile(
   vine.object({
-    search: vine.string().trim().maxLength(50),
+    search: vine.string().trim().maxLength(50).nullable(),
   })
 )
 
