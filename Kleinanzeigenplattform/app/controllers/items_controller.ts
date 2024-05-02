@@ -171,7 +171,7 @@ export default class ItemsController {
       }
 
       message.item_id = item.item_id
-      message.content = request.input('nachricht');
+      message.content = request.input('message');
       await message.save()
 
       const allMessages = await Message.query()

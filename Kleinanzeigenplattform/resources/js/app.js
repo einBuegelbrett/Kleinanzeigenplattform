@@ -19,7 +19,7 @@ function disableInputs() {
 }
 
 function sendWasLetztePreis() {
-  let messageInput = document.querySelector('input[name="nachricht"]');
+  let messageInput = document.querySelector('input[name="message"]');
   if (messageInput) {
     messageInput.value = "Was letzte Preis?";
     document.querySelector('form').submit();
