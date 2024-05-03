@@ -80,3 +80,13 @@ svg a {
 .small-font {
   font-size: 0.7em;
 }
+
+.card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.04);
+}
