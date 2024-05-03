@@ -157,6 +157,29 @@ export default class UsersController {
       user.profile_picture = profilePicture? profilePicture.fileName : await session.get('user').profile_image
       await user.save()
 
+      // the e-mail needs to be verified again, for this give new token and log out
+      if(user.email != session.get('user').email) {
+        user.token = cuid();
+        user.verified = false;
+        await user.save()
+        session.forget('user')
+
+        const sender = `${env.get("MAIL_USERNAME")}`;
+        const urlName = `${env.get("APP_URL")}/home/registrieren/bestaetigen/${user.user_id}/${user.token}`;
+
+        await mail.send((message) => {
+          message
+            .to(user.email)
+            .from(sender)
+            .subject('Bestätigungsmail')
+            .htmlView('email_template/confirmation-mail', {
+              urlName
+            })
+        })
+
+        return view.render('pages/authentication/signin', { success: 'E-Mail-Adresse erfolgreich geändert. Bitte bestätigen Sie Ihre E-Mail-Adresse, um sich einzuloggen.' })
+      }
+
       session.put('user', {
         user_id: user.user_id,
         username: user.username,
