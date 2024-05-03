@@ -73,6 +73,7 @@ svg a {
 }
 
 #chatBox {
+  min-height: 40vh;
   max-height: 40vh;
 }
 
