@@ -1,0 +1,92 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.bg-body-secondary {
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+footer {
+  color: rgb(255, 255, 255);
+  background-color: rgb(43, 48, 53);
+}
+
+svg a {
+  color: white;
+}
+
+#versteckterBtn {
+  display: none;
+}
+
+.item {
+  width: 20rem;
+}
+
+.pictureHeader {
+  width: 2.5em;
+  height: 2.5em;
+}
+
+.profilePicture {
+  width: 3em;
+  height: 3em;
+}
+
+#ImageCarouselIndicators {
+  width: 22em;
+  height: 22em;
+}
+
+.message-bubble {
+  max-width: 70%;
+  position: relative;
+}
+
+.sender {
+  background-color: #e2f0cb;
+}
+
+.receiver {
+  background-color: #c7d2fe;
+}
+
+.imageRatio {
+  height: 12em;
+}
+
+.carousel-item {
+  height: 19em;
+}
+
+#chatBox {
+  min-height: 40vh;
+  max-height: 40vh;
+}
+
+.small-font {
+  font-size: 0.7em;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.04);
+}

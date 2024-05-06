@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-center py-3 border-bottom bg-dark-subtle">
+  <form action="/home" method="post" class="d-flex">
+    {{csrfField()}}
+    <input class="form-control me-2 shadow" type="search" placeholder="Was suchst du?" name="search" aria-label="Was suchst du?" maxlength="50">
+    <button class="btn btn-success shadow" type="submit">Suchen</button>
+  </form>
+  @inputError('search')
+    <p class="text-danger ms-2 mt-2">Ihre Suche ist zu lange.</p>
+  @end
+</div>

@@ -1,0 +1,33 @@
+<header>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary container-fluid" data-bs-theme="dark">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/home">Schwarzes Bügelbrett</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ms-auto mb-auto mb-lg-0">
+      <li class="nav-item">
+        <a class="nav-link" href="/home/anzeige_aufgeben">Anzeige aufgeben</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Konto
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          @if(auth.user)
+            <li><a class="dropdown-item" href="/home/konto/profil">Profil</a></li>
+            <li><a class="dropdown-item" href="/home/konto/nachrichten">Nachrichten</a></li>
+            <li><a class="dropdown-item" href="/home/konto/eigene_anzeigen">Eigene Anzeigen</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/home/logout">Ausloggen</a></li>
+          @else
+            <li><a class="dropdown-item" href="/home/anmelden">einloggen oder neu anmelden</a></li>
+          @end
+        </ul>
+      </li>
+    </ul>
+    @if(auth.user)
+      <a href="/home/konto/profil"><img class="d-block object-fit-cover pictureHeader border rounded-circle border-2 border-light mx-2 my-2" src="/uploads/{{ auth.user.profile_picture }}" alt="{{ auth.user.profile_picture }}"></a>
+    @end
+  </nav>
+</header>

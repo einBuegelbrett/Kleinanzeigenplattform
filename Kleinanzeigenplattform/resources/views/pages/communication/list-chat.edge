@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Konversationen - Schwarzes Bügelbrett </title>
+
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body class="bg-body-secondary d-flex flex-column">
+  @include('partials/header')
+
+  <main class="mt-4">
+    <div class="d-flex justify-content-center align-items-center">
+      <div class="container-lg w-75 shadow rounded mx-5 p-5 bg-light">
+        <h3>Konversationen:</h3>
+          @each (conversation in allConversations)
+            <div class="d-flex column container shadow rounded my-4 p-3 bg-white">
+              @if (conversation.receiver_username === auth.user.username)
+                <h4 class="me-2">{{ conversation.sender_username }}: </h4>
+              @else
+                <h4 class="me-2">{{ conversation.receiver_username }}: </h4>
+              @end
+              <h4><a href="/home/artikel/{{ conversation.item_id }}/user/{{ conversation.sender_id }}/chat" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mt-1">{{ conversation.title }}</a></h4>
+            </div>
+          @end
+      </div>
+    </div>
+  </main>
+
+  @include('partials/footer')
+</body>
+</html>
