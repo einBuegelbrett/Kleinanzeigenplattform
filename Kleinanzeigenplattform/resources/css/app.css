@@ -90,3 +90,7 @@ svg a {
 .card:hover {
   transform: scale(1.04);
 }
+
+.shadow-top {
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.01), 0 -5px 10px rgba(0, 0, 0, 0.02), 0 -5px 10px rgba(0, 0, 0, 0.03), 0 -5px 10px rgba(0, 0, 0, 0.04), 0 -5px 10px rgba(0, 0, 0, 0.05);
+}
