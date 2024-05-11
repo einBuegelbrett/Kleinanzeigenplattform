@@ -54,14 +54,16 @@
           </div>
           <div class="bg-body rounded shadow p-4 col-md-5 d-flex flex-column justify-content-between  h-75">
             <div class="d-flex flex-column justify-content-between">
-              <h1 class="text-break fw-bold mb-4 me-2">{{ item.title }}</h1>
+              <h1 class="text-break fw-bold me-2">{{ item.title }}</h1>
+              <hr>
               @if(item.price === 0)
-                <h1 class="fw-bold d-flex text-primary">Kostenlos</h1>
+                <h1 class="fw-bold d-flex text-secondary">Kostenlos</h1>
               @else
-                <h1 class="fw-bold d-flex text-primary">{{ item.price }}€</h1>
+                <h1 class="fw-bold d-flex text-secondary">{{ item.price }}€</h1>
               @end
             </div>
-            <p class="text-break overflow-auto mt-4">{{ item.description }}</p>
+            <hr>
+            <p class="text-break overflow-auto">{{ item.description }}</p>
             <div>
             @if (auth.user && auth.user.user_id != seller.user_id)
               <div class="d-flex justify-content-end">

@@ -23,9 +23,9 @@
           <div class="card-body">
             <h5 class="card-title">{{ item.title }}</h5>
             @if(item.price === 0)
-              <p class="fw-bold d-flex text-primary">Kostenlos</p>
+              <p class="fw-bold d-flex text-secondary">Kostenlos</p>
             @else
-              <p class="fw-bold d-flex text-primary">{{ item.price }}€</p>
+              <p class="fw-bold d-flex text-secondary">{{ item.price }}€</p>
             @end
             <div class="d-flex justify-content-end">
               <a href="/home/artikel/{{ item.item_id }}" class="btn btn-primary shadow">Zum Artikel</a>
