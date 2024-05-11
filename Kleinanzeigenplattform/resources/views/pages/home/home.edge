@@ -15,9 +15,9 @@
 
   <main class="mt-4">
     @if(search != null)
-      <h3 class="ms-5 mb-3">Ergebnisse für "{{ search }}"</h3>
+      <h1 class="ms-5 mb-3">Ergebnisse für "{{ search }}"</h1>
     @else
-     <h3 class="ms-5 mb-3">Ergebnisse</h3>
+     <h1 class="ms-5 mb-3">Ergebnisse</h1>
     @end
     @include('partials/items')
   </main>

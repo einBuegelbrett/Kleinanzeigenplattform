@@ -54,11 +54,11 @@
           </div>
           <div class="bg-body rounded shadow p-4 col-md-5 d-flex flex-column justify-content-between  h-75">
             <div class="d-flex flex-column justify-content-between">
-              <h3 class="text-break fw-bold mb-4 me-2">{{ item.title }}</h3>
+              <h1 class="text-break fw-bold mb-4 me-2">{{ item.title }}</h1>
               @if(item.price === 0)
-                <h3 class="fw-bold d-flex text-primary">Kostenlos</h3>
+                <h1 class="fw-bold d-flex text-primary">Kostenlos</h1>
               @else
-                <h3 class="fw-bold d-flex text-primary">{{ item.price }}€</h3>
+                <h1 class="fw-bold d-flex text-primary">{{ item.price }}€</h1>
               @end
             </div>
             <p class="text-break overflow-auto mt-4">{{ item.description }}</p>

@@ -15,7 +15,7 @@
   <main class="mt-4">
     <div class="d-flex justify-content-center align-items-center">
       <div class="container-lg w-75 shadow rounded mx-5 p-5 bg-light">
-        <h3>Konversationen:</h3>
+        <h1>Konversationen:</h1>
           @each (conversation in allConversations)
             <div class="d-flex column container shadow rounded my-4 p-3 bg-white">
               @if (conversation.receiver_username === auth.user.username)
