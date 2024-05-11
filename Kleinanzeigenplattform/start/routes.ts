@@ -55,3 +55,7 @@ router.get('/home/konto/eigene_anzeigen', [ListingsController, 'ownItems'])
   .use(middleware.auth());
 router.post('/home/konto/eigene_anzeigen/:item_id', [ListingsController, 'deleteItem'])
   .use(middleware.auth());
+router.get('/home/anmelden/passwort_vergessen', [UsersController, 'getEmailGuest'])
+router.post('/home/anmelden/passwort_vergessen', [UsersController, 'sendPasswordResetMail'])
+router.get('/home/passwort_zuruecksaetzen/:user_id/:token', [UsersController, 'getResetPasswordPage'])
+router.post('/home/passwort_zuruecksaetzen/:user_id/:token', [UsersController, 'checkPassword'])

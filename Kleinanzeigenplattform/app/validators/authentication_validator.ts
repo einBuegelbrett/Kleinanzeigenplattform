@@ -19,3 +19,10 @@ export const logInValidator = vine.compile(
     password: vine.string().trim(),
   })
 )
+
+export const changePasswordValidator = vine.compile(
+  vine.object({
+    password: vine.string().trim().minLength(8).maxLength(16).regex(regexPassword),
+    repeat_password: vine.string().trim().minLength(8).maxLength(16).regex(regexPassword)
+  })
+)

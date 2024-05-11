@@ -5,8 +5,8 @@ import mail from '@adonisjs/mail/services/main'
 import { cuid } from '@adonisjs/core/helpers'
 import env from "#start/env";
 import User from "#models/user";
-import {logInValidator, signInValidator} from "#validators/authentication_validator";
-import {profileValidator} from "#validators/user_validator";
+import {changePasswordValidator, logInValidator, signInValidator} from "#validators/authentication_validator";
+import {emailValidator, profileValidator} from "#validators/user_validator";
 import Verification from "#models/verification";
 
 export default class UsersController {
@@ -20,7 +20,7 @@ export default class UsersController {
     try {
       if(password === repeat_password) {
         const user = await User.create({ firstname, lastname, password, email, username })
-        await auth.use("web").login(user, true);
+        await auth.use("web").login(user);
 
         const verification = new Verification();
         verification.user_id = user.user_id;
@@ -79,8 +79,8 @@ export default class UsersController {
   public async logInProcess({ request, response, view, auth }: HttpContext) {
     const { email, password } = await request.validateUsing(logInValidator)
     const user = await User.verifyCredentials(email, password)
+    await auth.use("web").login(user)
     try {
-      await auth.use('web').login(user)
       const verification = await Verification.findBy('user_id', user?.user_id)
 
       if(!user || !verification) {
@@ -117,7 +117,7 @@ export default class UsersController {
       }
 
       const { firstname, lastname, email } = await request.validateUsing(profileValidator);
-      let profilePicture = request.file('profile_picture',{ size: '2mb', extnames: ['jpg', 'png', 'jpeg']})
+      let profilePicture = request.file('profile_picture',{ size: '2mb', extnames: ['jpg', 'png', 'jpeg', 'gif']})
 
       if(profilePicture?.isValid){
         await profilePicture.move(app.publicPath('uploads'), { name: `${cuid()}.${profilePicture.extname}`, overwrite: true })
@@ -133,6 +133,7 @@ export default class UsersController {
         verification.token = cuid();
         verification.verified = false;
         await user.save()
+        await verification.save()
         await auth.use('web').logout()
 
         const sender = `${env.get("MAIL_USERNAME")}`;
@@ -178,5 +179,86 @@ export default class UsersController {
       });
 
     return view.render('pages/communication/list-chat', { allConversations })
+  }
+
+
+  public async getEmailGuest({ view }: HttpContext) {
+    return view.render('pages/user/enter-email')
+  }
+
+  public async sendPasswordResetMail({ request, view }: HttpContext) {
+    const email = await request.validateUsing(emailValidator)
+    const user = await User.findBy('email', email.email)
+
+    if(!user) {
+      return view.render('pages/errors-and-successes/error-and-success-page', { error: 'Benutzer nicht gefunden' })
+    }
+
+    const verification = await Verification.findBy('user_id', user.user_id)
+
+    if(!verification) {
+      return view.render('pages/authentication/login', { error: 'Fehler beim Laden des Profils' })
+    }
+
+    verification.token = cuid();
+    verification.verified = false;
+    await user!.save()
+    await verification.save()
+
+    const sender = `${env.get("MAIL_USERNAME")}`;
+    const urlName = `${env.get("APP_URL")}/home/passwort_zuruecksaetzen/${user.user_id}/${verification.token}`;
+
+    await mail.send((message) => {
+      message
+        .to(user!.email)
+        .from(sender)
+        .subject('Passwort zurücksetzen')
+        .htmlView('email_template/change-password-mail', {
+          urlName
+        })
+    })
+
+    return view.render('pages/errors-and-successes/error-and-success-page', { success: 'E-Mail zur Passwortänderung wurde versendet' })
+  }
+
+  public async getResetPasswordPage({ view, params, response }: HttpContext) {
+    try {
+      const verification = await Verification.findBy('user_id', params.user_id)
+
+      if (!verification) {
+        return response.redirect('/home/registrieren')
+      }
+
+      if (verification.token === params.token) {
+        verification.verified = true;
+        await verification.save()
+        return view.render('pages/user/change-password', { verificationToken: verification.token, user_id: params.user_id })
+      } else {
+        return view.render('pages/authentication/login', { error: 'Invalider Token' });
+      }
+    } catch (error) {
+      return view.render('pages/authentication/login', { error: 'Fehler beim Laden der Seite' });
+    }
+  }
+
+  public async checkPassword({ view, request, params }: HttpContext) {
+    const { password, repeat_password } = await request.validateUsing(changePasswordValidator)
+    try {
+      if(password === repeat_password) {
+        const user = await User.findBy('user_id', params.user_id)
+
+        if(!user) {
+          return view.render('pages/errors-and-successes/error-and-success-page', { error: 'Benutzer nicht gefunden' })
+        }
+
+        user.password = password
+        return view.render('pages/errors-and-successes/error-and-success-page', { success: 'Passwort erfolgreich geändert' })
+      } else {
+        const verification = await Verification.findBy('user_id', params.user_id)
+        return view.render('pages/user/change-password', { error: 'Passwort stimmt nicht überein', verificationToken: verification!.token, user_id: params.user_id })
+      }
+    } catch (error) {
+      return view.render('pages/authentication/login', { error: 'Fehler beim Laden der Seite' });
+    }
   }
 }
