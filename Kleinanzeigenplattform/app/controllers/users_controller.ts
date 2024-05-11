@@ -78,12 +78,13 @@ export default class UsersController {
 
   public async logInProcess({ request, response, view, auth }: HttpContext) {
     const { email, password } = await request.validateUsing(logInValidator)
-    const user = await User.verifyCredentials(email, password)
-    await auth.use("web").login(user)
     try {
-      const verification = await Verification.findBy('user_id', user?.user_id)
+      const user = await User.verifyCredentials(email, password)
+      await auth.use("web").login(user)
 
-      if(!user || !verification) {
+      const verification = await Verification.findBy('user_id', user.user_id)
+
+      if(!verification) {
         return view.render('pages/authentication/login', { error: 'Benutzername oder Passwort falsch' })
       }
 
@@ -93,7 +94,7 @@ export default class UsersController {
 
       return response.redirect('/home');
     } catch (error) {
-      return view.render('pages/authentication/login', { error: 'Anmeldung fehlgeschlagen' })
+      return view.render('pages/authentication/login', { error: 'Benutzername oder Passwort falsch' })
     }
   }
 
