@@ -31,7 +31,7 @@ export default class UsersController {
           return view.render('pages/authentication/signin', { error: 'Fehler bei der Registrierung' })
         }
         const sender = `${env.get("MAIL_USERNAME")}`;
-        const urlName = `${env.get("APP_URL")}/home/registrieren/bestaetigen/${user.user_id}/${verificationInDB.token}`;
+        const urlName = `${env.get("APP_URL")}/bestaetigen/${user.user_id}/${verificationInDB.token}`;
 
         await mail.send((message) => {
           message
@@ -57,7 +57,7 @@ export default class UsersController {
       const verification = await Verification.findBy('user_id', params.user_id)
 
       if (!verification) {
-        return response.redirect('/home/registrieren')
+        return response.redirect('/registrieren')
       }
 
       if (verification.token === params.token) {
@@ -100,7 +100,7 @@ export default class UsersController {
 
   public async logOut({ response, auth }: HttpContext) {
     await auth.use('web').logout()
-    return response.redirect('/home/anmelden')
+    return response.redirect('/anmelden')
   }
 
   public async getProfile({ view }: HttpContext) {
@@ -128,7 +128,7 @@ export default class UsersController {
       user.firstname = firstname
       user.lastname = lastname
 
-      // the e-mail needs to be verified again, for this give new token and log out
+      // the e-mail needs to be verified again if changed, for this give new token and log out
       if(user.email != email) {
         user.email = email
         verification.token = cuid();
@@ -138,7 +138,7 @@ export default class UsersController {
         await auth.use('web').logout()
 
         const sender = `${env.get("MAIL_USERNAME")}`;
-        const urlName = `${env.get("APP_URL")}/home/registrieren/bestaetigen/${user.user_id}/${verification.token}`;
+        const urlName = `${env.get("APP_URL")}/bestaetigen/${user.user_id}/${verification.token}`;
 
         await mail.send((message) => {
           message
@@ -201,13 +201,14 @@ export default class UsersController {
       return view.render('pages/authentication/login', { error: 'Fehler beim Laden des Profils' })
     }
 
+    // token needs to be changed so that the user can't use the token from the sign in
     verification.token = cuid();
     verification.verified = false;
-    await user!.save()
+    await user.save()
     await verification.save()
 
     const sender = `${env.get("MAIL_USERNAME")}`;
-    const urlName = `${env.get("APP_URL")}/home/passwort_zuruecksaetzen/${user.user_id}/${verification.token}`;
+    const urlName = `${env.get("APP_URL")}/passwort_zuruecksaetzen/${user.user_id}/${verification.token}`;
 
     await mail.send((message) => {
       message
@@ -227,7 +228,7 @@ export default class UsersController {
       const verification = await Verification.findBy('user_id', params.user_id)
 
       if (!verification) {
-        return response.redirect('/home/registrieren')
+        return response.redirect('/registrieren')
       }
 
       if (verification.token === params.token) {
@@ -253,6 +254,7 @@ export default class UsersController {
         }
 
         user.password = password
+        await user.save()
         return view.render('pages/errors-and-successes/error-and-success-page', { success: 'Passwort erfolgreich geändert' })
       } else {
         const verification = await Verification.findBy('user_id', params.user_id)

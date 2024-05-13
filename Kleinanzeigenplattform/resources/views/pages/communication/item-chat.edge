@@ -19,7 +19,7 @@
         <div class="d-flex flex-row sticky-top overflow-auto">
           <div class="d-flex justify-content-start align-items-start me-3">
             <img src="/uploads/{{ chatPartner.profile_picture }}" class="d-block object-fit-cover profilePicture border rounded-circle border-2 border-dark me-2" alt="Profilbild">
-            <h1 class="mt-1">{{ chatPartner.username }} | <a href="/home/artikel/{{ item.item_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ item.title }}</a></h1>
+            <h1 class="mt-1">{{ chatPartner.username }} | <a href="/artikel/{{ item.item_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ item.title }}</a></h1>
           </div>
         </div>
         <hr>
@@ -35,8 +35,8 @@
         </div>
         <hr>
         <div class="d-flex justify-content-center bg-light">
-          <a href="/home/konto/nachrichten" class="btn btn-danger shadow me-2">Zurück</a>
-          <form action="/home/artikel/{{ item.item_id }}/user/{{ allMessages[0] ? allMessages[0].sender_id : auth.user.user_id }}/chat" method="post" class="d-flex">
+          <a href="/konto/nachrichten" class="btn btn-danger shadow me-2">Zurück</a>
+          <form action="/artikel/{{ item.item_id }}/user/{{ allMessages[0] ? allMessages[0].sender_id : auth.user.user_id }}/chat" method="post" class="d-flex">
             {{ csrfField() }}
             <input class="form-control shadow me-2" type="search" placeholder="Schreibe eine Nachricht..." name="message" aria-label="Schreibe eine Nachricht..." maxlength="100" required autofocus>
             <button class="btn btn-success shadow me-2" type="submit">Senden</button>

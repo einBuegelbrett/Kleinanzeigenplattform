@@ -45,7 +45,7 @@
                 <p class="fw-bold mb-3 mt-auto">{{ seller.username }}</p>
               </div>
               @if (auth.user && auth.user.user_id != seller.user_id)
-                <form action="/home/artikel/{{ item.item_id }}/user/{{ auth.user.user_id }}/chat" method="GET">
+                <form action="/artikel/{{ item.item_id }}/user/{{ auth.user.user_id }}/chat" method="GET">
                   {{csrfField()}}
                   <button class="btn btn-primary shadow mt-1"  type="submit">Nachricht</button>
                 </form>
@@ -67,12 +67,12 @@
             <div>
             @if (auth.user && auth.user.user_id != seller.user_id)
               <div class="d-flex justify-content-end">
-                <a href="/home/artikel/{{ item.item_id }}/kaufen" class="btn btn-success shadow">Artikel kaufen</a>
+                <a href="/artikel/{{ item.item_id }}/kaufen" class="btn btn-success shadow">Artikel kaufen</a>
               </div>
             @end
             @if (auth.user && auth.user.user_id === seller.user_id)
               <div class="d-flex justify-content-end">
-              <form action="/home/artikel/{{ item.item_id }}" class="me-2" method="post">
+              <form action="/artikel/{{ item.item_id }}" class="me-2" method="post">
                 {{csrfField()}}
                 @if (item.active)
                   <button class="btn btn-warning shadow" type="submit">Deaktivieren</button>
@@ -80,7 +80,7 @@
                   <button class="btn btn-success shadow" type="submit">Aktivieren</button>
                 @end
               </form>
-              <form action="/home/konto/eigene_anzeigen/{{ item.item_id }}" method="post">
+              <form action="/konto/eigene_anzeigen/{{ item.item_id }}" method="post">
                 {{csrfField()}}
                 <button class="btn btn-danger shadow" type="submit">Löschen</button>
               </form>

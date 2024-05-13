@@ -34,7 +34,7 @@
             </div>
           @end
         </div>
-        <form action="/home/anmelden" method="post">
+        <form action="/anmelden" method="post">
           {{csrfField()}}
           <div class="row mb-2 d-flex justify-content-center">
             <div class="col-md-6">
@@ -62,11 +62,11 @@
           <div class="col-auto mb-2">
             <div class="d-flex align-items-center">
               <p class="mb-0 me-2">Neu?</p>
-              <a href="/home/registrieren" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Hier geht’s zur Registrierung</a>
+              <a href="/registrieren" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Hier geht’s zur Registrierung</a>
             </div>
           </div>
           <div class="col-auto">
-            <a href="/home/anmelden/passwort_vergessen" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Passwort vergessen?</a>
+            <a href="/passwort_vergessen" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Passwort vergessen?</a>
           </div>
           <div class="col-auto">
             <a href="/home" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Als Gast fortfahren</a>
