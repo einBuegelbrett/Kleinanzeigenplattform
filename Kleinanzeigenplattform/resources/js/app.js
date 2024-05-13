@@ -1,8 +1,5 @@
 function enableInputs() {
-  document.getElementById("profile_picture").disabled = false;
-  document.getElementById("email").disabled = false;
-  document.getElementById("firstname").disabled = false;
-  document.getElementById("lastname").disabled = false;
+  document.getElementsByClassName("input_visibility").disabled = false
   document.getElementById("changeDataBtn").classList.add("d-none");
   document.getElementById("cancelBtn").classList.remove("d-none");
   document.getElementById("doChangeBtn").classList.remove("d-none");
@@ -10,10 +7,7 @@ function enableInputs() {
 }
 
 function disableInputs() {
-  document.getElementById("profile_picture").disabled = true;
-  document.getElementById("email").disabled = true;
-  document.getElementById("firstname").disabled = true;
-  document.getElementById("lastname").disabled = true;
+  document.getElementsByClassName("input_visibility").disabled = true
   document.getElementById("changeDataBtn").classList.remove("d-none");
   document.getElementById("cancelBtn").classList.add("d-none");
   document.getElementById("doChangeBtn").classList.add("d-none");

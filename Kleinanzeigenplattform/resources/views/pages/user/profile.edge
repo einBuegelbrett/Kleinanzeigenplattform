@@ -30,12 +30,12 @@
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="profile_picture" class="form-label">Profilbild:</label>
-                    <input type="file" class="form-control shadow" name="profile_picture" id="profile_picture" onchange="previewImages()" disabled>
+                    <input type="file" class="form-control shadow input_visibility" name="profile_picture" id="profile_picture" onchange="previewImages()" disabled>
                     <div id="image-preview" class="d-flex flex-row"></div>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label for="email" class="form-label">E-Mail:</label>
-                    <input type="text" id="email" class="form-control shadow" name="email" placeholder="{{ auth.user.email }}" value="{{ auth.user.email }}" disabled>
+                    <input type="text" id="email" class="form-control shadow input_visibility" name="email" placeholder="{{ auth.user.email }}" value="{{ auth.user.email }}" disabled>
                     @inputError('email')
                       <p class="text-danger mt-2">Bitte geben Sie eine gültige E-Mail-Adresse ein.</p>
                     @end
@@ -44,14 +44,14 @@
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="firstname" class="form-label">Vorname:</label>
-                    <input type="text" id="firstname" class="form-control shadow" name="firstname" placeholder="{{ auth.user.firstname }}" value="{{ auth.user.firstname }}" disabled>
+                    <input type="text" id="firstname" class="form-control shadow input_visibility" name="firstname" placeholder="{{ auth.user.firstname }}" value="{{ auth.user.firstname }}" disabled>
                     @inputError('firstname')
                       <p class="text-danger mt-2">Der Vorname muss zwischen 1 und 50 Zeichen lang sein.</p>
                     @end
                   </div>
                   <div class="col-md-6">
                     <label for="lastname" class="form-label">Nachname:</label>
-                    <input type="text" id="lastname" class="form-control shadow" name="lastname" placeholder="{{ auth.user.lastname }}" value="{{ auth.user.lastname }}" disabled>
+                    <input type="text" id="lastname" class="form-control shadow input_visibility" name="lastname" placeholder="{{ auth.user.lastname }}" value="{{ auth.user.lastname }}" disabled>
                     @inputError('lastname')
                       <p class="text-danger mt-2">Der Nachname muss zwischen 1 und 50 Zeichen lang sein.</p>
                     @end

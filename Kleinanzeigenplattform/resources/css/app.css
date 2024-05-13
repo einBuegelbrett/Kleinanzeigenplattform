@@ -19,17 +19,8 @@ main {
   flex: 1;
 }
 
-footer {
-  color: rgb(255, 255, 255);
-  background-color: rgb(43, 48, 53);
-}
-
 svg a {
   color: white;
-}
-
-#versteckterBtn {
-  display: none;
 }
 
 .item {
@@ -37,8 +28,8 @@ svg a {
 }
 
 .pictureHeader {
-  width: 2.5em;
-  height: 2.5em;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 .profilePicture {
@@ -47,8 +38,8 @@ svg a {
 }
 
 #ImageCarouselIndicators {
-  width: 22em;
-  height: 22em;
+  width: 22rem;
+  height: 22rem;
 }
 
 .message-bubble {
@@ -69,7 +60,7 @@ svg a {
 }
 
 .carousel-item {
-  height: 19em;
+  height: 19rem;
 }
 
 #chatBox {
