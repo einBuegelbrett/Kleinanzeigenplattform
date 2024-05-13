@@ -1,17 +1,13 @@
 function enableInputs() {
-  document.getElementsByClassName("input_visibility").disabled = false
+  document.querySelectorAll(".input_visibility").forEach(attribute => attribute.disabled = false);
+  document.querySelectorAll(".button_visibility").forEach(attribute => attribute.classList.remove("d-none"));
   document.getElementById("changeDataBtn").classList.add("d-none");
-  document.getElementById("cancelBtn").classList.remove("d-none");
-  document.getElementById("doChangeBtn").classList.remove("d-none");
-  document.getElementById("passwordBtn").classList.remove("d-none");
 }
 
 function disableInputs() {
-  document.getElementsByClassName("input_visibility").disabled = true
+  document.querySelectorAll(".input_visibility").forEach(attribute => attribute.disabled = true);
+  document.querySelectorAll(".button_visibility").forEach(attribute => attribute.classList.add("d-none"));
   document.getElementById("changeDataBtn").classList.remove("d-none");
-  document.getElementById("cancelBtn").classList.add("d-none");
-  document.getElementById("doChangeBtn").classList.add("d-none");
-  document.getElementById("passwordBtn").classList.add("d-none");
 }
 
 function sendWasLetztePreis() {
