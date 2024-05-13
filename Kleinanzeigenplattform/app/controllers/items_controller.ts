@@ -13,7 +13,8 @@ import {submitItem} from "#validators/item_validator";
 import {messageValidator} from "#validators/user_validator";
 
 export default class ItemsController {
-  public async itemDetail({ view, params }: HttpContext) {
+  public async itemDetail({ view, params, auth }: HttpContext) {
+    await auth.check()
     const item = await Item.findBy('item_id', params.item_id)
 
     if(!item){
