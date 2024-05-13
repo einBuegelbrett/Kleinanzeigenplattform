@@ -81,11 +81,10 @@ export default class UsersController {
     try {
       const user = await User.verifyCredentials(email, password)
       await auth.use("web").login(user)
-
       const verification = await Verification.findBy('user_id', user.user_id)
 
       if(!verification) {
-        return view.render('pages/authentication/login', { error: 'Benutzername oder Passwort falsch' })
+        return view.render('pages/authentication/login', { error: 'Benutzer existiert nicht' })
       }
 
       if(!verification.verified) {
@@ -127,6 +126,7 @@ export default class UsersController {
 
       user.firstname = firstname
       user.lastname = lastname
+      await user.save()
 
       // the e-mail needs to be verified again if changed, for this give new token and log out
       if(user.email != email) {
