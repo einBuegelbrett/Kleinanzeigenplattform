@@ -9,39 +9,42 @@ import {changePasswordValidator, logInValidator, signInValidator} from "#validat
 import {emailValidator, profileValidator} from "#validators/user_validator";
 import Verification from "#models/verification";
 
+async function sendEmail(user: User, verification: Verification){
+  const sender = `${env.get("MAIL_USERNAME")}`;
+  const urlName = `${env.get("APP_URL")}/bestaetigen/${user.user_id}/${verification.token}`;
+
+  await mail.send((message) => {
+    message
+      .to(user.email)
+      .from(sender)
+      .subject('Bestätigungsmail')
+      .htmlView('email_template/confirmation-mail', {
+        urlName
+      })
+  })
+}
+
 export default class UsersController {
   public async getSignInPage({ view }: HttpContext) {
     return view.render('pages/authentication/signin')
   }
 
-  public async signInProcess({ view, request, auth }: HttpContext) {
+  public async signInProcess({ view, request }: HttpContext) {
     // Extract the needed properties
     const { firstname, lastname, password, repeat_password, email, username } = await request.validateUsing(signInValidator);
     try {
       if(password === repeat_password) {
         const user = await User.create({ firstname, lastname, password, email, username })
-        await auth.use("web").login(user);
 
-        const verification = new Verification();
-        verification.user_id = user.user_id;
-        await verification.save()
+        await Verification.create({user_id: user.user_id})
+
         // verification needs to be called again to get the token
-        const verificationInDB = await Verification.findBy('user_id', user.user_id)
-        if(!verificationInDB) {
+        const verification = await Verification.findBy('user_id', user.user_id)
+        if(!verification) {
           return view.render('pages/authentication/signin', { error: 'Fehler bei der Registrierung' })
         }
-        const sender = `${env.get("MAIL_USERNAME")}`;
-        const urlName = `${env.get("APP_URL")}/bestaetigen/${user.user_id}/${verificationInDB.token}`;
 
-        await mail.send((message) => {
-          message
-            .to(user.email)
-            .from(sender)
-            .subject('Bestätigungsmail')
-            .htmlView('email_template/confirmation-mail', {
-              urlName
-            })
-        })
+        await sendEmail(user, verification)
 
       } else {
         return view.render('pages/authentication/signin', { error: 'Passwort stimmt nicht überein' })
@@ -137,18 +140,7 @@ export default class UsersController {
         await verification.save()
         await auth.use('web').logout()
 
-        const sender = `${env.get("MAIL_USERNAME")}`;
-        const urlName = `${env.get("APP_URL")}/bestaetigen/${user.user_id}/${verification.token}`;
-
-        await mail.send((message) => {
-          message
-            .to(user.email)
-            .from(sender)
-            .subject('Bestätigungsmail')
-            .htmlView('email_template/confirmation-mail', {
-              urlName
-            })
-        })
+        await sendEmail(user, verification)
 
         return view.render('pages/authentication/signin', { success: 'E-Mail-Adresse erfolgreich geändert. Bitte bestätigen Sie Ihre E-Mail-Adresse, um sich einzuloggen.' })
       }
@@ -207,18 +199,7 @@ export default class UsersController {
     await user.save()
     await verification.save()
 
-    const sender = `${env.get("MAIL_USERNAME")}`;
-    const urlName = `${env.get("APP_URL")}/passwort_zuruecksaetzen/${user.user_id}/${verification.token}`;
-
-    await mail.send((message) => {
-      message
-        .to(user!.email)
-        .from(sender)
-        .subject('Passwort zurücksetzen')
-        .htmlView('email_template/change-password-mail', {
-          urlName
-        })
-    })
+    await sendEmail(user, verification)
 
     return view.render('pages/errors-and-successes/error-and-success-page', { success: 'E-Mail zur Passwortänderung wurde versendet' })
   }
