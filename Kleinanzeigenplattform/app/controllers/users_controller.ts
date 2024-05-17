@@ -119,12 +119,11 @@ export default class UsersController {
         return view.render('pages/authentication/login', { error: 'Fehler beim Laden des Profils' })
       }
 
-      const { firstname, lastname, email } = await request.validateUsing(profileValidator);
-      let profilePicture = request.file('profile_picture',{ size: '2mb', extnames: ['jpg', 'png', 'jpeg', 'gif']})
+      const { firstname, lastname, email, profile_picture  } = await request.validateUsing(profileValidator);
 
-      if(profilePicture?.isValid){
-        await profilePicture.move(app.publicPath('uploads'), { name: `${cuid()}.${profilePicture.extname}`, overwrite: true })
-        user.profile_picture = profilePicture.fileName!
+      if(profile_picture?.isValid){
+        await profile_picture.move(app.publicPath('uploads'), { name: `${cuid()}.${profile_picture.extname}`, overwrite: true })
+        user.profile_picture = profile_picture.fileName!
       }
 
       user.firstname = firstname

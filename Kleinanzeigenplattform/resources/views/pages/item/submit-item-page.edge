@@ -44,6 +44,9 @@
                 <label for="images" class="form-label">Bild(er):</label>
                 <input type="file" class="form-control shadow" name="images" id="imageInputId" multiple onchange="previewImages()">
                 <div id="image-preview" class="d-flex flex-row"></div>
+                @inputError('images')
+                  <p class="text-danger ms-2 mt-2">Bitte geben Sie ein gültiges Bild ein.</p>
+                @end
               </div>
               <div class="mb-3">
                 <label for="price" class="form-label">Preis:</label>

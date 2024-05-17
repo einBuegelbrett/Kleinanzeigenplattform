@@ -51,18 +51,22 @@ export default class ItemsController {
 
   public async postItem({ request, view, auth }: HttpContext) {
     await auth.check()
-    const { title, price, description } = await request.validateUsing(submitItem)
+    let { title, price, description, images } = await request.validateUsing(submitItem)
     try {
-      const uploadedImages = request.files('images', {size: '5mb', extnames: ['jpg', 'png', 'jpeg']})
       const user_id = auth.user!.user_id
 
-      if (uploadedImages === null) {
+      if (images === null) {
         return view.render('pages/item/submit-item-page', { error: 'Bitte Bild hochladen' })
       }
 
       const item = await Item.create({ title, description, price, user_id })
 
-      for (const uploadedImage of uploadedImages) {
+      // if only one image is uploaded, it is transformed into an array to simplify the code (see the item_validator.ts file)
+      if(!Array.isArray(images)) {
+        images = [images]
+      }
+
+      for (const uploadedImage of images) {
         const image = new Image()
         await uploadedImage.move(app.publicPath('uploads'), { name: `${cuid()}.${uploadedImage.extname}`, overwrite: true });
 

@@ -32,6 +32,9 @@
                     <label for="profile_picture" class="form-label">Profilbild:</label>
                     <input type="file" class="form-control shadow input_visibility" name="profile_picture" id="profile_picture" onchange="previewImages()" disabled>
                     <div id="image-preview" class="d-flex flex-row"></div>
+                    @inputError('profile_picture')
+                      <p class="text-danger mt-2">Bitte geben Sie ein gültiges Bild ein.</p>
+                    @end
                   </div>
                   <div class="col-md-6 mb-3">
                     <label for="email" class="form-label">E-Mail:</label>

@@ -5,6 +5,10 @@ export const profileValidator = vine.compile(
     email: vine.string().trim().email().toLowerCase(),
     firstname: vine.string().trim().minLength(1).maxLength(50),
     lastname: vine.string().trim().minLength(1).maxLength(50),
+    profile_picture: vine.file({
+      size: '2mb',
+      extnames: ['jpg', 'png', 'jpeg', 'gif']
+    }).nullable()
   })
 )
 
