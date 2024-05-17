@@ -9,7 +9,7 @@ export const searchbar = vine.compile(
 export const submitItem = vine.compile(
   vine.object({
     title: vine.string().trim().minLength(1).maxLength(50),
-    price: vine.number().min(0).max(9999999999.99).decimal([0, 2]).positive(),
+    price: vine.number().range([0, 9999999999.99]).decimal([0, 2]).positive(),
     description: vine.string().trim().minLength(1).maxLength(250),
   })
 )
