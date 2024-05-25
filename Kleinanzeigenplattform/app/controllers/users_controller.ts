@@ -9,6 +9,8 @@ import {changePasswordValidator, logInValidator, signInValidator} from "#validat
 import {emailValidator, profileValidator} from "#validators/user_validator";
 import Verification from "#models/verification";
 
+// Function is called multiple times, so it is extracted into a function. The function is called in signInProcess and sendPasswordResetMail
+// sendEmail is a function that sends an email to the user with a verification token to verify his email
 async function sendEmail(user: User, verification: Verification){
   const sender = `${env.get("MAIL_USERNAME")}`;
   const urlName = `${env.get("APP_URL")}/bestaetigen/${user.user_id}/${verification.token}`;

@@ -12,6 +12,41 @@ import {creditCardValidator} from "#validators/purchase_validator";
 import {submitItem} from "#validators/item_validator";
 import {messageValidator} from "#validators/user_validator";
 
+// We need MessageType for the getMessages function. That's because after formatting the date, other attributes like sender_id can no longer be called otherwise
+type MessageType = {
+  message_id: number;
+  sender_id: number;
+  receiver_id: number;
+  item_id: number;
+  content: string;
+  created_at: string;
+};
+
+// Function is called multiple times, so it is extracted into a function. The function is called in
+// getMessages is a function that returns all messages between two users for a specific item and formats the date
+async function getMessages(item: Item, params_user_id: number){
+  const allMessages = await Message.query()
+    .where(query => {
+      query
+        .where('sender_id', item.user_id)
+        .where('receiver_id', params_user_id)
+        .where('item_id', item.item_id)
+    })
+    .orWhere(query => {
+      query
+        .where('sender_id', params_user_id)
+        .where('receiver_id', item.user_id)
+        .where('item_id', item.item_id)
+    }).orderBy('created_at', 'asc')
+
+  // Format the date in all messages because it is not formatted in the database
+  return allMessages.map(message => ({
+    ...message.$attributes,
+    created_at: message.created_at.setZone('Europe/Berlin').toFormat('dd-MM-yyyy HH:mm')
+  })) as MessageType[];
+}
+
+// Start of the ItemsController
 export default class ItemsController {
   public async itemDetail({ view, params, auth }: HttpContext) {
     await auth.check()
@@ -127,19 +162,7 @@ export default class ItemsController {
         return view.render('pages/errors-and-successes/error-and-success-page.edge', { error: 'Nicht erlaubt'})
       }
 
-      const allMessages = await Message.query()
-        .where(function (query) {
-          query
-            .where('sender_id', item.user_id)
-            .where('receiver_id', params.user_id)
-            .where('item_id', item.item_id)
-        })
-        .orWhere(function (query) {
-          query
-            .where('sender_id', params.user_id)
-            .where('receiver_id', item.user_id)
-            .where('item_id', item.item_id)
-        }).orderBy('created_at', 'asc')
+      const allMessages = await getMessages(item, params.user_id)
 
       // The first message always comes from the person that is interested in the item
       let chatPartner
@@ -171,19 +194,7 @@ export default class ItemsController {
         await Message.create({content: message.message, item_id: item.item_id,  sender_id: params.user_id, receiver_id: item.user_id })
       }
 
-      const allMessages = await Message.query()
-        .where(function (query) {
-          query
-            .where('sender_id', item.user_id)
-            .where('receiver_id', params.user_id)
-            .where('item_id', item.item_id)
-        })
-        .orWhere(function (query) {
-          query
-            .where('sender_id', params.user_id)
-            .where('receiver_id', item.user_id)
-            .where('item_id', item.item_id)
-        }).orderBy('created_at', 'asc')
+      const allMessages = await getMessages(item, params.user_id)
 
       let chatPartner
       if(auth.user!.user_id === item.user_id) {
