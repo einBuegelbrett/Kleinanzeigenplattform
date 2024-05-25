@@ -10,8 +10,9 @@ export default class Item extends BaseModel {
   @column()
   declare description: string
 
+  // With the validator we have made sure that the price is in the correct format, so we can just save it as a string so that we keep the format with the 2 decimals
   @column()
-  declare price: number
+  declare price: string
 
   @column()
   declare active: boolean

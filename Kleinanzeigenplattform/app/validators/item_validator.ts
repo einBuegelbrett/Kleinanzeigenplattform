@@ -24,7 +24,7 @@ const images = vine.group([
 export const submitItem = vine.compile(
   vine.object({
     title: vine.string().trim().minLength(1).maxLength(50),
-    price: vine.number().range([0, 9999999999.99]).decimal([0, 2]).positive(),
+    price: vine.number().range([0, 9999999999.99]).positive().transform((value) => value.toFixed(2).toString()),
     description: vine.string().trim().minLength(1).maxLength(250),
   }).merge(images)
 )
