@@ -21,6 +21,7 @@ export default class HomeController {
     await auth.check()
     const search = await request.validateUsing(searchbar)
     try {
+      // if the search is null, show all items
       if(search.search === null) {
         const items = await db.from('items').select('*').innerJoin('images', 'items.item_id', 'images.item_id').groupBy('items.item_id').where('items.active', 1).limit(12);
         return view.render('pages/home/home', { user: session.get('user'), items });

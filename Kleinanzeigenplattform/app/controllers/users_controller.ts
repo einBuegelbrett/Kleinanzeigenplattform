@@ -161,13 +161,14 @@ export default class UsersController {
 
       return view.render('pages/user/profile', { success: 'Profil erfolgreich aktualisiert' });
     } catch (error) {
-      return view.render('pages/user/profile', { error: 'Fehler beim Aktualisieren des Profils'});
+      return view.render('pages/user/profile', { error: 'Fehler beim Aktualisieren des Profils (Sie müssen ein Profilbild angeben)'});
     }
   }
 
   public async conversationList({ view, auth }: HttpContext) {
     const user = auth.user!
 
+    // Get all conversations where the user is the sender and also get the receiver
     const allConversations = await db.from('messages as m')
       .select('m.sender_id', 'i.item_id', 'i.title', 'u.user_id as receiver_id', 'u.username as receiver_username', 's.username as sender_username')
       .join('items as i', 'm.item_id', 'i.item_id')
@@ -225,6 +226,7 @@ export default class UsersController {
         return response.redirect('/registrieren')
       }
 
+      // check if the credentials are correct
       if (verification.token === params.token) {
         verification.verified = true;
         await verification.save()

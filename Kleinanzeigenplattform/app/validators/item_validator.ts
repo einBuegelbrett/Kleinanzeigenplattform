@@ -8,7 +8,7 @@ export const searchbar = vine.compile(
 
 // vine.array doesn't work with a single file, 'group: solves this issue by testing if the data is an array or not: https://vinejs.dev/docs/types/object#object-groups
 const fileSchema = vine.file({
-  size: '2mb',
+  size: '10mb',
   extnames: ['jpg', 'png', 'pdf']
 });
 

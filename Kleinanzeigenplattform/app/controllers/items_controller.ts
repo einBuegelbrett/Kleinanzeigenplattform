@@ -88,6 +88,7 @@ export default class ItemsController {
     await auth.check()
     let { title, price, description, images } = await request.validateUsing(submitItem)
     try {
+      // we use "!" because we are sure that user is authenticated with await auth.check()
       const user_id = auth.user!.user_id
 
       if (images === null) {
@@ -101,6 +102,7 @@ export default class ItemsController {
         images = [images]
       }
 
+      // we upload each image and save the path in the database
       for (const uploadedImage of images) {
         const image = new Image()
         await uploadedImage.move(app.publicPath('uploads'), { name: `${cuid()}.${uploadedImage.extname}`, overwrite: true });
@@ -169,7 +171,7 @@ export default class ItemsController {
       if(auth.user!.user_id === item.user_id) {
         chatPartner = await User.findBy('user_id', allMessages[0].sender_id)
       } else {
-        chatPartner = allMessages[0] ? await User.findBy('user_id', allMessages[0].receiver_id) : await User.findBy('user_id', auth.user!.user_id)
+        chatPartner = await User.findBy('user_id', item.user_id)
       }
 
       return view.render('pages/communication/item-chat', { item, allMessages, chatPartner })
