@@ -1,6 +1,6 @@
 <header class="shadow">
   <nav class="navbar navbar-expand-lg bg-body-tertiary container-fluid" data-bs-theme="dark">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <ul class="navbar-nav ms-3 mb-2 mb-lg-0">
       <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="/home">Schwarzes Bügelbrett</a>
       </li>
@@ -9,7 +9,7 @@
       <li class="nav-item">
         <a class="nav-link" href="/anzeige_aufgeben">Anzeige aufgeben</a>
       </li>
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown me-2">
         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           Konto
         </a>
@@ -27,7 +27,7 @@
       </li>
     </ul>
     @if(auth.user)
-      <a href="/konto/profil"><img class="d-block object-fit-cover pictureHeader border rounded-circle border-2 border-light mx-2 my-2" src="/uploads/{{ auth.user.profile_picture }}" alt="{{ auth.user.profile_picture }}"></a>
+      <a href="/konto/profil"><img class="d-block object-fit-cover pictureHeader border rounded-circle border-2 border-light me-3 my-2" src="/uploads/{{ auth.user.profile_picture }}" alt="{{ auth.user.profile_picture }}"></a>
     @end
   </nav>
 </header>

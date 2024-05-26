@@ -12,7 +12,7 @@
 <body class="bg-body-secondary d-flex flex-column">
   @include('partials/header')
 
-  <main class="mt-4">
+  <main class="mt-4 d-flex justify-content-center flex-column">
     <div class="d-flex justify-content-center align-items-center">
       <div class="container-lg w-50 shadow rounded mb-4 mx-5 p-5 bg-light">
         <h1 class="mb-3">{{ seller.username }} | <a href="/artikel/{{ item.item_id }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ item.title }}</a></h1>
