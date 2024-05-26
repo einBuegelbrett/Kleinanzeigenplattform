@@ -10,20 +10,33 @@ import {emailValidator, profileValidator} from "#validators/user_validator";
 import Verification from "#models/verification";
 
 // Function is called multiple times, so it is extracted into a function. The function is called in signInProcess and sendPasswordResetMail
-// sendEmail is a function that sends an email to the user with a verification token to verify his email
-async function sendEmail(user: User, verification: Verification){
+// sendEmail is a function that sends an email to the user with a verification token to either verify their email or reset their password
+async function sendEmail(user: User, verification: Verification, emailType: 'confirmation' | 'passwordReset') {
   const sender = `${env.get("MAIL_USERNAME")}`;
-  const urlName = `${env.get("APP_URL")}/bestaetigen/${user.user_id}/${verification.token}`;
+
+  let urlName: string;
+  let subject: string;
+  let template: string;
+
+  if (emailType === 'confirmation') {
+    urlName = `${env.get("APP_URL")}/bestaetigen/${user.user_id}/${verification.token}`;
+    subject = 'Bestätigungsmail';
+    template = 'email_template/confirmation-mail';
+  } else if (emailType === 'passwordReset') {
+    urlName = `${env.get("APP_URL")}/passwort_zuruecksaetzen/${user.user_id}/${verification.token}`;
+    subject = 'Passwort zurücksetzen';
+    template = 'email_template/change-password-mail';
+  }
 
   await mail.send((message) => {
     message
       .to(user.email)
       .from(sender)
-      .subject('Bestätigungsmail')
-      .htmlView('email_template/confirmation-mail', {
+      .subject(subject)
+      .htmlView(template, {
         urlName
       })
-  })
+  });
 }
 
 export default class UsersController {
@@ -46,7 +59,7 @@ export default class UsersController {
           return view.render('pages/authentication/signin', { error: 'Fehler bei der Registrierung' })
         }
 
-        await sendEmail(user, verification)
+        await sendEmail(user, verification, 'confirmation')
 
       } else {
         return view.render('pages/authentication/signin', { error: 'Passwort stimmt nicht überein' })
@@ -98,7 +111,7 @@ export default class UsersController {
 
       return response.redirect('/home');
     } catch (error) {
-      return view.render('pages/authentication/login', { error: 'Benutzername oder Passwort falsch' })
+      return view.render('pages/authentication/login', { error: 'E-mail oder Passwort falsch' })
     }
   }
 
@@ -141,7 +154,7 @@ export default class UsersController {
         await verification.save()
         await auth.use('web').logout()
 
-        await sendEmail(user, verification)
+        await sendEmail(user, verification, 'confirmation')
 
         return view.render('pages/authentication/signin', { success: 'E-Mail-Adresse erfolgreich geändert. Bitte bestätigen Sie Ihre E-Mail-Adresse, um sich einzuloggen.' })
       }
@@ -196,11 +209,10 @@ export default class UsersController {
 
     // token needs to be changed so that the user can't use the token from the sign in
     verification.token = cuid();
-    verification.verified = false;
     await user.save()
     await verification.save()
 
-    await sendEmail(user, verification)
+    await sendEmail(user, verification, 'passwordReset')
 
     return view.render('pages/errors-and-successes/error-and-success-page', { success: 'E-Mail zur Passwortänderung wurde versendet' })
   }
